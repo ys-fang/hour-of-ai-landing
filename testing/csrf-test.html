@@ -1,0 +1,99 @@
+<!DOCTYPE html>
+<html lang="zh-TW">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>CSRF Protection Test</title>
+</head>
+<body>
+    <h1>CSRF Protection Test</h1>
+
+    <div>
+        <h3>Test 1: Check CSRF Token Generation</h3>
+        <button onclick="testTokenGeneration()">Generate Token</button>
+        <p id="token-result"></p>
+    </div>
+
+    <div>
+        <h3>Test 2: Test Honeypot Validation</h3>
+        <form id="honeypot-test">
+            <input type="text" name="website" placeholder="Leave empty" style="position: absolute; left: -5000px;">
+            <input type="text" name="real-field" placeholder="Real field" required>
+            <button type="submit">Submit with Empty Honeypot</button>
+        </form>
+        <p id="honeypot-result"></p>
+    </div>
+
+    <div>
+        <h3>Test 3: Test Form Submission with CSRF</h3>
+        <button onclick="testCSRFSubmission()">Test CSRF Submission</button>
+        <p id="csrf-result"></p>
+    </div>
+
+    <script>
+        const CONFIG = {
+            FORM_SUBMIT_URL: 'https://script.google.com/macros/s/AKfycbwZ1VRm8MxtqLms24V3Q4sJ5Jklu9o9V14q-B9QHTlw1e45Q2GcrzGA6E1RrxbMybRTFw/exec',
+            CSRF_TOKEN_KEY: 'csrf_token',
+            MAX_REQUESTS_PER_HOUR: 3
+        };
+
+        function generateCSRFToken() {
+            const array = new Uint8Array(16);
+            crypto.getRandomValues(array);
+            return Array.from(array, byte => byte.toString(16).padStart(2, '0')).join('');
+        }
+
+        function testTokenGeneration() {
+            const token = generateCSRFToken();
+            sessionStorage.setItem(CONFIG.CSRF_TOKEN_KEY, token);
+            document.getElementById('token-result').innerHTML = `
+                <strong>Token Generated:</strong> ${token}<br>
+                <strong>Length:</strong> ${token.length} chars<br>
+                <strong>Format Valid:</strong> ${/^[0-9a-f]+$/.test(token) ? 'Yes' : 'No'}
+            `;
+        }
+
+        function testCSRFSubmission() {
+            const token = sessionStorage.getItem(CONFIG.CSRF_TOKEN_KEY) || generateCSRFToken();
+
+            const testData = {
+                email: 'test@example.com',
+                contactName: 'Test User',
+                timestamp: Date.now(),
+                csrf_token: token,
+                origin: window.location.origin,
+                honeypot_website: '',
+                honeypot_contact: '',
+                honeypot_phone: ''
+            };
+
+            document.getElementById('csrf-result').innerHTML = '<strong>Testing CSRF submission...</strong>';
+
+            fetch(CONFIG.FORM_SUBMIT_URL, {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                },
+                body: JSON.stringify(testData)
+            })
+            .then(response => response.json())
+            .then(data => {
+                document.getElementById('csrf-result').innerHTML = `
+                    <strong>Response:</strong> ${JSON.stringify(data, null, 2)}
+                `;
+            })
+            .catch(error => {
+                document.getElementById('csrf-result').innerHTML = `
+                    <strong>Error:</strong> ${error.message}
+                `;
+            });
+        }
+
+        // Initialize token on load
+        if (!sessionStorage.getItem(CONFIG.CSRF_TOKEN_KEY)) {
+            const token = generateCSRFToken();
+            sessionStorage.setItem(CONFIG.CSRF_TOKEN_KEY, token);
+        }
+    </script>
+</body>
+</html>

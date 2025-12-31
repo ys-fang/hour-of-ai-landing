@@ -1,0 +1,1768 @@
+<!-- Hour of AI WordPress Compatible Version -->
+<div class="hour-of-ai">
+    <!-- Fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+TC:wght@400;500;700;900&display=swap" rel="stylesheet">
+
+    <!-- Leaflet CSS for Interactive Maps -->
+    <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css"
+          integrity="sha256-p4NxAoJBhIIN+hmNHrzRCf9tD/miZyoHS5obTRR9BMY="
+          crossorigin=""/>
+
+    <!-- Leaflet JavaScript -->
+    <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"
+            integrity="sha256-20nQCchB9co0qIjJZRGuk2/Z9VM+kNiyxNV1lvTlZBo="
+            crossorigin=""></script>
+
+    <style>
+        /* ===== WordPress Compatible CSS for Hour of AI ===== */
+
+        /* Root Container with Isolation */
+        .hour-of-ai {
+            position: relative;
+            isolation: isolate;
+            contain: layout style;
+            width: 100%;
+            max-width: none;
+            margin: 0;
+            padding: 0;
+            font-family: 'Noto Sans TC', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+            line-height: 1.7;
+            color: #1A1A1A;
+            background-color: #FFFFFF;
+            overflow-x: hidden;
+        }
+
+        /* CSS Custom Properties (Design Tokens) - Scoped to .hour-of-ai */
+        .hour-of-ai {
+            /* Colors from Halo Theme */
+            --hoa-color-primary-orange: #FF9F4D;
+            --hoa-color-primary-blue: #3B7DD6;
+            --hoa-color-primary-teal: #4DBFA3;
+            --hoa-color-navy: #003D82;
+            --hoa-color-yellow: #FFD166;
+            --hoa-color-coral: #FF6B6B;
+
+            /* Neutral Colors */
+            --hoa-color-white: #FFFFFF;
+            --hoa-color-bg-light: #F5F5F5;
+            --hoa-color-bg-lighter: #FAFAFA;
+            --hoa-color-text-primary: #1A1A1A;
+            --hoa-color-text-secondary: #666666;
+            --hoa-color-border: #E0E0E0;
+
+            /* Spacing */
+            --hoa-spacing-xs: 0.5rem;
+            --hoa-spacing-sm: 1rem;
+            --hoa-spacing-md: 1.5rem;
+            --hoa-spacing-lg: 2rem;
+            --hoa-spacing-xl: 3rem;
+            --hoa-spacing-2xl: 4rem;
+            --hoa-spacing-3xl: 6rem;
+
+            /* Typography */
+            --hoa-font-family: 'Noto Sans TC', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+            --hoa-font-size-xs: 0.875rem;
+            --hoa-font-size-sm: 1rem;
+            --hoa-font-size-base: 1.125rem;
+            --hoa-font-size-lg: 1.25rem;
+            --hoa-font-size-xl: 1.5rem;
+            --hoa-font-size-2xl: 2rem;
+            --hoa-font-size-3xl: 2.5rem;
+            --hoa-font-size-4xl: 3rem;
+
+            /* Layout */
+            --hoa-container-max-width: 1200px;
+            --hoa-border-radius-sm: 8px;
+            --hoa-border-radius-md: 12px;
+            --hoa-border-radius-lg: 20px;
+            --hoa-border-radius-full: 9999px;
+
+            /* Shadows */
+            --hoa-shadow-sm: 0 2px 4px rgba(0, 0, 0, 0.05);
+            --hoa-shadow-md: 0 4px 12px rgba(0, 0, 0, 0.08);
+            --hoa-shadow-lg: 0 8px 24px rgba(0, 0, 0, 0.12);
+            --hoa-shadow-xl: 0 12px 40px rgba(0, 0, 0, 0.15);
+
+            /* Transitions */
+            --hoa-transition-fast: 150ms ease;
+            --hoa-transition-base: 300ms ease;
+            --hoa-transition-slow: 500ms ease;
+
+            /* Z-index layers (WordPress compatible) */
+            --hoa-z-floating-cta: 999998;
+            --hoa-z-navigation: 999997;
+            --hoa-z-map-tooltip: 999996;
+            --hoa-z-form-progress: 10;
+            --hoa-z-hero-content: 1;
+        }
+
+        /* Reset & Base Styles - Scoped */
+        .hour-of-ai *,
+        .hour-of-ai *::before,
+        .hour-of-ai *::after {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        .hour-of-ai img {
+            max-width: 100%;
+            height: auto;
+            display: block;
+        }
+
+        .hour-of-ai a {
+            text-decoration: none;
+            color: inherit;
+            transition: all var(--hoa-transition-base);
+        }
+
+        .hour-of-ai button {
+            font-family: inherit;
+            border: none;
+            cursor: pointer;
+            transition: all var(--hoa-transition-base);
+            background: transparent;
+        }
+
+        .hour-of-ai input,
+        .hour-of-ai select,
+        .hour-of-ai textarea {
+            font-family: inherit;
+            font-size: var(--hoa-font-size-sm);
+            border: 2px solid var(--hoa-color-border);
+            border-radius: var(--hoa-border-radius-sm);
+            padding: var(--hoa-spacing-sm) var(--hoa-spacing-md);
+            transition: all var(--hoa-transition-base);
+            width: 100%;
+        }
+
+        .hour-of-ai input:focus,
+        .hour-of-ai select:focus,
+        .hour-of-ai textarea:focus {
+            outline: none;
+            border-color: var(--hoa-color-primary-blue);
+            box-shadow: 0 0 0 3px rgba(59, 125, 214, 0.1);
+        }
+
+        /* Utility Classes - Scoped */
+        .hour-of-ai .hoa-container {
+            max-width: var(--hoa-container-max-width);
+            margin: 0 auto;
+            padding: 0 var(--hoa-spacing-md);
+        }
+
+        .hour-of-ai .hoa-section {
+            padding: var(--hoa-spacing-3xl) 0;
+        }
+
+        .hour-of-ai .hoa-section-sm {
+            padding: var(--hoa-spacing-2xl) 0;
+        }
+
+        .hour-of-ai .hoa-text-center {
+            text-align: center;
+        }
+
+        .hour-of-ai .hoa-hidden {
+            display: none !important;
+        }
+
+        /* Fade-in Animation - Scoped */
+        .hour-of-ai .hoa-fade-in {
+            opacity: 0;
+            transform: translateY(30px);
+            transition: opacity var(--hoa-transition-slow), transform var(--hoa-transition-slow);
+        }
+
+        .hour-of-ai .hoa-fade-in.hoa-visible {
+            opacity: 1;
+            transform: translateY(0);
+        }
+
+        /* Navigation - Scoped */
+        .hour-of-ai .hoa-nav {
+            position: sticky;
+            top: 0;
+            background: rgba(255, 255, 255, 0.95);
+            backdrop-filter: blur(10px);
+            box-shadow: var(--hoa-shadow-sm);
+            z-index: var(--hoa-z-navigation);
+            transition: all var(--hoa-transition-base);
+        }
+
+        .hour-of-ai .hoa-nav.hoa-scrolled {
+            box-shadow: var(--hoa-shadow-md);
+        }
+
+        .hour-of-ai .hoa-nav-container {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: var(--hoa-spacing-sm) var(--hoa-spacing-md);
+        }
+
+        .hour-of-ai .hoa-nav-logo {
+            font-size: var(--hoa-font-size-xl);
+            font-weight: 900;
+            color: var(--hoa-color-navy);
+        }
+
+        .hour-of-ai .hoa-nav-logo span {
+            color: var(--hoa-color-primary-orange);
+        }
+
+        .hour-of-ai .hoa-nav-links {
+            display: flex;
+            gap: var(--hoa-spacing-lg);
+            list-style: none;
+        }
+
+        .hour-of-ai .hoa-nav-links a {
+            font-weight: 500;
+            color: var(--hoa-color-text-secondary);
+            padding: var(--hoa-spacing-xs) var(--hoa-spacing-sm);
+            border-radius: var(--hoa-border-radius-sm);
+        }
+
+        .hour-of-ai .hoa-nav-links a:hover {
+            color: var(--hoa-color-primary-blue);
+            background: rgba(59, 125, 214, 0.05);
+        }
+
+        .hour-of-ai .hoa-nav-cta {
+            background: linear-gradient(135deg, var(--hoa-color-yellow), var(--hoa-color-primary-orange));
+            color: var(--hoa-color-navy);
+            font-weight: 700;
+            padding: var(--hoa-spacing-sm) var(--hoa-spacing-lg);
+            border-radius: var(--hoa-border-radius-full);
+            box-shadow: var(--hoa-shadow-md);
+        }
+
+        .hour-of-ai .hoa-nav-cta:hover {
+            transform: translateY(-2px);
+            box-shadow: var(--hoa-shadow-lg);
+        }
+
+        /* Mobile Menu - Scoped */
+        .hour-of-ai .hoa-mobile-menu-toggle {
+            display: none;
+            background: transparent;
+            padding: var(--hoa-spacing-xs);
+        }
+
+        .hour-of-ai .hoa-hamburger {
+            width: 28px;
+            height: 2px;
+            background: var(--hoa-color-navy);
+            position: relative;
+            transition: all var(--hoa-transition-base);
+        }
+
+        .hour-of-ai .hoa-hamburger::before,
+        .hour-of-ai .hoa-hamburger::after {
+            content: '';
+            position: absolute;
+            width: 28px;
+            height: 2px;
+            background: var(--hoa-color-navy);
+            transition: all var(--hoa-transition-base);
+        }
+
+        .hour-of-ai .hoa-hamburger::before {
+            top: -8px;
+        }
+
+        .hour-of-ai .hoa-hamburger::after {
+            bottom: -8px;
+        }
+
+        .hour-of-ai .hoa-mobile-menu-toggle.hoa-active .hoa-hamburger {
+            background: transparent;
+        }
+
+        .hour-of-ai .hoa-mobile-menu-toggle.hoa-active .hoa-hamburger::before {
+            top: 0;
+            transform: rotate(45deg);
+        }
+
+        .hour-of-ai .hoa-mobile-menu-toggle.hoa-active .hoa-hamburger::after {
+            bottom: 0;
+            transform: rotate(-45deg);
+        }
+
+        /* Hero Section - Scoped */
+        .hour-of-ai .hoa-hero {
+            position: relative;
+            background: linear-gradient(135deg, var(--hoa-color-bg-light) 0%, var(--hoa-color-white) 100%);
+            padding: var(--hoa-spacing-3xl) 0;
+            overflow: hidden;
+        }
+
+        .hour-of-ai .hoa-hero::before {
+            content: '';
+            position: absolute;
+            top: -50%;
+            right: -20%;
+            width: 800px;
+            height: 800px;
+            background: radial-gradient(circle, rgba(255, 159, 77, 0.1) 0%, transparent 70%);
+            border-radius: 50%;
+            pointer-events: none;
+        }
+
+        .hour-of-ai .hoa-hero-content {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: var(--hoa-spacing-2xl);
+            align-items: center;
+            position: relative;
+            z-index: var(--hoa-z-hero-content);
+        }
+
+        .hour-of-ai .hoa-hero-text h1 {
+            font-size: var(--hoa-font-size-4xl);
+            font-weight: 900;
+            color: var(--hoa-color-navy);
+            margin-bottom: var(--hoa-spacing-md);
+            line-height: 1.2;
+        }
+
+        .hour-of-ai .hoa-hero-text .hoa-highlight {
+            background: linear-gradient(135deg, var(--hoa-color-primary-orange), var(--hoa-color-yellow));
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+        }
+
+        .hour-of-ai .hoa-hero-text p {
+            font-size: var(--hoa-font-size-lg);
+            color: var(--hoa-color-text-secondary);
+            margin-bottom: var(--hoa-spacing-xl);
+            line-height: 1.8;
+        }
+
+        .hour-of-ai .hoa-hero-ctas {
+            display: flex;
+            gap: var(--hoa-spacing-md);
+            flex-wrap: wrap;
+        }
+
+        .hour-of-ai .hoa-btn {
+            padding: var(--hoa-spacing-md) var(--hoa-spacing-xl);
+            border-radius: var(--hoa-border-radius-full);
+            font-weight: 700;
+            font-size: var(--hoa-font-size-base);
+            display: inline-flex;
+            align-items: center;
+            gap: var(--hoa-spacing-xs);
+            transition: all var(--hoa-transition-base);
+            text-decoration: none;
+            border: none;
+            cursor: pointer;
+        }
+
+        .hour-of-ai .hoa-btn-primary {
+            background: linear-gradient(135deg, var(--hoa-color-yellow), var(--hoa-color-primary-orange));
+            color: var(--hoa-color-navy);
+            box-shadow: var(--hoa-shadow-lg);
+        }
+
+        .hour-of-ai .hoa-btn-primary:hover {
+            transform: translateY(-3px);
+            box-shadow: var(--hoa-shadow-xl);
+        }
+
+        .hour-of-ai .hoa-btn-secondary {
+            background: var(--hoa-color-white);
+            color: var(--hoa-color-primary-blue);
+            border: 2px solid var(--hoa-color-primary-blue);
+        }
+
+        .hour-of-ai .hoa-btn-secondary:hover {
+            background: var(--hoa-color-primary-blue);
+            color: var(--hoa-color-white);
+        }
+
+        .hour-of-ai .hoa-hero-image {
+            position: relative;
+        }
+
+        .hour-of-ai .hoa-hero-image img {
+            border-radius: var(--hoa-border-radius-lg);
+            box-shadow: var(--hoa-shadow-xl);
+            animation: hoa-float 6s ease-in-out infinite;
+        }
+
+        @keyframes hoa-float {
+            0%, 100% {
+                transform: translateY(0px);
+            }
+            50% {
+                transform: translateY(-20px);
+            }
+        }
+
+        /* ===== Live Statistics Dashboard ===== */
+        .hour-of-ai .hoa-live-stats-section {
+            background: var(--hoa-color-white);
+            padding: var(--hoa-spacing-3xl) 0;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .hour-of-ai .hoa-live-stats-section::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            height: 4px;
+            background: linear-gradient(90deg, var(--hoa-color-primary-orange), var(--hoa-color-yellow), var(--hoa-color-primary-teal), var(--hoa-color-primary-blue));
+        }
+
+        .hour-of-ai .hoa-stats-dashboard {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: var(--hoa-spacing-xl);
+            margin-top: var(--hoa-spacing-2xl);
+        }
+
+        .hour-of-ai .hoa-stats-left {
+            display: flex;
+            flex-direction: column;
+            gap: var(--hoa-spacing-xl);
+        }
+
+        .hour-of-ai .hoa-stats-counters {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: var(--hoa-spacing-md);
+        }
+
+        .hour-of-ai .hoa-counter-card {
+            background: linear-gradient(135deg, var(--hoa-color-bg-lighter), var(--hoa-color-white));
+            border: 2px solid var(--hoa-color-border);
+            border-radius: var(--hoa-border-radius-lg);
+            padding: var(--hoa-spacing-lg);
+            text-align: center;
+            transition: all var(--hoa-transition-base);
+            position: relative;
+            overflow: hidden;
+        }
+
+        .hour-of-ai .hoa-counter-card::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            height: 4px;
+            background: var(--hoa-color-primary-blue);
+            transform: scaleX(0);
+            transition: transform var(--hoa-transition-base);
+        }
+
+        .hour-of-ai .hoa-counter-card:hover::before {
+            transform: scaleX(1);
+        }
+
+        .hour-of-ai .hoa-counter-card:hover {
+            transform: translateY(-4px);
+            border-color: var(--hoa-color-primary-blue);
+            box-shadow: var(--hoa-shadow-lg);
+        }
+
+        .hour-of-ai .hoa-counter-icon {
+            font-size: var(--hoa-font-size-2xl);
+            margin-bottom: var(--hoa-spacing-sm);
+        }
+
+        .hour-of-ai .hoa-counter-number {
+            font-size: var(--hoa-font-size-3xl);
+            font-weight: 900;
+            color: var(--hoa-color-navy);
+            margin-bottom: var(--hoa-spacing-xs);
+            font-variant-numeric: tabular-nums;
+        }
+
+        .hour-of-ai .hoa-counter-label {
+            font-size: var(--hoa-font-size-sm);
+            color: var(--hoa-color-text-secondary);
+            font-weight: 500;
+        }
+
+        .hour-of-ai .hoa-taiwan-map-container {
+            background: linear-gradient(135deg, var(--hoa-color-bg-lighter), var(--hoa-color-white));
+            border: 2px solid var(--hoa-color-border);
+            border-radius: var(--hoa-border-radius-lg);
+            padding: var(--hoa-spacing-xl);
+            text-align: center;
+        }
+
+        .hour-of-ai .hoa-taiwan-map-container h4 {
+            font-size: var(--hoa-font-size-lg);
+            font-weight: 700;
+            color: var(--hoa-color-navy);
+            margin-bottom: var(--hoa-spacing-md);
+        }
+
+        .hour-of-ai .hoa-taiwan-map {
+            width: 100%;
+            height: 450px;
+            margin: 0 auto;
+            border-radius: var(--hoa-border-radius-md);
+            overflow: hidden;
+        }
+
+        /* ===== Form Section ===== */
+        .hour-of-ai .hoa-register-section {
+            background: var(--hoa-color-bg-light);
+            padding: var(--hoa-spacing-3xl) 0;
+        }
+
+        .hour-of-ai .hoa-form-container {
+            background: var(--hoa-color-white);
+            border-radius: var(--hoa-border-radius-lg);
+            box-shadow: var(--hoa-shadow-xl);
+            overflow: hidden;
+            max-width: 800px;
+            margin: 0 auto;
+        }
+
+        .hour-of-ai .hoa-form-header {
+            background: linear-gradient(135deg, var(--hoa-color-navy), var(--hoa-color-primary-blue));
+            color: var(--hoa-color-white);
+            text-align: center;
+            padding: var(--hoa-spacing-xl);
+        }
+
+        .hour-of-ai .hoa-form-header h3 {
+            font-size: var(--hoa-font-size-2xl);
+            font-weight: 700;
+            margin-bottom: var(--hoa-spacing-sm);
+        }
+
+        .hour-of-ai .hoa-form-header p {
+            opacity: 0.9;
+            line-height: 1.6;
+        }
+
+        .hour-of-ai .hoa-form-progress {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: var(--hoa-spacing-lg);
+            background: var(--hoa-color-bg-lighter);
+            border-bottom: 2px solid var(--hoa-color-border);
+            position: relative;
+            z-index: var(--hoa-z-form-progress);
+        }
+
+        .hour-of-ai .hoa-step {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: var(--hoa-spacing-xs);
+            position: relative;
+            flex: 1;
+        }
+
+        .hour-of-ai .hoa-step-number {
+            width: 40px;
+            height: 40px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-weight: 700;
+            font-size: var(--hoa-font-size-sm);
+            background: var(--hoa-color-border);
+            color: var(--hoa-color-text-secondary);
+            transition: all var(--hoa-transition-base);
+        }
+
+        .hour-of-ai .hoa-step.hoa-active .hoa-step-number {
+            background: var(--hoa-color-primary-blue);
+            color: var(--hoa-color-white);
+        }
+
+        .hour-of-ai .hoa-step.hoa-completed .hoa-step-number {
+            background: var(--hoa-color-primary-teal);
+            color: var(--hoa-color-white);
+        }
+
+        .hour-of-ai .hoa-step-title {
+            font-size: var(--hoa-font-size-xs);
+            color: var(--hoa-color-text-secondary);
+            text-align: center;
+            max-width: 80px;
+            line-height: 1.3;
+        }
+
+        .hour-of-ai .hoa-step.hoa-active .hoa-step-title {
+            color: var(--hoa-color-primary-blue);
+            font-weight: 700;
+        }
+
+        .hour-of-ai .hoa-step-connector {
+            position: absolute;
+            top: 20px;
+            left: 50%;
+            right: 0;
+            height: 2px;
+            background: var(--hoa-color-border);
+            z-index: -1;
+        }
+
+        .hour-of-ai .hoa-step:last-child .hoa-step-connector {
+            display: none;
+        }
+
+        .hour-of-ai .hoa-step.hoa-completed .hoa-step-connector {
+            background: var(--hoa-color-primary-teal);
+        }
+
+        .hour-of-ai .hoa-form-content {
+            padding: var(--hoa-spacing-2xl);
+        }
+
+        .hour-of-ai .hoa-form-page {
+            display: none;
+        }
+
+        .hour-of-ai .hoa-form-page.hoa-active {
+            display: block;
+            animation: hoa-fadeIn 0.3s ease;
+        }
+
+        @keyframes hoa-fadeIn {
+            from {
+                opacity: 0;
+                transform: translateY(10px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        .hour-of-ai .hoa-form-group {
+            margin-bottom: var(--hoa-spacing-lg);
+        }
+
+        .hour-of-ai .hoa-form-group label {
+            display: block;
+            font-weight: 700;
+            color: var(--hoa-color-navy);
+            margin-bottom: var(--hoa-spacing-sm);
+            font-size: var(--hoa-font-size-sm);
+        }
+
+        .hour-of-ai .hoa-form-group.hoa-error input,
+        .hour-of-ai .hoa-form-group.hoa-error select,
+        .hour-of-ai .hoa-form-group.hoa-error textarea {
+            border-color: var(--hoa-color-coral);
+            background: rgba(255, 107, 107, 0.05);
+        }
+
+        .hour-of-ai .hoa-radio-group {
+            display: flex;
+            flex-direction: column;
+            gap: var(--hoa-spacing-sm);
+        }
+
+        .hour-of-ai .hoa-radio-option {
+            display: flex;
+            align-items: center;
+            gap: var(--hoa-spacing-sm);
+            padding: var(--hoa-spacing-sm);
+            border: 2px solid var(--hoa-color-border);
+            border-radius: var(--hoa-border-radius-sm);
+            cursor: pointer;
+            transition: all var(--hoa-transition-base);
+        }
+
+        .hour-of-ai .hoa-radio-option:hover {
+            border-color: var(--hoa-color-primary-blue);
+            background: rgba(59, 125, 214, 0.05);
+        }
+
+        .hour-of-ai .hoa-radio-option input[type="radio"]:checked + label {
+            color: var(--hoa-color-primary-blue);
+            font-weight: 700;
+        }
+
+        .hour-of-ai .hoa-checkbox-group {
+            display: flex;
+            flex-direction: column;
+            gap: var(--hoa-spacing-sm);
+        }
+
+        .hour-of-ai .hoa-checkbox-option {
+            display: flex;
+            align-items: center;
+            gap: var(--hoa-spacing-sm);
+            padding: var(--hoa-spacing-sm);
+            border: 2px solid var(--hoa-color-border);
+            border-radius: var(--hoa-border-radius-sm);
+            cursor: pointer;
+            transition: all var(--hoa-transition-base);
+        }
+
+        .hour-of-ai .hoa-checkbox-option:hover {
+            border-color: var(--hoa-color-primary-blue);
+            background: rgba(59, 125, 214, 0.05);
+        }
+
+        .hour-of-ai .hoa-form-actions {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: var(--hoa-spacing-xl);
+            background: var(--hoa-color-bg-lighter);
+            border-top: 2px solid var(--hoa-color-border);
+        }
+
+        .hour-of-ai .hoa-btn-outline {
+            background: transparent;
+            color: var(--hoa-color-text-secondary);
+            border: 2px solid var(--hoa-color-border);
+        }
+
+        .hour-of-ai .hoa-btn-outline:hover {
+            border-color: var(--hoa-color-primary-blue);
+            color: var(--hoa-color-primary-blue);
+        }
+
+        .hour-of-ai .hoa-btn-success {
+            background: linear-gradient(135deg, var(--hoa-color-primary-teal), var(--hoa-color-primary-blue));
+            color: var(--hoa-color-white);
+        }
+
+        .hour-of-ai .hoa-success-page {
+            text-align: center;
+            padding: var(--hoa-spacing-3xl);
+        }
+
+        .hour-of-ai .hoa-success-icon {
+            width: 80px;
+            height: 80px;
+            background: linear-gradient(135deg, var(--hoa-color-primary-teal), var(--hoa-color-primary-blue));
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: var(--hoa-font-size-3xl);
+            color: var(--hoa-color-white);
+            margin: 0 auto var(--hoa-spacing-lg);
+        }
+
+        .hour-of-ai .hoa-success-title {
+            font-size: var(--hoa-font-size-2xl);
+            font-weight: 700;
+            color: var(--hoa-color-navy);
+            margin-bottom: var(--hoa-spacing-sm);
+        }
+
+        .hour-of-ai .hoa-success-message {
+            color: var(--hoa-color-text-secondary);
+            line-height: 1.6;
+            margin-bottom: var(--hoa-spacing-xl);
+        }
+
+        /* Responsive Design - WordPress/Elementor Compatible Breakpoints */
+
+        /* Large Desktop - Elementor XL breakpoint (1200px+) */
+        @media (min-width: 1200px) {
+            .hour-of-ai .hoa-container {
+                max-width: 1140px;
+            }
+        }
+
+        /* Desktop - Elementor Desktop breakpoint (1025px - 1199px) */
+        @media (max-width: 1199px) {
+            .hour-of-ai .hoa-container {
+                max-width: 960px;
+            }
+        }
+
+        /* Tablet Landscape - Elementor Tablet breakpoint (768px - 1024px) */
+        @media (max-width: 1024px) {
+            .hour-of-ai .hoa-hero-content {
+                grid-template-columns: 1fr;
+                gap: var(--hoa-spacing-xl);
+                text-align: center;
+            }
+
+            .hour-of-ai .hoa-stats-dashboard {
+                grid-template-columns: 1fr;
+            }
+
+            .hour-of-ai .hoa-stats-counters {
+                grid-template-columns: repeat(3, 1fr);
+            }
+
+            .hour-of-ai .hoa-nav-links {
+                display: none;
+            }
+
+            .hour-of-ai .hoa-mobile-menu-toggle {
+                display: block;
+            }
+
+            .hour-of-ai .hoa-container {
+                max-width: 720px;
+            }
+        }
+
+        /* Tablet Portrait - WordPress tablet breakpoint (768px - 1024px) */
+        @media (max-width: 768px) {
+            .hour-of-ai .hoa-hero-text h1 {
+                font-size: var(--hoa-font-size-3xl);
+            }
+
+            .hour-of-ai .hoa-hero-ctas {
+                justify-content: center;
+                flex-direction: column;
+                align-items: center;
+            }
+
+            .hour-of-ai .hoa-stats-counters {
+                grid-template-columns: 1fr 1fr;
+            }
+
+            .hour-of-ai .hoa-form-progress {
+                flex-wrap: wrap;
+                justify-content: center;
+                gap: var(--hoa-spacing-sm);
+            }
+
+            .hour-of-ai .hoa-step {
+                flex-direction: column;
+                text-align: center;
+                min-width: 120px;
+            }
+
+            .hour-of-ai .hoa-step-connector {
+                display: none;
+            }
+
+            .hour-of-ai .hoa-form-actions {
+                flex-direction: column;
+                gap: var(--hoa-spacing-sm);
+            }
+
+            .hour-of-ai .hoa-btn {
+                width: 100%;
+                justify-content: center;
+            }
+
+            .hour-of-ai .hoa-container {
+                max-width: 100%;
+                padding: 0 var(--hoa-spacing-md);
+            }
+        }
+
+        /* Mobile Large - Elementor Mobile breakpoint (480px - 767px) */
+        @media (max-width: 480px) {
+            .hour-of-ai .hoa-container {
+                padding: 0 var(--hoa-spacing-sm);
+            }
+
+            .hour-of-ai .hoa-hero {
+                padding: var(--hoa-spacing-2xl) 0;
+            }
+
+            .hour-of-ai .hoa-hero-text h1 {
+                font-size: var(--hoa-font-size-2xl);
+                line-height: 1.3;
+            }
+
+            .hour-of-ai .hoa-hero-text p {
+                font-size: var(--hoa-font-size-base);
+            }
+
+            .hour-of-ai .hoa-form-content {
+                padding: var(--hoa-spacing-lg);
+            }
+
+            .hour-of-ai .hoa-form-header {
+                padding: var(--hoa-spacing-lg);
+            }
+
+            .hour-of-ai .hoa-form-header h3 {
+                font-size: var(--hoa-font-size-xl);
+            }
+
+            .hour-of-ai .hoa-stats-counters {
+                grid-template-columns: 1fr;
+                gap: var(--hoa-spacing-sm);
+            }
+
+            .hour-of-ai .hoa-counter-card {
+                padding: var(--hoa-spacing-md);
+            }
+
+            .hour-of-ai .hoa-section-title {
+                font-size: var(--hoa-font-size-2xl);
+            }
+
+            .hour-of-ai .hoa-section-subtitle {
+                font-size: var(--hoa-font-size-base);
+            }
+
+            .hour-of-ai .hoa-nav-container {
+                padding: var(--hoa-spacing-sm);
+            }
+
+            .hour-of-ai .hoa-nav-logo {
+                font-size: var(--hoa-font-size-lg);
+            }
+        }
+
+        /* Mobile Small - Extra small screens (320px - 479px) */
+        @media (max-width: 320px) {
+            .hour-of-ai .hoa-container {
+                padding: 0 var(--hoa-spacing-xs);
+            }
+
+            .hour-of-ai .hoa-hero-text h1 {
+                font-size: var(--hoa-font-size-xl);
+            }
+
+            .hour-of-ai .hoa-form-content {
+                padding: var(--hoa-spacing-md);
+            }
+
+            .hour-of-ai .hoa-btn {
+                padding: var(--hoa-spacing-sm) var(--hoa-spacing-md);
+                font-size: var(--hoa-font-size-sm);
+            }
+        }
+
+        /* WordPress Specific Overrides */
+        .hour-of-ai {
+            /* Ensure proper spacing in WordPress */
+            margin-top: 0 !important;
+            margin-bottom: 0 !important;
+        }
+
+        /* Override WordPress default link styles */
+        .hour-of-ai a:not(.hoa-btn) {
+            color: var(--hoa-color-primary-blue) !important;
+            text-decoration: none !important;
+        }
+
+        .hour-of-ai a:not(.hoa-btn):hover {
+            color: var(--hoa-color-primary-teal) !important;
+            text-decoration: underline !important;
+        }
+
+        /* Elementor compatibility */
+        .elementor-widget-html .hour-of-ai {
+            width: 100%;
+        }
+
+        /* Ensure proper z-index stacking in WordPress */
+        .hour-of-ai .hoa-nav {
+            z-index: var(--hoa-z-navigation) !important;
+        }
+
+        /* Fix potential conflicts with WordPress admin bar */
+        @media screen and (min-width: 783px) {
+            .admin-bar .hour-of-ai .hoa-nav {
+                top: 32px;
+            }
+        }
+
+        @media screen and (max-width: 782px) {
+            .admin-bar .hour-of-ai .hoa-nav {
+                top: 46px;
+            }
+        }
+    </style>
+
+    <!-- Navigation -->
+    <nav class="hoa-nav">
+        <div class="hoa-container">
+            <div class="hoa-nav-container">
+                <div class="hoa-nav-logo">
+                    均一 x <span>Hour of AI</span>
+                </div>
+                <ul class="hoa-nav-links">
+                    <li><a href="#about">關於活動</a></li>
+                    <li><a href="#schedule">活動時程</a></li>
+                    <li><a href="#register">立即報名</a></li>
+                </ul>
+                <a href="#register" class="hoa-btn hoa-nav-cta">馬上報名</a>
+                <button class="hoa-mobile-menu-toggle">
+                    <span class="hoa-hamburger"></span>
+                </button>
+            </div>
+        </div>
+    </nav>
+
+    <!-- Hero Section -->
+    <section class="hoa-hero">
+        <div class="hoa-container">
+            <div class="hoa-hero-content hoa-fade-in">
+                <div class="hoa-hero-text">
+                    <h1>2025 <span class="hoa-highlight">Hour of AI</span><br>全台同步啟動</h1>
+                    <p>與均一教育平台攜手，讓每個學生都有機會認識人工智慧，培養未來世代必備的數位素養。全台教育夥伴一起參與這場AI教育革命！</p>
+                    <div class="hoa-hero-ctas">
+                        <a href="#register" class="hoa-btn hoa-btn-primary">🚀 立即報名參與</a>
+                        <a href="#about" class="hoa-btn hoa-btn-secondary">📖 了解更多</a>
+                    </div>
+                </div>
+                <div class="hoa-hero-image">
+                    <img src="https://images.unsplash.com/photo-1620712943543-bcc4688e7485?ixlib=rb-4.0.3&auto=format&fit=crop&w=800&q=80" alt="Hour of AI 2025" loading="eager">
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Live Statistics Section -->
+    <section class="hoa-live-stats-section hoa-section">
+        <div class="hoa-container">
+            <h2 class="hoa-section-title hoa-fade-in">🔥 全台即時統計</h2>
+            <p class="hoa-section-subtitle hoa-fade-in">實時追蹤全台各地Hour of AI活動參與狀況</p>
+
+            <div class="hoa-stats-dashboard hoa-fade-in">
+                <div class="hoa-stats-left">
+                    <div class="hoa-stats-counters">
+                        <div class="hoa-counter-card">
+                            <div class="hoa-counter-icon">🎯</div>
+                            <div class="hoa-counter-number" id="hoaTotalEvents">15</div>
+                            <div class="hoa-counter-label">活動場次</div>
+                        </div>
+                        <div class="hoa-counter-card">
+                            <div class="hoa-counter-icon">👥</div>
+                            <div class="hoa-counter-number" id="hoaTotalParticipants">1,850</div>
+                            <div class="hoa-counter-label">參與人數</div>
+                        </div>
+                        <div class="hoa-counter-card">
+                            <div class="hoa-counter-icon">🏢</div>
+                            <div class="hoa-counter-number" id="hoaTotalCounties">15</div>
+                            <div class="hoa-counter-label">參與縣市</div>
+                        </div>
+                    </div>
+
+                    <div class="hoa-taiwan-map-container">
+                        <h4>📍 全台參與地圖</h4>
+                        <div id="hoaTaiwanMap" class="hoa-taiwan-map"></div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Registration Form Section -->
+    <section id="register" class="hoa-register-section hoa-section">
+        <div class="hoa-container">
+            <h2 class="hoa-section-title hoa-fade-in">📝 活動報名</h2>
+            <p class="hoa-section-subtitle hoa-fade-in">立即加入Hour of AI 2025，為學生帶來最棒的AI學習體驗</p>
+
+            <div class="hoa-form-container hoa-fade-in">
+                <div class="hoa-form-header">
+                    <h3>Hour of AI 2025 報名表</h3>
+                    <p>請填寫以下資訊完成報名，我們會盡快與您聯繫確認活動細節</p>
+                </div>
+
+                <div class="hoa-form-progress">
+                    <div class="hoa-step hoa-active" data-step="1">
+                        <div class="hoa-step-number">1</div>
+                        <div class="hoa-step-title">基本資料</div>
+                        <div class="hoa-step-connector"></div>
+                    </div>
+                    <div class="hoa-step" data-step="2">
+                        <div class="hoa-step-number">2</div>
+                        <div class="hoa-step-title">機構資訊</div>
+                        <div class="hoa-step-connector"></div>
+                    </div>
+                    <div class="hoa-step" data-step="3">
+                        <div class="hoa-step-number">3</div>
+                        <div class="hoa-step-title">活動安排</div>
+                        <div class="hoa-step-connector"></div>
+                    </div>
+                    <div class="hoa-step" data-step="4">
+                        <div class="hoa-step-number">4</div>
+                        <div class="hoa-step-title">確認提交</div>
+                    </div>
+                </div>
+
+                <form id="hoaRegistrationForm" class="hoa-form-content">
+                    <!-- Page 1: Basic Information -->
+                    <div class="hoa-form-page hoa-active" data-page="1">
+                        <div class="hoa-form-group">
+                            <label for="contactName">聯絡人姓名 *</label>
+                            <input type="text" id="contactName" name="contactName" required>
+                        </div>
+
+                        <div class="hoa-form-group">
+                            <label for="contactEmail">聯絡人信箱 *</label>
+                            <input type="email" id="contactEmail" name="contactEmail" required>
+                        </div>
+
+                        <div class="hoa-form-group">
+                            <label for="contactPhone">聯絡人電話 *</label>
+                            <input type="tel" id="contactPhone" name="contactPhone" required pattern="[0-9\-\s\+\(\)]+">
+                        </div>
+
+                        <div class="hoa-form-group">
+                            <label for="contactPosition">職位/身分 *</label>
+                            <input type="text" id="contactPosition" name="contactPosition" required placeholder="例如：校長、主任、老師、企業主管">
+                        </div>
+                    </div>
+
+                    <!-- Page 2: Institution Information -->
+                    <div class="hoa-form-page" data-page="2">
+                        <div class="hoa-form-group">
+                            <label>機構類型 *</label>
+                            <div class="hoa-radio-group">
+                                <div class="hoa-radio-option">
+                                    <input type="radio" id="instSchool" name="institutionType" value="學校" required>
+                                    <label for="instSchool">🏫 學校</label>
+                                </div>
+                                <div class="hoa-radio-option">
+                                    <input type="radio" id="instCompany" name="institutionType" value="企業" required>
+                                    <label for="instCompany">🏢 企業</label>
+                                </div>
+                                <div class="hoa-radio-option">
+                                    <input type="radio" id="instNPO" name="institutionType" value="非營利組織" required>
+                                    <label for="instNPO">🤝 非營利組織</label>
+                                </div>
+                                <div class="hoa-radio-option">
+                                    <input type="radio" id="instOther" name="institutionType" value="其他" required>
+                                    <label for="instOther">📋 其他</label>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="hoa-form-group">
+                            <label for="institutionName">機構名稱 *</label>
+                            <input type="text" id="institutionName" name="institutionName" required>
+                        </div>
+
+                        <div class="hoa-form-group">
+                            <label for="county">縣市 *</label>
+                            <select id="county" name="county" required>
+                                <option value="">請選擇縣市</option>
+                                <option value="台北市">台北市</option>
+                                <option value="新北市">新北市</option>
+                                <option value="桃園市">桃園市</option>
+                                <option value="台中市">台中市</option>
+                                <option value="台南市">台南市</option>
+                                <option value="高雄市">高雄市</option>
+                                <option value="基隆市">基隆市</option>
+                                <option value="新竹市">新竹市</option>
+                                <option value="新竹縣">新竹縣</option>
+                                <option value="苗栗縣">苗栗縣</option>
+                                <option value="彰化縣">彰化縣</option>
+                                <option value="南投縣">南投縣</option>
+                                <option value="雲林縣">雲林縣</option>
+                                <option value="嘉義市">嘉義市</option>
+                                <option value="嘉義縣">嘉義縣</option>
+                                <option value="屏東縣">屏東縣</option>
+                                <option value="宜蘭縣">宜蘭縣</option>
+                                <option value="花蓮縣">花蓮縣</option>
+                                <option value="台東縣">台東縣</option>
+                                <option value="澎湖縣">澎湖縣</option>
+                                <option value="金門縣">金門縣</option>
+                                <option value="連江縣">連江縣</option>
+                            </select>
+                        </div>
+
+                        <!-- School-specific fields (initially hidden) -->
+                        <div id="hoaSchoolFields" class="hoa-hidden">
+                            <div class="hoa-form-group">
+                                <label for="schoolName">學校全名</label>
+                                <input type="text" id="schoolName" name="schoolName" placeholder="例如：台北市立中山國民小學">
+                            </div>
+                            <div class="hoa-form-group">
+                                <label for="gradeLevel">學制</label>
+                                <input type="text" id="gradeLevel" name="gradeLevel" placeholder="例如：國小、國中、高中、大學">
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Page 3: Event Planning -->
+                    <div class="hoa-form-page" data-page="3">
+                        <div class="hoa-form-group">
+                            <label for="expectedParticipants">預計參與人數 *</label>
+                            <select id="expectedParticipants" name="expectedParticipants" required>
+                                <option value="">請選擇人數範圍</option>
+                                <option value="10-30人">10-30人</option>
+                                <option value="31-50人">31-50人</option>
+                                <option value="51-100人">51-100人</option>
+                                <option value="101-200人">101-200人</option>
+                                <option value="200人以上">200人以上</option>
+                            </select>
+                        </div>
+
+                        <div class="hoa-form-group">
+                            <label for="targetAudience">目標對象 *</label>
+                            <input type="text" id="targetAudience" name="targetAudience" required placeholder="例如：小學三年級學生、國中生、高中生、員工">
+                        </div>
+
+                        <div class="hoa-form-group">
+                            <label>活動進行方式 * (可複選)</label>
+                            <div class="hoa-checkbox-group">
+                                <div class="hoa-checkbox-option">
+                                    <input type="checkbox" id="deliveryOnline" name="deliveryFormat" value="線上">
+                                    <label for="deliveryOnline">💻 線上進行</label>
+                                </div>
+                                <div class="hoa-checkbox-option">
+                                    <input type="checkbox" id="deliveryOffline" name="deliveryFormat" value="實體">
+                                    <label for="deliveryOffline">🏫 實體進行</label>
+                                </div>
+                                <div class="hoa-checkbox-option">
+                                    <input type="checkbox" id="deliveryHybrid" name="deliveryFormat" value="混合">
+                                    <label for="deliveryHybrid">🔄 混合模式</label>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- Online registration field (conditionally shown) -->
+                        <div id="hoaOnlineRegistrationField" class="hoa-form-group hoa-hidden">
+                            <label for="onlineRegistrationUrl">線上活動報名連結</label>
+                            <input type="url" id="onlineRegistrationUrl" name="onlineRegistrationUrl" placeholder="請提供您的活動報名連結，我們會協助推廣">
+                        </div>
+
+                        <div class="hoa-form-group">
+                            <label for="preferredDate">偏好日期 *</label>
+                            <input type="date" id="preferredDate" name="preferredDate" required min="2025-01-01">
+                        </div>
+
+                        <div class="hoa-form-group">
+                            <label for="additionalNeeds">其他需求或備註</label>
+                            <textarea id="additionalNeeds" name="additionalNeeds" rows="4" placeholder="請說明任何特殊需求、問題或想法..."></textarea>
+                        </div>
+                    </div>
+
+                    <!-- Page 4: Confirmation -->
+                    <div class="hoa-form-page" data-page="4">
+                        <div class="hoa-form-group">
+                            <label>資料蒐集與運用聲明 *</label>
+                            <div class="hoa-radio-group">
+                                <div class="hoa-radio-option">
+                                    <input type="radio" id="dataConsentYes" name="dataConsent" value="同意" required>
+                                    <label for="dataConsentYes">✅ 我同意均一教育平台蒐集並運用以上個人資料，僅用於Hour of AI活動相關事宜</label>
+                                </div>
+                                <div class="hoa-radio-option">
+                                    <input type="radio" id="dataConsentNo" name="dataConsent" value="不同意" required>
+                                    <label for="dataConsentNo">❌ 我不同意</label>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="hoa-form-group">
+                            <label>接收相關資訊</label>
+                            <div class="hoa-checkbox-group">
+                                <div class="hoa-checkbox-option">
+                                    <input type="checkbox" id="newsletter" name="newsletter" value="是">
+                                    <label for="newsletter">📧 我願意接收均一教育平台的教育相關電子報</label>
+                                </div>
+                                <div class="hoa-checkbox-option">
+                                    <input type="checkbox" id="futureEvents" name="futureEvents" value="是">
+                                    <label for="futureEvents">🎯 我願意接收未來相關活動通知</label>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div style="background: #f0f9ff; border: 2px solid #0ea5e9; border-radius: 12px; padding: 20px; margin-top: 20px;">
+                            <h4 style="color: #0369a1; margin-bottom: 12px;">📋 報名確認</h4>
+                            <p style="color: #475569; margin-bottom: 8px;">感謝您報名Hour of AI 2025！提交後我們將在3個工作天內與您聯繫。</p>
+                            <p style="color: #475569; margin: 0;">如有急件請洽：<a href="mailto:contact@junyiacademy.org">contact@junyiacademy.org</a></p>
+                        </div>
+                    </div>
+
+                    <!-- Success Page -->
+                    <div class="hoa-form-page" data-page="success">
+                        <div class="hoa-success-page">
+                            <div class="hoa-success-icon">🎉</div>
+                            <h3 class="hoa-success-title">報名成功！</h3>
+                            <div class="hoa-success-message">
+                                <p>感謝您報名Hour of AI 2025！</p>
+                                <p>我們已收到您的報名資料，將在3個工作天內與您聯繫確認活動細節。</p>
+                                <p>期待與您一起為學生帶來精彩的AI學習體驗！</p>
+                            </div>
+                            <a href="/" class="hoa-btn hoa-btn-primary">返回首頁</a>
+                        </div>
+                    </div>
+                </form>
+
+                <div class="hoa-form-actions">
+                    <button type="button" id="hoaPrevBtn" class="hoa-btn hoa-btn-outline hoa-hidden">← 上一步</button>
+                    <button type="button" id="hoaNextBtn" class="hoa-btn hoa-btn-primary">下一步 →</button>
+                    <button type="submit" form="hoaRegistrationForm" id="hoaSubmitBtn" class="hoa-btn hoa-btn-success hoa-hidden">送出報名 →</button>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <script>
+        // WordPress-compatible JavaScript with namespaced selectors
+        (function() {
+            'use strict';
+
+            // Configuration
+            const CONFIG = {
+                FORM_SUBMIT_URL: 'https://script.google.com/macros/s/YOUR_SCRIPT_ID/exec',
+                ENABLE_ANALYTICS: false,
+                FADE_ANIMATION_DELAY: 200
+            };
+
+            // Initialize on DOM ready
+            if (document.readyState === 'loading') {
+                document.addEventListener('DOMContentLoaded', initHourOfAI);
+            } else {
+                initHourOfAI();
+            }
+
+            function initHourOfAI() {
+                // Ensure we're working within our component
+                const hoaContainer = document.querySelector('.hour-of-ai');
+                if (!hoaContainer) return;
+
+                // Initialize all components
+                initScrollAnimations();
+                initNavigation();
+                initRegistrationForm();
+                initLiveStats();
+            }
+
+            // Scroll animations
+            function initScrollAnimations() {
+                const observerOptions = {
+                    root: null,
+                    rootMargin: '0px 0px -100px 0px',
+                    threshold: 0.1
+                };
+
+                const observer = new IntersectionObserver((entries) => {
+                    entries.forEach((entry, index) => {
+                        if (entry.isIntersecting) {
+                            setTimeout(() => {
+                                entry.target.classList.add('hoa-visible');
+                            }, index * CONFIG.FADE_ANIMATION_DELAY);
+                        }
+                    });
+                }, observerOptions);
+
+                // Observe all fade-in elements within our component
+                document.querySelectorAll('.hour-of-ai .hoa-fade-in').forEach(el => {
+                    observer.observe(el);
+                });
+            }
+
+            // Navigation
+            function initNavigation() {
+                const nav = document.querySelector('.hour-of-ai .hoa-nav');
+                const mobileToggle = document.querySelector('.hour-of-ai .hoa-mobile-menu-toggle');
+
+                if (!nav) return;
+
+                // Sticky navigation background
+                window.addEventListener('scroll', () => {
+                    if (window.scrollY > 50) {
+                        nav.classList.add('hoa-scrolled');
+                    } else {
+                        nav.classList.remove('hoa-scrolled');
+                    }
+                });
+
+                // Mobile menu toggle
+                if (mobileToggle) {
+                    mobileToggle.addEventListener('click', () => {
+                        mobileToggle.classList.toggle('hoa-active');
+                        // Add mobile menu implementation if needed
+                    });
+                }
+
+                // Smooth scrolling for navigation links
+                document.querySelectorAll('.hour-of-ai .hoa-nav-links a[href^="#"]').forEach(link => {
+                    link.addEventListener('click', (e) => {
+                        e.preventDefault();
+                        const targetId = link.getAttribute('href').substring(1);
+                        const targetElement = document.getElementById(targetId);
+
+                        if (targetElement) {
+                            const offsetTop = targetElement.offsetTop - (nav.offsetHeight + 20);
+                            window.scrollTo({
+                                top: offsetTop,
+                                behavior: 'smooth'
+                            });
+                        }
+                    });
+                });
+            }
+
+            // Registration form
+            function initRegistrationForm() {
+                const form = document.getElementById('hoaRegistrationForm');
+                const formPages = document.querySelectorAll('.hour-of-ai .hoa-form-page');
+                const steps = document.querySelectorAll('.hour-of-ai .hoa-step');
+                const prevBtn = document.getElementById('hoaPrevBtn');
+                const nextBtn = document.getElementById('hoaNextBtn');
+                const submitBtn = document.getElementById('hoaSubmitBtn');
+                const formActions = document.querySelector('.hour-of-ai .hoa-form-actions');
+
+                if (!form) return;
+
+                let currentPage = 1;
+                const totalPages = 4;
+
+                // Initialize form
+                showPage(currentPage);
+                updateProgress();
+
+                // Update progress indicator
+                function updateProgress() {
+                    steps.forEach((step, index) => {
+                        const stepNumber = index + 1;
+                        step.classList.remove('hoa-active', 'hoa-completed');
+
+                        if (stepNumber < currentPage) {
+                            step.classList.add('hoa-completed');
+                        } else if (stepNumber === currentPage) {
+                            step.classList.add('hoa-active');
+                        }
+                    });
+                }
+
+                // Show specific page
+                function showPage(pageNumber) {
+                    formPages.forEach(page => {
+                        page.classList.remove('hoa-active');
+                    });
+
+                    const targetPage = document.querySelector(`.hour-of-ai .hoa-form-page[data-page="${pageNumber}"]`);
+                    if (targetPage) {
+                        targetPage.classList.add('hoa-active');
+                    }
+
+                    // Update button visibility
+                    if (pageNumber === 1) {
+                        prevBtn.classList.add('hoa-hidden');
+                    } else {
+                        prevBtn.classList.remove('hoa-hidden');
+                    }
+
+                    if (pageNumber === totalPages) {
+                        nextBtn.classList.add('hoa-hidden');
+                        submitBtn.classList.remove('hoa-hidden');
+                    } else {
+                        nextBtn.classList.remove('hoa-hidden');
+                        submitBtn.classList.add('hoa-hidden');
+                    }
+
+                    // Scroll to form
+                    document.getElementById('register').scrollIntoView({ behavior: 'smooth', block: 'start' });
+                }
+
+                // Validate current page
+                function validatePage(pageNumber) {
+                    const currentPageEl = document.querySelector(`.hour-of-ai .hoa-form-page[data-page="${pageNumber}"]`);
+                    const inputs = currentPageEl.querySelectorAll('input[required], select[required], textarea[required]');
+                    let isValid = true;
+
+                    inputs.forEach(input => {
+                        const formGroup = input.closest('.hoa-form-group');
+
+                        // Check if input is visible (for conditional fields)
+                        if (formGroup && formGroup.classList.contains('hoa-hidden')) {
+                            return;
+                        }
+
+                        // For radio buttons
+                        if (input.type === 'radio') {
+                            const radioGroup = currentPageEl.querySelectorAll(`input[name="${input.name}"]`);
+                            const isChecked = Array.from(radioGroup).some(radio => radio.checked);
+                            if (!isChecked) {
+                                formGroup.classList.add('hoa-error');
+                                isValid = false;
+                            } else {
+                                formGroup.classList.remove('hoa-error');
+                            }
+                        }
+                        // For other inputs
+                        else if (!input.value.trim()) {
+                            formGroup.classList.add('hoa-error');
+                            isValid = false;
+                        } else if (input.hasAttribute('pattern')) {
+                            // Validate pattern
+                            const pattern = new RegExp(input.getAttribute('pattern'));
+                            if (!pattern.test(input.value)) {
+                                formGroup.classList.add('hoa-error');
+                                isValid = false;
+                            } else {
+                                formGroup.classList.remove('hoa-error');
+                            }
+                        } else {
+                            formGroup.classList.remove('hoa-error');
+                        }
+                    });
+
+                    // Custom validation for page 4
+                    if (pageNumber === 4) {
+                        const dataConsent = document.querySelector('.hour-of-ai input[name="dataConsent"]:checked');
+                        if (dataConsent && dataConsent.value === '不同意') {
+                            alert('您必須同意資料蒐集與運用聲明才能完成報名');
+                            isValid = false;
+                        }
+                    }
+
+                    return isValid;
+                }
+
+                // Next button
+                nextBtn.addEventListener('click', () => {
+                    if (validatePage(currentPage)) {
+                        currentPage++;
+                        showPage(currentPage);
+                        updateProgress();
+                    }
+                });
+
+                // Previous button
+                prevBtn.addEventListener('click', () => {
+                    if (currentPage > 1) {
+                        currentPage--;
+                        showPage(currentPage);
+                        updateProgress();
+                    }
+                });
+
+                // Conditional Fields Logic
+
+                // Show/hide school fields based on institution type
+                const institutionTypeRadios = document.querySelectorAll('.hour-of-ai input[name="institutionType"]');
+                const schoolFields = document.getElementById('hoaSchoolFields');
+
+                institutionTypeRadios.forEach(radio => {
+                    radio.addEventListener('change', (e) => {
+                        if (e.target.value === '學校') {
+                            schoolFields.classList.remove('hoa-hidden');
+                            schoolFields.querySelectorAll('input[name="schoolName"], input[name="gradeLevel"]').forEach(input => {
+                                input.setAttribute('required', 'required');
+                            });
+                        } else {
+                            schoolFields.classList.add('hoa-hidden');
+                            schoolFields.querySelectorAll('input').forEach(input => {
+                                input.removeAttribute('required');
+                                input.value = '';
+                            });
+                        }
+                    });
+                });
+
+                // Show/hide online registration field
+                const deliveryFormatCheckboxes = document.querySelectorAll('.hour-of-ai input[name="deliveryFormat"]');
+                const onlineRegistrationField = document.getElementById('hoaOnlineRegistrationField');
+
+                deliveryFormatCheckboxes.forEach(checkbox => {
+                    checkbox.addEventListener('change', () => {
+                        const onlineChecked = Array.from(deliveryFormatCheckboxes).some(cb =>
+                            cb.value === '線上' && cb.checked
+                        );
+
+                        if (onlineChecked) {
+                            onlineRegistrationField.classList.remove('hoa-hidden');
+                        } else {
+                            onlineRegistrationField.classList.add('hoa-hidden');
+                        }
+                    });
+                });
+
+                // Form submission
+                form.addEventListener('submit', async (e) => {
+                    e.preventDefault();
+
+                    if (!validatePage(currentPage)) {
+                        return;
+                    }
+
+                    // Collect form data
+                    const formData = new FormData(form);
+                    const data = {};
+
+                    // Convert FormData to object
+                    for (let [key, value] of formData.entries()) {
+                        // Handle checkboxes (multiple values)
+                        if (key === 'deliveryFormat') {
+                            if (!data[key]) {
+                                data[key] = [];
+                            }
+                            data[key].push(value);
+                        } else {
+                            data[key] = value;
+                        }
+                    }
+
+                    // Convert deliveryFormat array to string
+                    if (Array.isArray(data.deliveryFormat)) {
+                        data.deliveryFormat = data.deliveryFormat.join(', ');
+                    }
+
+                    // Add timestamp
+                    data.timestamp = new Date().toISOString();
+
+                    // Disable submit button
+                    submitBtn.disabled = true;
+                    submitBtn.textContent = '送出中...';
+
+                    try {
+                        // Submit to Google Apps Script
+                        const response = await fetch(CONFIG.FORM_SUBMIT_URL, {
+                            method: 'POST',
+                            mode: 'no-cors',
+                            headers: {
+                                'Content-Type': 'application/json',
+                            },
+                            body: JSON.stringify(data)
+                        });
+
+                        // Show success page
+                        formActions.classList.add('hoa-hidden');
+                        formPages.forEach(page => page.classList.remove('hoa-active'));
+                        document.querySelector('.hour-of-ai .hoa-form-page[data-page="success"]').classList.add('hoa-active');
+
+                        // Track conversion
+                        if (CONFIG.ENABLE_ANALYTICS && typeof gtag !== 'undefined') {
+                            gtag('event', 'form_submission', {
+                                'event_category': 'registration',
+                                'event_label': '均一 x Hour of AI'
+                            });
+                        }
+
+                        // Reset form
+                        form.reset();
+                        currentPage = 1;
+
+                    } catch (error) {
+                        console.error('Form submission error:', error);
+                        alert('送出時發生錯誤,請稍後再試或直接聯繫我們。');
+                        submitBtn.disabled = false;
+                        submitBtn.textContent = '送出報名 →';
+                    }
+                });
+            }
+
+            // Live statistics
+            function initLiveStats() {
+                const liveStatsConfig = {
+                    UPDATE_INTERVAL: 5 * 60 * 1000, // 5 minutes
+                    fallbackData: {
+                        totalEvents: 15,
+                        totalParticipants: 1850,
+                        counties: {
+                            '台北市': 5,
+                            '新北市': 3,
+                            '台中市': 2,
+                            '高雄市': 2,
+                            '桃園市': 1,
+                            '台南市': 1,
+                            '新竹市': 1
+                        }
+                    }
+                };
+
+                // Animated counter
+                function animateCounter(element, start, end, duration) {
+                    if (!element) return;
+
+                    const range = end - start;
+                    const startTime = performance.now();
+
+                    function update(currentTime) {
+                        const elapsed = currentTime - startTime;
+                        const progress = Math.min(elapsed / duration, 1);
+
+                        // Ease out cubic
+                        const easeProgress = 1 - Math.pow(1 - progress, 3);
+                        const current = Math.floor(start + range * easeProgress);
+
+                        element.textContent = current.toLocaleString();
+
+                        if (progress < 1) {
+                            requestAnimationFrame(update);
+                        }
+                    }
+
+                    requestAnimationFrame(update);
+                }
+
+                // Update counters
+                function updateCounters(data) {
+                    const totalEvents = data.totalEvents || liveStatsConfig.fallbackData.totalEvents;
+                    const totalParticipants = data.totalParticipants || liveStatsConfig.fallbackData.totalParticipants;
+                    const totalCounties = Object.keys(data.counties || liveStatsConfig.fallbackData.counties).length;
+
+                    animateCounter(document.getElementById('hoaTotalEvents'), 0, totalEvents, 2000);
+                    animateCounter(document.getElementById('hoaTotalParticipants'), 0, totalParticipants, 2500);
+                    animateCounter(document.getElementById('hoaTotalCounties'), 0, totalCounties, 1500);
+                }
+
+                // Initialize with fallback data
+                updateCounters(liveStatsConfig.fallbackData);
+
+                // Initialize Taiwan map if Leaflet is available
+                if (typeof L !== 'undefined') {
+                    initTaiwanMap();
+                }
+            }
+
+            // Taiwan map initialization
+            function initTaiwanMap() {
+                const mapContainer = document.getElementById('hoaTaiwanMap');
+                if (!mapContainer) return;
+
+                try {
+                    // Initialize map centered on Taiwan
+                    const taiwanMap = L.map('hoaTaiwanMap', {
+                        center: [23.8, 121],
+                        zoom: 7,
+                        minZoom: 6,
+                        maxZoom: 10,
+                        zoomControl: true,
+                        scrollWheelZoom: false
+                    });
+
+                    // Add base tile layer
+                    L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
+                        attribution: '© OpenStreetMap contributors',
+                        maxZoom: 19
+                    }).addTo(taiwanMap);
+
+                    // Add some sample markers for demo
+                    const sampleLocations = [
+                        { name: '台北市', lat: 25.0330, lng: 121.5654, count: 5 },
+                        { name: '新北市', lat: 25.0092, lng: 121.4648, count: 3 },
+                        { name: '台中市', lat: 24.1477, lng: 120.6736, count: 2 },
+                        { name: '高雄市', lat: 22.6273, lng: 120.3014, count: 2 }
+                    ];
+
+                    sampleLocations.forEach(location => {
+                        const marker = L.marker([location.lat, location.lng]).addTo(taiwanMap);
+                        marker.bindPopup(`
+                            <div class="hoa-county-popup">
+                                <div class="hoa-county-popup-name">${location.name}</div>
+                                <div class="hoa-county-popup-count">${location.count}</div>
+                                <div class="hoa-county-popup-label">場活動</div>
+                            </div>
+                        `);
+                    });
+
+                } catch (error) {
+                    console.error('Error initializing Taiwan map:', error);
+                    // Hide map container if initialization fails
+                    mapContainer.style.display = 'none';
+                }
+            }
+
+        })();
+    </script>
+</div>

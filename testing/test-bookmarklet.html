@@ -1,0 +1,163 @@
+<!DOCTYPE html>
+<html lang="zh-TW">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>HOA 表單測試工具</title>
+    <style>
+        body { font-family: Arial, sans-serif; margin: 20px; line-height: 1.6; }
+        .bookmarklet {
+            background: #f0f0f0;
+            padding: 10px;
+            margin: 10px 0;
+            border-left: 4px solid #007cba;
+            border-radius: 4px;
+        }
+        code {
+            background: #e8e8e8;
+            padding: 2px 4px;
+            border-radius: 3px;
+            font-family: 'Courier New', monospace;
+        }
+        .method {
+            border: 1px solid #ddd;
+            margin: 15px 0;
+            padding: 15px;
+            border-radius: 8px;
+        }
+        .method h3 { margin-top: 0; color: #2c3e50; }
+        .pros { color: #27ae60; }
+        .cons { color: #e74c3c; }
+    </style>
+</head>
+<body>
+    <h1>🚀 HOA 表單快速測試工具</h1>
+
+    <div class="method">
+        <h3>方法 1: 控制台命令 (推薦)</h3>
+        <p><strong>使用步驟:</strong></p>
+        <ol>
+            <li>打開表單頁面: <code>https://www.junyiacademy.org/event/hoa-staging</code></li>
+            <li>按 <code>F12</code> 打開開發者工具</li>
+            <li>切換到 <code>Console</code> 標籤</li>
+            <li>輸入以下命令:</li>
+        </ol>
+
+        <div class="bookmarklet">
+            <strong>自動填寫測試資料:</strong><br>
+            <code>fillTestData()</code>
+        </div>
+
+        <div class="bookmarklet">
+            <strong>跳轉到指定頁面:</strong><br>
+            <code>goToPage(4)</code> // 跳到第4頁
+        </div>
+
+        <div class="bookmarklet">
+            <strong>測試 CORS 連線:</strong><br>
+            <code>testCORS()</code>
+        </div>
+
+        <div class="bookmarklet">
+            <strong>一鍵快速測試 (超快速):</strong><br>
+            按住 <code>Ctrl + Shift + T</code>
+        </div>
+
+        <p class="pros">✅ 優點: 最快速、功能完整、包含 CORS 測試</p>
+        <p class="cons">❌ 缺點: 需要打開開發者工具</p>
+    </div>
+
+    <div class="method">
+        <h3>方法 2: 書籤工具 (Bookmarklet)</h3>
+        <p><strong>設定步驟:</strong></p>
+        <ol>
+            <li>複製下面的程式碼</li>
+            <li>在瀏覽器中新增書籤</li>
+            <li>將程式碼貼到書籤的網址欄位</li>
+            <li>在表單頁面點擊書籤即可使用</li>
+        </ol>
+
+        <div class="bookmarklet">
+            <strong>自動填寫書籤:</strong><br>
+            <textarea readonly style="width:100%; height:60px; font-size:11px;">javascript:(function(){const testData={'email':'test@example.com','contactName':'測試使用者','jobTitle':'教師','phone':'0912345678','county':'台北市','address':'台北市信義區市府路1號','postalCode':'11008','participants':'30','institutionType':'學校','schoolName':'測試國小','gradeLevel':'國小','activityType':'教室活動','deviceUsage':'有使用設備','activityDescription':'AI測試活動','deliveryFormat':'實體','startDate':'2025-03-01','endDate':'2025-03-01','codeOrgContact':'是','dataConsent':'同意'};Object.entries(testData).forEach(([name,value])=>{const input=document.querySelector(`[name="${name}"]`);if(input){if(input.type==='radio'){const radio=document.querySelector(`[name="${name}"][value="${value}"]`);if(radio)radio.checked=true;}else if(input.type==='checkbox'){if(value==='同意')input.checked=true;}else{input.value=value;}input.dispatchEvent(new Event('input',{bubbles:true}));}});alert('✅ 測試資料已填入');})();</textarea>
+        </div>
+
+        <p class="pros">✅ 優點: 不需要開發者工具</p>
+        <p class="cons">❌ 缺點: 功能較限制、無法測試 CORS</p>
+    </div>
+
+    <div class="method">
+        <h3>方法 3: URL 參數快速測試</h3>
+        <p>在網址後加上參數自動填寫:</p>
+
+        <div class="bookmarklet">
+            <strong>測試網址:</strong><br>
+            <code>https://www.junyiacademy.org/event/hoa-staging?test=auto</code>
+        </div>
+
+        <p><em>注意: 此功能需要在 HTML 中實作 URL 參數解析</em></p>
+    </div>
+
+    <hr>
+
+    <h2>🧪 CORS 測試指南</h2>
+
+    <div class="method">
+        <h3>測試步驟:</h3>
+        <ol>
+            <li><strong>基本 CORS 測試:</strong> 在控制台執行 <code>testCORS()</code></li>
+            <li><strong>完整流程測試:</strong>
+                <ul>
+                    <li>執行 <code>fillTestData()</code></li>
+                    <li>執行 <code>goToPage(4)</code></li>
+                    <li>點擊 "提交活動規劃" 按鈕</li>
+                    <li>觀察是否出現 CORS 錯誤</li>
+                </ul>
+            </li>
+            <li><strong>錯誤檢查:</strong> 檢查控制台是否有紅色錯誤訊息</li>
+            <li><strong>成功驗證:</strong> 確認出現成功頁面</li>
+        </ol>
+
+        <h3>常見 CORS 錯誤:</h3>
+        <ul>
+            <li><code>Access to fetch ... has been blocked by CORS policy</code></li>
+            <li><code>No 'Access-Control-Allow-Origin' header is present</code></li>
+            <li><code>Response to preflight request doesn't pass access control check</code></li>
+        </ul>
+
+        <h3>解決方案確認:</h3>
+        <ul>
+            <li>✅ Google Apps Script 已更新並重新部署</li>
+            <li>✅ 使用 <code>mode: 'no-cors'</code></li>
+            <li>✅ 表單成功提交並顯示成功頁面</li>
+        </ul>
+    </div>
+
+    <hr>
+
+    <h2>⚡ 推薦測試流程</h2>
+
+    <div class="method">
+        <h3>日常測試 (5秒):</h3>
+        <ol>
+            <li>開啟表單頁面</li>
+            <li>按 <code>Ctrl + Shift + T</code></li>
+            <li>確認成功頁面出現</li>
+        </ol>
+
+        <h3>完整測試 (30秒):</h3>
+        <ol>
+            <li>開啟開發者工具 (<code>F12</code>)</li>
+            <li>執行 <code>testCORS()</code> 確認連線</li>
+            <li>執行 <code>fillTestData()</code></li>
+            <li>逐頁檢查: <code>goToPage(1)</code>, <code>goToPage(2)</code>, <code>goToPage(3)</code>, <code>goToPage(4)</code></li>
+            <li>提交並確認成功</li>
+        </ol>
+    </div>
+
+    <p style="background: #e8f4fd; padding: 15px; border-radius: 8px; margin-top: 30px;">
+        <strong>💡 提示:</strong> 所有測試工具只在 staging 環境下載入，production 環境不會有這些功能。
+    </p>
+
+</body>
+</html>
