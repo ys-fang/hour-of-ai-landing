@@ -559,7 +559,7 @@
         .stats-header-content {
             display: flex;
             align-items: center;
-            justify-content: space-between;
+            justify-content: center;
             gap: var(--spacing-md);
             flex-wrap: wrap;
         }
@@ -630,11 +630,143 @@
             opacity: 0.6;
         }
 
+        /* ===== Stats Controls Wrapper (at bottom of stats section) ===== */
+        .stats-controls-wrapper {
+            margin-top: var(--spacing-lg);
+        }
+
+        .stats-controls {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+        }
+
+        .stats-controls .stats-meta {
+            display: flex;
+            align-items: center;
+            gap: var(--spacing-sm);
+            opacity: 0.6;
+        }
+
+        .stats-controls .stats-refresh-btn {
+            width: 28px;
+            height: 28px;
+            padding: 0;
+            border-radius: 50%;
+            background: rgba(0, 0, 0, 0.05);
+            border: 1px solid rgba(0, 0, 0, 0.1);
+            transition: all 0.2s ease;
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .stats-controls .stats-refresh-btn:hover {
+            background: rgba(0, 0, 0, 0.08);
+            border-color: rgba(0, 0, 0, 0.15);
+            opacity: 1;
+        }
+
+        .stats-controls .stats-refresh-btn .material-icons {
+            font-size: 16px;
+            color: rgba(0, 0, 0, 0.5);
+        }
+
+        @media (max-width: 768px) {
+            .stats-controls .stats-refresh-btn {
+                width: 24px;
+                height: 24px;
+            }
+
+            .stats-controls .stats-refresh-btn .material-icons {
+                font-size: 14px;
+            }
+        }
+
+        /* ===== Demo Mode Indicators ===== */
+        .demo-badge {
+            display: inline-flex;
+            align-items: center;
+            gap: 4px;
+            margin-left: var(--spacing-sm);
+            padding: 4px 8px;
+            background: rgba(255, 193, 7, 0.15);
+            color: #e65100;
+            border: 1px solid rgba(255, 193, 7, 0.3);
+            border-radius: 12px;
+            font-size: var(--font-size-xs);
+            font-weight: var(--font-weight-semibold);
+            line-height: 1;
+        }
+
+        .demo-badge .material-icons {
+            font-size: 14px !important;
+        }
+
+        .demo-notice {
+            margin: var(--spacing-md) 0;
+            text-align: center;
+        }
+
+        .demo-notice-content {
+            display: inline-flex;
+            align-items: center;
+            gap: var(--spacing-xs);
+            padding: var(--spacing-xs) var(--spacing-sm);
+            background: rgba(33, 150, 243, 0.1);
+            color: #1976d2;
+            border: 1px solid rgba(33, 150, 243, 0.2);
+            border-radius: var(--border-radius);
+            font-size: var(--font-size-xs);
+            opacity: 0.8;
+        }
+
+        .demo-notice-content .material-icons {
+            font-size: 16px !important;
+        }
+
+        /* Demo mode visual overlay */
+        .stats-dashboard.demo-mode {
+            position: relative;
+            opacity: 0.92;
+        }
+
+        .stats-dashboard.demo-mode::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: repeating-linear-gradient(
+                45deg,
+                transparent,
+                transparent 20px,
+                rgba(255, 193, 7, 0.02) 20px,
+                rgba(255, 193, 7, 0.02) 40px
+            );
+            pointer-events: none;
+            z-index: 1;
+        }
+
+        @media (max-width: 768px) {
+            .demo-badge {
+                margin-left: 0;
+                margin-top: var(--spacing-xs);
+                font-size: 11px;
+            }
+
+            .demo-badge .material-icons {
+                font-size: 12px !important;
+            }
+        }
+
         .stats-dashboard {
             display: grid;
             grid-template-columns: 1fr 1fr;
             gap: var(--spacing-xl);
             margin-top: var(--spacing-2xl);
+            transition: opacity 0.3s ease;
         }
 
         .stats-left {
@@ -1006,7 +1138,8 @@
 
             .stats-header-content {
                 flex-direction: column;
-                align-items: flex-start;
+                align-items: center;
+                text-align: center;
             }
 
             .stats-meta {
@@ -3300,20 +3433,18 @@
                     <h2 class="section-title fade-in">
                         <span class="material-icons medium" style="color: var(--color-primary-teal);">trending_up</span>
                         台灣活動舉辦狀況
+                        <span id="demoIndicator" class="demo-badge" style="display: none;">
+                            <span class="material-icons tiny">science</span>
+                            展示資料
+                        </span>
                     </h2>
-                    <div class="stats-meta">
-                        <span id="statsCacheIndicator" class="stats-update-time">載入中...</span>
-                        <button id="statsRefreshBtn" class="stats-refresh-btn" onclick="refreshStatistics()" title="重新整理統計資料" aria-label="重新整理統計資料">
-                            <span class="material-icons">refresh</span>
-                        </button>
-                    </div>
                 </div>
                 <p class="section-subtitle fade-in">
                     全台教育單位正在熱烈響應！一起成為 AI 素養教育推手
                 </p>
             </div>
 
-            <div class="stats-dashboard">
+            <div class="stats-dashboard" id="statsDashboard">
                 <!-- Left Column: Counters & Map -->
                 <div class="stats-left">
                     <!-- Counters -->
@@ -3392,6 +3523,26 @@
                                 </div>
                             </div>
                         </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Demo Mode Notice (only shown in demo mode) -->
+            <div id="demoNotice" class="demo-notice" style="display: none;">
+                <div class="demo-notice-content">
+                    <span class="material-icons small">info</span>
+                    <span>以上為展示資料，僅供介面預覽參考</span>
+                </div>
+            </div>
+
+            <!-- Stats Update Controls -->
+            <div class="stats-controls-wrapper">
+                <div class="stats-controls">
+                    <div class="stats-meta">
+                        <span id="statsCacheIndicator" class="stats-update-time">載入中...</span>
+                        <button id="statsRefreshBtn" class="stats-refresh-btn" onclick="refreshStatistics()" title="重新整理統計資料" aria-label="重新整理統計資料">
+                            <span class="material-icons">refresh</span>
+                        </button>
                     </div>
                 </div>
             </div>
@@ -5849,9 +6000,54 @@ Check Google Sheets to see how many entries were actually created.
             });
         });
 
+        // ===== Demo Mode Indicators Control =====
+        function setupDemoModeIndicators() {
+            // Check if we're in demo mode
+            if (CONFIG.IS_DEMO_MODE()) {
+                console.log('🧪 Demo Mode: 顯示 Demo 標示元素');
+
+                // Show demo badge in title
+                const demoIndicator = document.getElementById('demoIndicator');
+                if (demoIndicator) {
+                    demoIndicator.style.display = 'inline-flex';
+                }
+
+                // Show demo notice
+                const demoNotice = document.getElementById('demoNotice');
+                if (demoNotice) {
+                    demoNotice.style.display = 'block';
+                }
+
+                // Add demo mode class to stats dashboard
+                const statsDashboard = document.getElementById('statsDashboard');
+                if (statsDashboard) {
+                    statsDashboard.classList.add('demo-mode');
+                }
+            } else {
+                console.log('🌐 Production Mode: 隱藏 Demo 標示元素');
+                // Ensure demo indicators are hidden in production
+                const demoElements = ['demoIndicator', 'demoNotice'];
+                demoElements.forEach(id => {
+                    const element = document.getElementById(id);
+                    if (element) {
+                        element.style.display = 'none';
+                    }
+                });
+
+                // Remove demo mode class
+                const statsDashboard = document.getElementById('statsDashboard');
+                if (statsDashboard) {
+                    statsDashboard.classList.remove('demo-mode');
+                }
+            }
+        }
+
         // ===== Initialize =====
         document.addEventListener('DOMContentLoaded', () => {
             updateProgress();
+
+            // Setup demo mode indicators based on environment
+            setupDemoModeIndicators();
 
             // Initialize live statistics dashboard
             initStatistics();
