@@ -4257,14 +4257,54 @@
             });
         });
 
-        // ===== Configuration =====
+        // ===== Smart Configuration System =====
+
+        // 智慧配置函數 - 自動偵測部署環境
+        function getFormSubmitUrl() {
+            // 1. 檢查 URL 參數 (用於測試)
+            const urlParams = new URLSearchParams(window.location.search);
+            const apiUrl = urlParams.get('apiUrl');
+            if (apiUrl) {
+                console.log('🔧 Using URL parameter API:', apiUrl);
+                return apiUrl;
+            }
+
+            // 2. 檢查 WordPress 環境變數 (用於生產)
+            if (window.HOA_CONFIG && window.HOA_CONFIG.FORM_SUBMIT_URL) {
+                console.log('🏢 Using WordPress config API');
+                return window.HOA_CONFIG.FORM_SUBMIT_URL;
+            }
+
+            // 3. 偵測域名環境
+            const hostname = window.location.hostname;
+            if (hostname.includes('junyiacademy.org')) {
+                console.log('🌐 Detected Junyiacademy domain - using production fallback');
+                // WordPress 部署時需要設定 window.HOA_CONFIG
+                return 'PLEASE_SET_HOA_CONFIG_IN_WORDPRESS';
+            }
+
+            // 4. GitHub Pages 或本地測試環境
+            console.log('🧪 Using demo mode - statistics will show sample data');
+            return 'DEMO_MODE';
+        }
+
         const CONFIG = {
-            // Replace this URL with your Google Apps Script Web App URL
-            FORM_SUBMIT_URL: 'https://script.google.com/macros/s/AKfycbwZ1VRm8MxtqLms24V3Q4sJ5Jklu9o9V14q-B9QHTlw1e45Q2GcrzGA6E1RrxbMybRTFw/exec',
+            // 智慧 API URL 配置
+            FORM_SUBMIT_URL: getFormSubmitUrl(),
             ENABLE_ANALYTICS: true,
             ANIMATION_DURATION: 300,
             CSRF_TOKEN_KEY: 'csrf_token',
-            MAX_REQUESTS_PER_HOUR: 3
+            MAX_REQUESTS_PER_HOUR: 3,
+
+            // Demo mode 配置
+            IS_DEMO_MODE: function() {
+                return this.FORM_SUBMIT_URL === 'DEMO_MODE';
+            },
+
+            // WordPress 配置檢查
+            isWordPressConfigValid: function() {
+                return this.FORM_SUBMIT_URL !== 'PLEASE_SET_HOA_CONFIG_IN_WORDPRESS';
+            }
         };
 
         // Generate secure CSRF token
@@ -4953,15 +4993,30 @@ Check Google Sheets to see how many entries were actually created.
             submitBtn.textContent = '送出中...';
 
             try {
-                // Submit to Google Apps Script with no-cors mode
-                await fetch(CONFIG.FORM_SUBMIT_URL, {
-                    method: 'POST',
-                    mode: 'no-cors',
-                    headers: {
-                        'Content-Type': 'application/json',
-                    },
-                    body: JSON.stringify(data)
-                });
+                // 檢查是否為 Demo Mode
+                if (CONFIG.IS_DEMO_MODE()) {
+                    console.log('🧪 Demo Mode: Simulating form submission');
+                    console.log('📝 Form data would be:', data);
+
+                    // 模擬 API 延遲
+                    await new Promise(resolve => setTimeout(resolve, 1500));
+
+                    // Demo mode 不實際提交，直接顯示成功
+                } else if (!CONFIG.isWordPressConfigValid()) {
+                    // WordPress 環境但未正確設定
+                    throw new Error('請在 WordPress 中設定 window.HOA_CONFIG.FORM_SUBMIT_URL');
+                } else {
+                    // 正常提交到 Google Apps Script
+                    console.log('🚀 Submitting to:', CONFIG.FORM_SUBMIT_URL);
+                    await fetch(CONFIG.FORM_SUBMIT_URL, {
+                        method: 'POST',
+                        mode: 'no-cors',
+                        headers: {
+                            'Content-Type': 'application/json',
+                        },
+                        body: JSON.stringify(data)
+                    });
+                }
 
                 // Since we can't read the response in no-cors mode,
                 // we assume success if no error was thrown
@@ -5016,9 +5071,21 @@ Check Google Sheets to see how many entries were actually created.
         });
 
         // ===== Live Statistics Dashboard =====
+
+        // 智慧統計 API URL 配置
+        function getStatsApiUrl() {
+            if (CONFIG.IS_DEMO_MODE()) {
+                return 'DEMO_MODE';
+            } else if (!CONFIG.isWordPressConfigValid()) {
+                return 'WORDPRESS_CONFIG_NEEDED';
+            } else {
+                return CONFIG.FORM_SUBMIT_URL.replace('/exec', '/exec?action=getStats');
+            }
+        }
+
         const liveStatsConfig = {
-            // Google Apps Script API endpoint for statistics
-            STATS_API_URL: CONFIG.FORM_SUBMIT_URL.replace('/exec', '/exec?action=getStats'),
+            // 智慧統計 API endpoint
+            STATS_API_URL: getStatsApiUrl(),
             UPDATE_INTERVAL: 5 * 60 * 1000, // 5 minutes
             // Cache configuration
             CACHE_KEY: 'hourOfAI_stats_cache',
@@ -5046,6 +5113,61 @@ Check Google Sheets to see how many entries were actually created.
                 ]
             }
         };
+
+        // ===== Mock Data Generator for Demo Mode =====
+
+        function generateMockStats() {
+            const baseTime = Date.now();
+            const counties = [
+                '台北市', '新北市', '台中市', '台南市', '高雄市', '桃園市',
+                '新竹縣', '新竹市', '苗栗縣', '彰化縣', '南投縣', '雲林縣',
+                '嘉義縣', '嘉義市', '屏東縣', '宜蘭縣', '花蓮縣', '台東縣'
+            ];
+
+            const institutionTypes = ['學校', '企業', '政府機關', '非營利組織', '其他'];
+            const activities = ['AI 程式體驗', 'AI 藝術創作', '機器學習入門', 'AI 倫理討論', 'AI 工具應用'];
+
+            // 生成動態統計 (每次稍有變化)
+            const mockCounties = {};
+            const totalCounties = Math.floor(Math.random() * 6) + 12; // 12-18 個縣市
+
+            for (let i = 0; i < totalCounties; i++) {
+                const county = counties[Math.floor(Math.random() * counties.length)];
+                if (!mockCounties[county]) {
+                    mockCounties[county] = Math.floor(Math.random() * 8) + 1; // 1-8 場活動
+                }
+            }
+
+            // 生成最近活動
+            const recentActivities = [];
+            for (let i = 0; i < 5; i++) {
+                const county = counties[Math.floor(Math.random() * counties.length)];
+                const type = institutionTypes[Math.floor(Math.random() * institutionTypes.length)];
+                const participants = Math.floor(Math.random() * 150) + 20; // 20-170 人
+                const timeAgo = ['剛剛', '5 分鐘前', '15 分鐘前', '30 分鐘前', '1 小時前'][i];
+
+                recentActivities.push({ county, type, participants, time: timeAgo });
+            }
+
+            // 計算總計
+            const totalEvents = Object.values(mockCounties).reduce((sum, count) => sum + count, 0);
+            const totalParticipants = totalEvents * (Math.floor(Math.random() * 50) + 50); // 平均 50-100 人/活動
+
+            return {
+                status: 'success',
+                totalEvents: totalEvents + Math.floor(Math.random() * 5), // 加一點隨機性
+                totalParticipants: totalParticipants + Math.floor(Math.random() * 200),
+                counties: mockCounties,
+                institutionTypes: {
+                    '學校': Math.floor(totalEvents * 0.6),
+                    '企業': Math.floor(totalEvents * 0.2),
+                    '政府機關': Math.floor(totalEvents * 0.1),
+                    '非營利組織': Math.floor(totalEvents * 0.07),
+                    '其他': Math.floor(totalEvents * 0.03)
+                },
+                recentActivities
+            };
+        }
 
         // ===== Cache Management Utilities =====
 
@@ -5570,6 +5692,26 @@ Check Google Sheets to see how many entries were actually created.
             console.log(forceRefresh ? '🔄 強制重新載入資料...' : '📡 從 API 載入資料...');
 
             try {
+                // 檢查統計 API 模式
+                if (liveStatsConfig.STATS_API_URL === 'DEMO_MODE') {
+                    console.log('🧪 Demo Mode: 使用模擬統計資料');
+
+                    // 模擬 API 延遲
+                    await new Promise(resolve => setTimeout(resolve, 800));
+
+                    // 回傳模擬資料，每次稍有不同
+                    const mockData = generateMockStats();
+                    console.log('📊 Mock stats generated:', mockData);
+
+                    saveToCache(mockData);
+                    updateCacheIndicator(0); // Fresh data
+                    return mockData;
+
+                } else if (liveStatsConfig.STATS_API_URL === 'WORDPRESS_CONFIG_NEEDED') {
+                    console.log('⚠️ WordPress 環境需要設定 API URL');
+                    throw new Error('WordPress 環境需要設定統計 API');
+                }
+
                 const response = await fetch(liveStatsConfig.STATS_API_URL, {
                     method: 'GET',
                     mode: 'cors',

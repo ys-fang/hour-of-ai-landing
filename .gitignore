@@ -1,0 +1,52 @@
+# Environment and Configuration Files
+.env
+.env.local
+.env.production
+config.js
+config.json
+
+# API Keys and Sensitive Data
+**/secrets/
+**/*secret*
+**/*key*
+**/*credential*
+
+# Google Apps Script URLs (production)
+# Uncomment if you want to exclude production URLs
+# src/hour-of-ai-2025.html
+
+# Deployment Files
+deploy/
+.deployment/
+
+# IDE and Editor Files
+.vscode/
+.idea/
+*.swp
+*.swo
+*~
+
+# OS Files
+.DS_Store
+Thumbs.db
+
+# Logs
+*.log
+logs/
+
+# Backup Files
+*.backup
+*.bak
+*.orig
+
+# Temporary Files
+tmp/
+temp/
+*.tmp
+
+# Test Coverage
+coverage/
+.nyc_output/
+
+# Node Modules (if added)
+node_modules/

@@ -1,52 +1,59 @@
-# Hour of AI 2025 - WordPress 部署指南
+# Hour of AI 2025 - WordPress 智慧部署指南
 
-**版本**: 1.0
-**建立日期**: 2025-12-26
-**適用於**: WordPress + Elementor 環境
-
----
-
-## 📋 部署概述
-
-此文件說明如何將 Hour of AI 2025 活動頁面部署到 WordPress + Elementor 環境中，確保樣式完整性和功能正常運作。
-
-### 🎯 主要改進
-
-- **CSS 命名空間隔離**: 所有樣式都封裝在 `.hour-of-ai` 容器中
-- **WordPress 兼容性**: 修復與 WordPress 核心樣式的潛在衝突
-- **Elementor 友善**: 響應式斷點對齊 Elementor 標準
-- **Z-index 管理**: 避免與 WordPress Admin Bar 和 Elementor 元件衝突
-- **JavaScript 命名空間**: 防止與其他外掛的 JavaScript 衝突
+**版本**: 2.0
+**更新日期**: 2025-01-01
+**適用於**: 所有 WordPress 環境 (不限主題)
 
 ---
 
-## 🚀 快速部署步驟
+## 🚀 新版智慧部署系統
 
-### 步驟 1: 準備檔案
+Hour of AI 2025 現在支援智慧配置系統，讓 WordPress 部署變得極其簡單！
 
-確保您有以下檔案：
-- `hour-of-ai-2025-wordpress.html` - WordPress 兼容版本
+### ✨ 主要改進
 
-### 步驟 2: WordPress 後台操作
+- **🧠 智慧環境偵測**: 自動適應不同部署環境
+- **🔧 零配置部署**: 只需設定一個環境變數即可
+- **🔐 安全性增強**: 生產 API 不會意外暴露
+- **🧪 內建測試模式**: 支援 Demo 和測試環境
+- **📱 完整功能**: 統計面板、表單提交、CSRF 保護一應俱全
 
-1. **登入 WordPress 管理後台**
-2. **編輯目標頁面/文章**:
-   - 前往 `頁面` > `編輯` 或 `文章` > `編輯`
-   - 選擇要插入 Hour of AI 內容的頁面
+---
 
-3. **使用 HTML 區塊**:
-   - 在 Elementor 編輯器中，新增 `HTML` 元件
-   - 將 `hour-of-ai-2025-wordpress.html` 的完整內容複製貼上到 HTML 區塊中
+## 🚀 超簡單部署步驟 (2分鐘完成)
 
-4. **儲存並預覽**:
-   - 點擊 `更新` 儲存變更
-   - 使用 `預覽` 功能確認顯示效果
+### 步驟 1: 設定 API 配置
 
-### 步驟 3: 驗證部署
+在 WordPress 主題的 `functions.php` 或頁面 HTML 開頭添加：
 
-檢查以下項目確保部署成功：
-- ✅ 頁面樣式正確顯示
-- ✅ 響應式設計在不同裝置上正常
+```html
+<script>
+window.HOA_CONFIG = {
+    FORM_SUBMIT_URL: 'https://script.google.com/macros/s/YOUR_SCRIPT_ID/exec'
+};
+</script>
+```
+
+**🔑 取得您的 Google Apps Script URL:**
+1. 開啟您的 Google Apps Script 專案
+2. 點選「部署」→「新增部署」
+3. 複製 Web App URL
+4. 替換上方的 `YOUR_SCRIPT_ID`
+
+### 步驟 2: 複製完整 HTML
+
+1. **開啟檔案**: `src/hour-of-ai-2025.html`
+2. **全選複製**: Ctrl+A → Ctrl+C (完整內容)
+3. **在 WordPress 中貼上**:
+   - 新增頁面 → 使用 HTML 模式
+   - 或 Elementor → HTML 元件
+   - 或古騰堡 → 自定義 HTML 區塊
+
+### 步驟 3: 發布即可！
+
+- ✅ **儲存並發布** - 就是這麼簡單！
+- ✅ **自動偵測環境** - 系統會自動配置
+- ✅ **完整功能** - 統計、表單、地圖全部正常運作
 - ✅ 表單功能正常運作
 - ✅ 互動地圖正確載入
 - ✅ 沒有與 WordPress 樣式衝突

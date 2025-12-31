@@ -8,8 +8,7 @@
 hoa_landingPage/
 ├── 📄 README.md                    # 專案說明文件
 ├── 📁 src/                         # 主要原始檔案
-│   ├── hour-of-ai-2025.html       # 主要登陸頁面 (完整版)
-│   └── hour-of-ai-2025-wordpress.html # WordPress 版本
+│   └── hour-of-ai-2025.html       # 智慧配置版本 (支援多環境部署)
 ├── 📁 backend/                     # 後端整合
 │   ├── google-apps-script-stats-api.js # Google Apps Script API (當前版本)
 │   └── google-apps-script-stats-api-updated.js # 更新版本
@@ -45,22 +44,35 @@ hoa_landingPage/
 - **Material Icons**: 圖示系統
 - **Noto Sans TC**: 中文字體最佳化
 
-## 🚦 快速開始
+## 🚀 快速開始
 
-### 1. 本地開發
+### 🧪 **Demo 模式 (GitHub Pages)**
 ```bash
-# 直接在瀏覽器開啟主檔案
+# 直接在瀏覽器開啟 - 自動啟用 Demo 模式
 open src/hour-of-ai-2025.html
+
+# 或使用 GitHub Pages (推薦測試用)
+# https://your-username.github.io/hour-of-ai-landing/
 ```
 
-### 2. WordPress 部署
-```bash
-# 使用 WordPress 版本
-cp src/hour-of-ai-2025-wordpress.html your-wordpress-theme/
+### 🌐 **WordPress 部署**
+```html
+<!-- 1. 在 WordPress 主題中添加配置 -->
+<script>
+window.HOA_CONFIG = {
+    FORM_SUBMIT_URL: 'YOUR_GOOGLE_APPS_SCRIPT_URL'
+};
+</script>
+
+<!-- 2. 直接貼上完整 HTML -->
+<!-- 將 src/hour-of-ai-2025.html 內容貼到 WordPress 頁面 -->
 ```
 
-### 3. 測試與驗證
+### 🔧 **測試模式**
 ```bash
+# 指定測試 API URL
+open "src/hour-of-ai-2025.html?apiUrl=YOUR_TEST_URL"
+
 # 開啟測試工具
 open testing/csrf-test.html
 open testing/test-bookmarklet.html
@@ -118,12 +130,38 @@ open testing/test-bookmarklet.html
 - 觸控友善設計
 - 簡化互動元素
 
+## ⚙️ 智慧配置系統
+
+### 🎯 **自動環境偵測**
+系統會自動偵測部署環境並選擇合適的配置：
+
+1. **🧪 Demo Mode** (GitHub Pages, 本地測試)
+   - 顯示模擬統計資料
+   - 表單提交僅作展示
+   - 適合 UI/UX 測試
+
+2. **🌐 WordPress Mode** (生產環境)
+   - 需要設定 `window.HOA_CONFIG.FORM_SUBMIT_URL`
+   - 連接真實 Google Apps Script API
+   - 完整功能運作
+
+3. **🔧 測試 Mode** (開發測試)
+   - 透過 URL 參數指定 API: `?apiUrl=YOUR_TEST_URL`
+   - 可測試不同後端配置
+   - 方便整合測試
+
+### 🔐 **安全特性**
+- GitHub 版本不含生產 API URL
+- WordPress 環境變數配置
+- 自動錯誤處理和提示
+
 ## 🎯 效能最佳化
 
 - **字體預載入**: Google Fonts 最佳化載入
 - **圖片最佳化**: 響應式圖片處理
 - **CSS 變數**: 統一的設計 token 系統
 - **載入動畫**: 表單提交時的全頁遮罩
+- **智慧配置**: 零配置多環境支援
 
 ## 🐛 測試與調試
 
