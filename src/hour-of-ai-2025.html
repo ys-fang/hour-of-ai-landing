@@ -761,6 +761,302 @@
             }
         }
 
+        /* ===== Taiwan Global Rank Section - Redesigned ===== */
+        .taiwan-global-rank-section {
+            margin: var(--spacing-lg) 0 var(--spacing-xl) 0;
+        }
+
+        .taiwan-global-rank-section .stats-header-wrapper {
+            margin-bottom: var(--spacing-lg);
+        }
+
+        /* Main 2-column layout */
+        .global-rank-main {
+            display: grid;
+            grid-template-columns: 1fr 1.5fr;
+            gap: var(--spacing-lg);
+            margin-bottom: var(--spacing-md);
+        }
+
+        /* Left: Global Rank Highlight */
+        .global-rank-highlight {
+            background: linear-gradient(135deg, #ffffff 0%, #f8f9fa 100%);
+            border: 2px solid var(--color-border);
+            border-radius: var(--border-radius-md);
+            padding: var(--spacing-lg);
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            text-align: center;
+            transition: all var(--transition-base);
+            position: relative;
+            overflow: hidden;
+        }
+
+        .global-rank-highlight::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            height: 4px;
+            background: var(--color-primary-blue);
+            transform: scaleX(0);
+            transition: transform var(--transition-base);
+        }
+
+        .global-rank-highlight:hover::before {
+            transform: scaleX(1);
+        }
+
+        .global-rank-highlight:hover {
+            transform: translateY(-4px);
+            box-shadow: var(--shadow-lg);
+            border-color: var(--color-primary-blue);
+        }
+
+        .rank-badge {
+            margin-bottom: var(--spacing-xs);
+        }
+
+        .rank-badge .material-icons {
+            font-size: 2rem;
+        }
+
+        .rank-number-large {
+            font-size: 4rem;
+            font-weight: var(--font-weight-bold);
+            color: var(--color-navy);
+            line-height: 1;
+            margin: var(--spacing-xs) 0;
+        }
+
+        .rank-context {
+            display: flex;
+            align-items: center;
+            gap: 4px;
+            font-size: var(--font-size-sm);
+            color: var(--color-text-secondary);
+            margin-bottom: var(--spacing-sm);
+        }
+
+        .rank-context .material-icons {
+            font-size: 16px;
+        }
+
+        .rank-percentile-large {
+            display: inline-flex;
+            align-items: center;
+            gap: 6px;
+            font-size: var(--font-size-xl);
+            font-weight: var(--font-weight-semibold);
+            color: var(--color-primary-teal);
+            background: rgba(77, 191, 163, 0.1);
+            padding: var(--spacing-xs) var(--spacing-sm);
+            border-radius: var(--border-radius-full);
+        }
+
+        .rank-percentile-large .material-icons {
+            font-size: 20px;
+        }
+
+        /* Right: Nearby Rank Panel */
+        .nearby-rank-panel {
+            background: linear-gradient(135deg, #ffffff 0%, #f8f9fa 100%);
+            border: 2px solid var(--color-border);
+            border-radius: var(--border-radius-md);
+            padding: var(--spacing-md);
+            transition: all var(--transition-base);
+            position: relative;
+            overflow: hidden;
+        }
+
+        .nearby-rank-panel::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            height: 4px;
+            background: var(--color-primary-blue);
+            transform: scaleX(0);
+            transition: transform var(--transition-base);
+        }
+
+        .nearby-rank-panel:hover::before {
+            transform: scaleX(1);
+        }
+
+        .nearby-rank-panel:hover {
+            transform: translateY(-4px);
+            box-shadow: var(--shadow-lg);
+            border-color: var(--color-primary-blue);
+        }
+
+        .nearby-rank-title {
+            display: flex;
+            align-items: center;
+            gap: var(--spacing-xs);
+            font-size: var(--font-size-base);
+            font-weight: var(--font-weight-semibold);
+            color: var(--color-navy);
+            margin: 0 0 var(--spacing-sm) 0;
+            padding-bottom: var(--spacing-xs);
+            border-bottom: 1px solid var(--color-border);
+        }
+
+        .nearby-rank-title .material-icons {
+            font-size: 20px;
+        }
+
+        .nearby-countries-list {
+            display: grid;
+            gap: var(--spacing-xs);
+        }
+
+        .country-rank-item {
+            display: grid;
+            grid-template-columns: 45px 1fr 90px;
+            align-items: center;
+            padding: var(--spacing-xs) var(--spacing-sm);
+            background: white;
+            border-radius: var(--border-radius-sm);
+            transition: background 0.2s;
+            font-size: var(--font-size-sm);
+        }
+
+        .country-rank-item:hover {
+            background: var(--color-bg-light);
+        }
+
+        .country-rank-item.current-country {
+            background: linear-gradient(90deg, rgba(255, 159, 77, 0.15) 0%, rgba(255, 159, 77, 0.05) 100%);
+            border-left: 3px solid var(--color-primary-orange);
+            font-weight: var(--font-weight-semibold);
+            padding-left: calc(var(--spacing-sm) - 3px);
+        }
+
+        .rank-col {
+            font-weight: var(--font-weight-semibold);
+            color: var(--color-text-secondary);
+        }
+
+        .country-col {
+            color: var(--color-navy);
+        }
+
+        .count-col {
+            text-align: right;
+            color: var(--color-text-secondary);
+            font-size: var(--font-size-xs);
+        }
+
+        /* Auxiliary Info (降級視覺層次) */
+        .rank-auxiliary-info {
+            display: flex;
+            align-items: flex-start;
+            gap: var(--spacing-xs);
+            padding: var(--spacing-sm) var(--spacing-md);
+            background: var(--color-bg-lighter);
+            border-radius: var(--border-radius-sm);
+            border-left: 3px solid var(--color-border);
+        }
+
+        .rank-auxiliary-info > .material-icons {
+            color: var(--color-text-secondary);
+            font-size: 16px;
+            margin-top: 2px;
+            flex-shrink: 0;
+        }
+
+        .auxiliary-content {
+            flex: 1;
+        }
+
+        .auxiliary-stats {
+            display: flex;
+            flex-wrap: wrap;
+            gap: var(--spacing-xs);
+            font-size: var(--font-size-xs);
+            color: var(--color-text-secondary);
+            margin-bottom: 4px;
+        }
+
+        .auxiliary-stats strong {
+            color: var(--color-text-primary);
+            font-weight: var(--font-weight-semibold);
+        }
+
+        .auxiliary-stats .separator {
+            color: var(--color-border);
+        }
+
+        .auxiliary-note {
+            font-size: var(--font-size-xs);
+            color: var(--color-text-secondary);
+            line-height: var(--line-height-normal);
+            margin: 0;
+            opacity: 0.8;
+        }
+
+        .auxiliary-link {
+            color: var(--color-primary-blue);
+            text-decoration: none;
+            border-bottom: 1px solid transparent;
+            transition: all var(--transition-base);
+        }
+
+        .auxiliary-link:hover {
+            color: var(--color-primary-teal);
+            border-bottom-color: var(--color-primary-teal);
+        }
+
+        /* ===== Global Rank Responsive Design ===== */
+        @media (max-width: 768px) {
+            .global-rank-main {
+                grid-template-columns: 1fr;
+                gap: var(--spacing-md);
+            }
+
+            .global-rank-highlight {
+                padding: var(--spacing-md);
+            }
+
+            .rank-number-large {
+                font-size: 3rem;
+            }
+
+            .rank-percentile-large {
+                font-size: var(--font-size-base);
+            }
+
+            .country-rank-item {
+                grid-template-columns: 40px 1fr 80px;
+                font-size: var(--font-size-xs);
+            }
+
+            .auxiliary-stats {
+                flex-direction: column;
+                gap: 4px;
+            }
+
+            .auxiliary-stats .separator {
+                display: none;
+            }
+        }
+
+        @media (max-width: 480px) {
+            .rank-number-large {
+                font-size: 2.5rem;
+            }
+
+            .rank-percentile-large {
+                font-size: var(--font-size-sm);
+                padding: 6px 12px;
+            }
+        }
+
         .stats-dashboard {
             display: grid;
             grid-template-columns: 1fr 1fr;
@@ -2029,10 +2325,6 @@
             }
 
             /* Mobile 上禁用 hover，使用 flipped 系統 */
-
-            .overlay-content {
-                /*padding: var(--spacing-lg);*/
-            }
 
             .overlay-content h4 {
                 font-size: var(--font-size-base);
@@ -3428,6 +3720,63 @@
     <!-- Live Statistics Dashboard -->
     <section class="live-stats-section" id="live-stats">
         <div class="container">
+            <!-- Taiwan Global Ranking Section -->
+            <div class="taiwan-global-rank-section fade-in" id="globalRankSection">
+                <div class="stats-header-wrapper">
+                    <div class="stats-header-content">
+                        <h2 class="section-title">
+                            <span class="material-icons medium" style="color: var(--color-primary-teal);">public</span>
+                            台灣全球排名
+                        </h2>
+                    </div>
+                </div>
+
+                <!-- Main Rank Display: 2 columns -->
+                <div class="global-rank-main">
+                    <!-- Left: Global Rank Number + TOP% -->
+                    <div class="global-rank-highlight">
+                        <div class="rank-badge">
+                            <span class="material-icons" style="color: var(--color-primary-orange);">workspace_premium</span>
+                        </div>
+                        <div class="rank-number-large" id="globalRankNumber">--</div>
+                        <div class="rank-context">
+                            <span class="material-icons tiny">language</span>
+                            <span id="globalRankTotal">--</span> 個國家中
+                        </div>
+                        <div class="rank-percentile-large">
+                            <span class="material-icons small">trending_up</span>
+                            Top <span id="globalPercentile">--</span>%
+                        </div>
+                    </div>
+
+                    <!-- Right: Nearby Countries Ranking -->
+                    <div class="nearby-rank-panel">
+                        <h3 class="nearby-rank-title">
+                            <span class="material-icons small" style="color: var(--color-navy);">leaderboard</span>
+                            鄰近排名
+                        </h3>
+                        <div class="nearby-countries-list" id="nearbyCountriesList">
+                            <!-- Dynamically populated -->
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Auxiliary Info: Local vs Global (降級為說明文字) -->
+                <div class="rank-auxiliary-info">
+                    <span class="material-icons tiny">info_outline</span>
+                    <div class="auxiliary-content">
+                        <div class="auxiliary-stats">
+                            <span>本地統計：<strong id="localEventCount">--</strong> 場</span>
+                            <span class="separator">|</span>
+                            <span>全球統計：<strong id="globalEventCount">--</strong> 場</span>
+                        </div>
+                        <p class="auxiliary-note">
+                            本地統計來自均一平台台灣報名表單；全球統計來自 <a href="https://csforall.org/zh-Hant/hour-of-ai/how-to/global" target="_blank" rel="noopener noreferrer" class="auxiliary-link">CSforAll 全球報名系統</a>。兩系統獨立運作，資料差異為正常現象。
+                        </p>
+                    </div>
+                </div>
+            </div>
+
             <div class="stats-header-wrapper">
                 <div class="stats-header-content">
                     <h2 class="section-title fade-in">
@@ -5444,6 +5793,213 @@ Check Google Sheets to see how many entries were actually created.
             }
         }
 
+        // ===== Global Rank Configuration =====
+
+        /**
+         * Global Rank Configuration
+         */
+        const globalRankConfig = {
+            CSV_URL: 'https://docs.google.com/spreadsheets/d/1QDTmNNP3i6Nfhg6y7qp5V_cSL6ciNsMyF3bEjyKXTsY/export?format=csv',
+            CACHE_KEY: 'hourOfAI_global_rank_cache',
+            CACHE_TIMESTAMP_KEY: 'hourOfAI_global_rank_timestamp',
+            CACHE_DURATION: 3600000, // 1 hour
+            TARGET_COUNTRY: 'Taiwan',
+            CONTEXT_RANGE: 2  // Show 2 countries above and below
+        };
+
+        /**
+         * Fetch and analyze Taiwan's global rank
+         */
+        async function fetchTaiwanGlobalRank() {
+            try {
+                // Check cache first
+                const cached = getGlobalRankCache();
+                if (cached) {
+                    console.log('Using cached global rank data');
+                    return cached;
+                }
+
+                // Fetch fresh data
+                const response = await fetch(globalRankConfig.CSV_URL);
+                const csvText = await response.text();
+                const data = parseCSV(csvText);
+                const analysis = analyzeTaiwanGlobalRank(data);
+
+                // Save to cache
+                saveGlobalRankCache(analysis);
+
+                return analysis;
+            } catch (error) {
+                console.error('Error fetching global rank:', error);
+                return null;
+            }
+        }
+
+        /**
+         * Parse CSV data
+         */
+        function parseCSV(csvText) {
+            const lines = csvText.split('\n');
+            const data = [];
+
+            for (let i = 1; i < lines.length; i++) {
+                const line = lines[i].trim();
+                if (!line) continue;
+
+                const [country, count] = line.split(',');
+                if (country && count) {
+                    data.push({
+                        country: country.trim().replace(/^"|"$/g, ''),
+                        count: parseInt(count.trim())
+                    });
+                }
+            }
+
+            return data;
+        }
+
+        /**
+         * Analyze Taiwan's global rank
+         */
+        function analyzeTaiwanGlobalRank(data) {
+            // Sort by count descending
+            const sorted = data
+                .filter(item => item.count > 0)
+                .sort((a, b) => b.count - a.count);
+
+            // Find Taiwan
+            const taiwanIndex = sorted.findIndex(item =>
+                item.country === globalRankConfig.TARGET_COUNTRY
+            );
+
+            if (taiwanIndex === -1) {
+                throw new Error('Taiwan not found in data');
+            }
+
+            const taiwan = sorted[taiwanIndex];
+            const rank = taiwanIndex + 1;
+            const totalCountries = sorted.length;
+
+            // Get nearby countries
+            const contextRange = globalRankConfig.CONTEXT_RANGE;
+            const nearbyCountries = [
+                ...sorted.slice(Math.max(0, taiwanIndex - contextRange), taiwanIndex)
+                    .map((country, idx) => ({
+                        ...country,
+                        rank: taiwanIndex - contextRange + idx + 1,
+                        position: 'above'
+                    })),
+                {
+                    ...taiwan,
+                    rank: rank,
+                    position: 'current'
+                },
+                ...sorted.slice(taiwanIndex + 1, taiwanIndex + contextRange + 1)
+                    .map((country, idx) => ({
+                        ...country,
+                        rank: rank + idx + 1,
+                        position: 'below'
+                    }))
+            ];
+
+            return {
+                globalRank: rank,
+                totalCountries: totalCountries,
+                percentile: ((totalCountries - rank + 1) / totalCountries * 100).toFixed(1),
+                taiwanCount: taiwan.count,
+                nearbyCountries: nearbyCountries,
+                topCountry: sorted[0],
+                lastUpdated: new Date().toISOString()
+            };
+        }
+
+        /**
+         * Cache management for global rank
+         */
+        function saveGlobalRankCache(data) {
+            try {
+                localStorage.setItem(globalRankConfig.CACHE_KEY, JSON.stringify(data));
+                localStorage.setItem(globalRankConfig.CACHE_TIMESTAMP_KEY, Date.now().toString());
+            } catch (e) {
+                console.warn('Failed to save global rank cache:', e);
+            }
+        }
+
+        function getGlobalRankCache() {
+            try {
+                const timestamp = localStorage.getItem(globalRankConfig.CACHE_TIMESTAMP_KEY);
+                if (!timestamp) return null;
+
+                const age = Date.now() - parseInt(timestamp);
+                if (age > globalRankConfig.CACHE_DURATION) return null;
+
+                const cached = localStorage.getItem(globalRankConfig.CACHE_KEY);
+                return cached ? JSON.parse(cached) : null;
+            } catch (e) {
+                console.warn('Failed to get global rank cache:', e);
+                return null;
+            }
+        }
+
+        /**
+         * Update UI with global rank data
+         */
+        function updateGlobalRankUI(rankData, localStats) {
+            if (!rankData) return;
+
+            // Update global rank card
+            animateCounter(
+                document.getElementById('globalRankNumber'),
+                0,
+                rankData.globalRank,
+                1000
+            );
+            document.getElementById('globalRankTotal').textContent = rankData.totalCountries;
+            document.getElementById('globalPercentile').textContent = rankData.percentile;
+
+            // Update comparison card
+            document.getElementById('localEventCount').textContent =
+                formatNumberResponsively(localStats.totalEvents || 0);
+            document.getElementById('globalEventCount').textContent =
+                formatNumberResponsively(rankData.taiwanCount);
+
+            // Update nearby countries list
+            const listContainer = document.getElementById('nearbyCountriesList');
+            listContainer.innerHTML = rankData.nearbyCountries.map(country => `
+                <div class="country-rank-item ${country.position === 'current' ? 'current-country' : ''}">
+                    <span class="rank-col">#${country.rank}</span>
+                    <span class="country-col">${country.country}</span>
+                    <span class="count-col">${formatNumberResponsively(country.count)} 場活動</span>
+                </div>
+            `).join('');
+        }
+
+        /**
+         * Initialize global rank section
+         */
+        async function initGlobalRankSection() {
+            try {
+                const localStats = loadFromCache() || liveStatsConfig.fallbackData;
+                const rankData = await fetchTaiwanGlobalRank();
+                updateGlobalRankUI(rankData, localStats);
+            } catch (error) {
+                console.error('Error initializing global rank section:', error);
+            }
+        }
+
+        /**
+         * Refresh global rank data
+         */
+        async function refreshGlobalRank() {
+            try {
+                const rankData = await fetchTaiwanGlobalRank();
+                const localStats = loadFromCache() || liveStatsConfig.fallbackData;
+                updateGlobalRankUI(rankData, localStats);
+            } catch (error) {
+                console.error('Error refreshing global rank:', error);
+            }
+        }
+
         // Responsive number formatting
         function formatNumberResponsively(number) {
             const screenWidth = window.innerWidth;
@@ -5907,6 +6463,9 @@ Check Google Sheets to see how many entries were actually created.
                 updateRankings(data.counties);
                 updateActivityFeed(data.recentActivities);
 
+                // Update global rank
+                await refreshGlobalRank();
+
                 console.log('✅ 統計資料已更新');
             } catch (error) {
                 console.error('❌ 更新統計資料失敗:', error);
@@ -5929,6 +6488,9 @@ Check Google Sheets to see how many entries were actually created.
             updateRankings(data.counties);
             updateActivityFeed(data.recentActivities);
 
+            // Initialize global rank section
+            await initGlobalRankSection();
+
             // Check cache periodically and only refresh if expired
             // This is more efficient than unconditional refreshes
             setInterval(async () => {
@@ -5940,6 +6502,7 @@ Check Google Sheets to see how many entries were actually created.
                     await updateTaiwanMap(newData.counties);
                     updateRankings(newData.counties);
                     updateActivityFeed(newData.recentActivities);
+                    await refreshGlobalRank();
                 } else {
                     console.log('✅ 快取仍有效，跳過更新');
                 }

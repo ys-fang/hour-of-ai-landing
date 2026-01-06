@@ -1,11 +1,12 @@
 /**
  * Google Apps Script - Statistics API for Hour of AI Dashboard
  *
- * VERSION 3.0 - 整合通知系統
+ * VERSION 3.1 - 優化週報系統
  * - timestamp: Unix timestamp (毫秒) - 供程式處理
  * - timestamp_unified: 台灣時區人類可讀格式 (YYYY-MM-DD HH:mm:ss)
  * - 即時通知：每次新報名發送 Slack 通知
  * - 週報：每週二上午 9:00 自動發送統計報告
+ * - GA4 整合：網站流量分析與轉換率追蹤
  *
  * SETUP INSTRUCTIONS:
  * 1. 複製此完整程式碼到 Google Apps Script 編輯器
@@ -19,10 +20,11 @@
  * 詳細教學請參考：docs/Notification-System-Setup-Guide.md
  */
 
-// ===== NOTIFICATION CONFIGURATION =====
-// 在此統一管理所有通知設定，方便快速啟用/停用
+// ===== CONFIGURATION =====
+// 在此統一管理所有設定，方便快速啟用/停用
 
-const NOTIFICATION_CONFIG = {
+const CONFIG = {
+  // ===== Slack 設定 =====
   // Slack Webhook URL - 從 Script Properties 讀取（安全做法）
   // 設定方式：Apps Script 編輯器 > 專案設定 > Script Properties
   // 新增屬性：SLACK_WEBHOOK_URL = 你的 Webhook URL
@@ -43,23 +45,97 @@ const NOTIFICATION_CONFIG = {
   // Slack 訊息設定
   SLACK_CHANNEL: '#hour-of-ai',  // 可選：指定 channel（如果 webhook 未預設）
   SLACK_USERNAME: 'Hour of AI Bot',  // Bot 顯示名稱
-  SLACK_ICON_EMOJI: ':robot_face:'   // Bot 圖示
+  SLACK_ICON_EMOJI: ':robot_face:',   // Bot 圖示
+
+  // ===== GA4 設定 =====
+  ENABLE_GA_REPORT: true,
+  GA4_PROPERTY_ID: '266069252',  // GA4 Property ID
+  PAGE_PATH_FILTER: '/event/2025-hour-of-ai/',  // 要追蹤的頁面路徑
 };
 
+// ===== UTILITY FUNCTIONS =====
+
 /**
- * Helper function to set Slack Webhook URL in Script Properties
- * Usage: Run this function once with your webhook URL
+ * 格式化日期為台灣時區
+ * @param {Date} date - 日期物件
+ * @param {string} format - 格式字串 (例如 'yyyy-MM-dd', 'M/d')
+ * @returns {string} 格式化後的日期字串
  */
-function setSlackWebhookURL(webhookUrl) {
-  PropertiesService.getScriptProperties().setProperty('SLACK_WEBHOOK_URL', webhookUrl);
-  Logger.log('Slack Webhook URL has been set successfully');
+function formatDateTW(date, format) {
+  return Utilities.formatDate(date, 'Asia/Taipei', format);
 }
 
 /**
- * Helper function to get Slack Webhook URL from Script Properties
+ * 取得成長率圖示
+ * @param {string|number} value - 成長率數值
+ * @returns {string} 對應的 emoji 圖示
+ */
+function getGrowthIcon(value) {
+  const num = parseFloat(value);
+  if (num > 0) return '📈';
+  if (num < 0) return '📉';
+  return '➖';
+}
+
+/**
+ * 計算成長率
+ * @param {number} current - 本期數值
+ * @param {number} previous - 上期數值
+ * @returns {string} 成長率字串 (例如 '+15.2' 或 '-5.3')
+ */
+function calculateGrowthRate(current, previous) {
+  if (previous === 0) {
+    return current > 0 ? '+100.0' : '0.0';
+  }
+  const growth = ((current - previous) / previous) * 100;
+  return growth >= 0 ? '+' + growth.toFixed(1) : growth.toFixed(1);
+}
+
+/**
+ * 將秒數轉換為 分:秒 格式
+ * @param {number} seconds - 秒數
+ * @returns {string} 格式化後的時間字串 (例如 '4:05')
+ */
+function formatDuration(seconds) {
+  const totalSeconds = Math.round(parseFloat(seconds) || 0);
+  const mins = Math.floor(totalSeconds / 60);
+  const secs = totalSeconds % 60;
+  return `${mins}:${secs.toString().padStart(2, '0')}`;
+}
+
+// ===== SLACK WEBHOOK URL MANAGEMENT =====
+
+/**
+ * 設定 Slack Webhook URL（安全儲存到 Script Properties）
+ * 使用方式：在 Apps Script 編輯器中執行此函數
+ * @param {string} webhookUrl - Slack Webhook URL
+ */
+function setSlackWebhookURL(webhookUrl) {
+  PropertiesService.getScriptProperties().setProperty('SLACK_WEBHOOK_URL', webhookUrl);
+  Logger.log('✅ Slack Webhook URL 已成功設定');
+  Logger.log('💡 提示：執行 testInstantNotification() 測試連線');
+}
+
+/**
+ * 取得 Slack Webhook URL
+ * @returns {string|null} Slack Webhook URL 或 null
  */
 function getSlackWebhookURL() {
   return PropertiesService.getScriptProperties().getProperty('SLACK_WEBHOOK_URL');
+}
+
+/**
+ * 檢查 Slack Webhook URL 是否已設定
+ */
+function checkSlackWebhookURL() {
+  const url = getSlackWebhookURL();
+  if (url) {
+    Logger.log('✅ Slack Webhook URL 已設定');
+    Logger.log('URL 前 50 字元: ' + url.substring(0, 50) + '...');
+  } else {
+    Logger.log('❌ Slack Webhook URL 未設定');
+    Logger.log('請執行: setSlackWebhookURL("你的-webhook-url")');
+  }
 }
 
 // ===== STATISTICS API =====
@@ -76,7 +152,7 @@ function doGet(e) {
     }
 
     // Default response
-    return ContentService.createTextOutput('Hour of AI Statistics API v2.0')
+    return ContentService.createTextOutput('Hour of AI Statistics API v3.1')
       .setMimeType(ContentService.MimeType.TEXT);
 
   } catch (error) {
@@ -269,11 +345,7 @@ function doPost(e) {
 
     // 2. 轉換為台灣時區的可讀格式
     const timestampDate = new Date(unixTimestamp);
-    const timestamp_unified = Utilities.formatDate(
-      timestampDate,
-      'Asia/Taipei',
-      'yyyy-MM-dd HH:mm:ss'
-    );
+    const timestamp_unified = formatDateTW(timestampDate, 'yyyy-MM-dd HH:mm:ss');
 
     Logger.log(`收到表單: Unix=${unixTimestamp}, Unified=${timestamp_unified}`);
 
@@ -579,16 +651,17 @@ function sendToSlack(message) {
   const webhookUrl = getSlackWebhookURL();
 
   if (!webhookUrl) {
-    Logger.log('Slack Webhook URL not configured in Script Properties');
-    Logger.log('Please run: setSlackWebhookURL("your-webhook-url")');
+    Logger.log('❌ Slack Webhook URL 未設定');
+    Logger.log('請執行: setSlackWebhookURL("你的-webhook-url")');
+    Logger.log('或在 專案設定 > Script Properties 中新增 SLACK_WEBHOOK_URL');
     return false;
   }
 
   try {
     const payload = {
       text: message,
-      username: NOTIFICATION_CONFIG.SLACK_USERNAME,
-      icon_emoji: NOTIFICATION_CONFIG.SLACK_ICON_EMOJI
+      username: CONFIG.SLACK_USERNAME,
+      icon_emoji: CONFIG.SLACK_ICON_EMOJI
     };
 
     const options = {
@@ -602,14 +675,14 @@ function sendToSlack(message) {
     const responseCode = response.getResponseCode();
 
     if (responseCode === 200) {
-      Logger.log('Slack notification sent successfully');
+      Logger.log('✅ Slack 通知發送成功');
       return true;
     } else {
-      Logger.log(`Slack notification failed: ${responseCode} - ${response.getContentText()}`);
+      Logger.log(`❌ Slack 通知發送失敗: ${responseCode} - ${response.getContentText()}`);
       return false;
     }
   } catch (error) {
-    Logger.log('Error sending Slack notification: ' + error.toString());
+    Logger.log('❌ Slack 通知發送錯誤: ' + error.toString());
     return false;
   }
 }
@@ -618,7 +691,7 @@ function sendToSlack(message) {
  * Send instant notification when new registration submitted
  */
 function sendInstantNotification(data, timestamp_unified) {
-  if (!NOTIFICATION_CONFIG.ENABLE_INSTANT_NOTIFICATION) {
+  if (!CONFIG.ENABLE_INSTANT_NOTIFICATION) {
     return;
   }
 
@@ -644,7 +717,7 @@ ${data.schoolName ? `🏫 學校名稱：${data.schoolName}\n` : ''}👥 預計�
   sendToSlack(message);
 
   // Send email if enabled
-  if (NOTIFICATION_CONFIG.ENABLE_EMAIL_NOTIFICATION) {
+  if (CONFIG.ENABLE_EMAIL_NOTIFICATION) {
     const emailBody = `
 新的 Hour of AI 報名!
 
@@ -658,7 +731,7 @@ Email: ${data.email}
 查看完整資料: ${sheetUrl}
     `;
 
-    NOTIFICATION_CONFIG.EMAIL_RECIPIENTS.forEach(recipient => {
+    CONFIG.EMAIL_RECIPIENTS.forEach(recipient => {
       try {
         MailApp.sendEmail({
           to: recipient,
@@ -682,7 +755,7 @@ Email: ${data.email}
  * - Time: 9am-10am
  */
 function sendWeeklyReport() {
-  if (!NOTIFICATION_CONFIG.ENABLE_WEEKLY_REPORT) {
+  if (!CONFIG.ENABLE_WEEKLY_REPORT) {
     Logger.log('Weekly report is disabled');
     return;
   }
@@ -691,9 +764,9 @@ function sendWeeklyReport() {
     const stats = calculateWeeklyStats();
     const message = formatWeeklyReport(stats);
     sendToSlack(message);
-    Logger.log('Weekly report sent successfully');
+    Logger.log('✅ 週報發送成功');
   } catch (error) {
-    Logger.log('Error sending weekly report: ' + error.toString());
+    Logger.log('❌ 週報生成失敗: ' + error.toString());
     sendToSlack(`⚠️ 週報生成失敗：${error.toString()}`);
   }
 }
@@ -792,12 +865,8 @@ function calculateWeeklyStats() {
 
   // Calculate growth rates
   stats.growth = {
-    events: stats.lastWeek.events > 0
-      ? ((stats.thisWeek.events - stats.lastWeek.events) / stats.lastWeek.events * 100).toFixed(1)
-      : stats.thisWeek.events > 0 ? '+100.0' : '0.0',
-    participants: stats.lastWeek.participants > 0
-      ? ((stats.thisWeek.participants - stats.lastWeek.participants) / stats.lastWeek.participants * 100).toFixed(1)
-      : stats.thisWeek.participants > 0 ? '+100.0' : '0.0'
+    events: calculateGrowthRate(stats.thisWeek.events, stats.lastWeek.events),
+    participants: calculateGrowthRate(stats.thisWeek.participants, stats.lastWeek.participants)
   };
 
   // County coverage
@@ -823,6 +892,16 @@ function calculateWeeklyStats() {
     ? ((stats.thisWeek.codeOrg / stats.thisWeek.events) * 100).toFixed(1)
     : 0;
 
+  // 取得 GA4 數據
+  stats.ga = getGA4WeeklyStats();
+
+  // 計算轉換率（如果有 GA 數據）
+  if (stats.ga && stats.ga.thisWeek.users > 0) {
+    stats.conversionRate = ((stats.thisWeek.events / stats.ga.thisWeek.users) * 100).toFixed(1);
+  } else {
+    stats.conversionRate = null;
+  }
+
   return stats;
 }
 
@@ -832,17 +911,6 @@ function calculateWeeklyStats() {
 function formatWeeklyReport(stats) {
   const now = new Date();
   const weekStart = new Date(now.getTime() - 7 * 24 * 60 * 60 * 1000);
-
-  const formatDate = (date) => {
-    return Utilities.formatDate(date, 'Asia/Taipei', 'M/d');
-  };
-
-  const getGrowthIcon = (value) => {
-    const num = parseFloat(value);
-    if (num > 0) return '📈';
-    if (num < 0) return '📉';
-    return '➖';
-  };
 
   // Build top counties text
   const topCountiesText = stats.topCounties.map((item, index) => {
@@ -855,17 +923,57 @@ function formatWeeklyReport(stats) {
     .map(([type, count]) => `   • ${type}：${count} 場`)
     .join('\n');
 
+  // Build GA section
+  let gaSection = '';
+  if (stats.ga) {
+    gaSection = `
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+📊 *網站流量分析* (GA4)
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+👀 本週瀏覽次數：*${stats.ga.thisWeek.pageviews.toLocaleString()}* 次 ${getGrowthIcon(stats.ga.growth.pageviews)} (${stats.ga.growth.pageviews}% vs 上週)
+👤 本週訪客數：*${stats.ga.thisWeek.users.toLocaleString()}* 人 ${getGrowthIcon(stats.ga.growth.users)} (${stats.ga.growth.users}% vs 上週)
+🔄 工作階段：*${stats.ga.thisWeek.sessions.toLocaleString()}* 次
+⏱️ 平均停留時間：*${formatDuration(stats.ga.thisWeek.avgSessionDuration)}*
+📤 跳出率：*${stats.ga.thisWeek.bounceRate}%*`;
+  } else if (CONFIG.ENABLE_GA_REPORT) {
+    gaSection = `
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+📊 *網站流量分析* (GA4)
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+⚠️ GA4 數據取得失敗，請檢查 API 設定`;
+  }
+
+  // Build conversion section
+  let conversionSection = '';
+  if (stats.conversionRate !== null) {
+    conversionSection = `
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+🎯 *轉換指標*
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+📈 訪客轉報名率：*${stats.conversionRate}%* (${stats.thisWeek.events}/${stats.ga.thisWeek.users})`;
+  }
+
+  // Build highlight section
+  let highlightSection = '';
+  if (stats.thisWeek.events === 0) {
+    highlightSection = `⚠️ *本週提醒*\n本週無新增報名，建議檢視推廣策略`;
+  } else if (stats.thisWeek.events > stats.lastWeek.events) {
+    highlightSection = `✨ *本週亮點*\n🎉 活動報名成長 ${stats.growth.events}%，表現優異！`;
+  }
+
   const message = `
 ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
-🎯 *Hour of AI 週報* | ${formatDate(weekStart)} - ${formatDate(now)}
+🎯 *Hour of AI 週報* | ${formatDateTW(weekStart, 'M/d')} - ${formatDateTW(now, 'M/d')}
 ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
 
 📈 *核心成長指標*
 ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
 📊 本週新增活動：*${stats.thisWeek.events}* 場 ${getGrowthIcon(stats.growth.events)} (${stats.growth.events}% vs 上週)
 ✅ 累計總活動：*${stats.total.events}* 場
-👥 本週新增參與：*${stats.thisWeek.participants}* 人 ${getGrowthIcon(stats.growth.participants)} (${stats.growth.participants}% vs 上週)
-🎓 累計總參與：*${stats.total.participants}* 人
+👥 本週新增參與：*${stats.thisWeek.participants.toLocaleString()}* 人 ${getGrowthIcon(stats.growth.participants)} (${stats.growth.participants}% vs 上週)
+🎓 累計總參與：*${stats.total.participants.toLocaleString()}* 人
+${gaSection}
+${conversionSection}
 
 ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
 🗺️ *市場滲透*
@@ -886,9 +994,7 @@ ${institutionText || '   （無資料）'}
 平均參與人數：*${stats.avgParticipants}* 人/場
 ${stats.thisWeek.codeOrg > 0 ? `🤝 Code.org 合作意願率：${stats.codeOrgRate}%` : ''}
 
-━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
-${stats.thisWeek.events === 0 ? '⚠️ *本週提醒*\n本週無新增報名，建議檢視推廣策略' : stats.thisWeek.events > stats.lastWeek.events ? `✨ *本週亮點*\n🎉 活動報名成長 ${stats.growth.events}%，表現優異！` : ''}
-
+${highlightSection ? `━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━\n${highlightSection}\n` : ''}
 ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
 📊 查看完整資料：${SpreadsheetApp.getActiveSpreadsheet().getUrl()}
   `.trim();
@@ -916,5 +1022,208 @@ function testInstantNotification() {
     participants: '50'
   };
 
-  sendInstantNotification(testData, '2025-01-02 10:30:00');
+  sendInstantNotification(testData, formatDateTW(new Date(), 'yyyy-MM-dd HH:mm:ss'));
+}
+
+// ===== GA4 ANALYTICS INTEGRATION =====
+
+/**
+ * 測試 GA4 連線 - 第一次執行會要求授權
+ */
+function testGa4Connection() {
+  if (!CONFIG.ENABLE_GA_REPORT) {
+    Logger.log('GA4 報表已停用');
+    return;
+  }
+  
+  const propertyId = CONFIG.GA4_PROPERTY_ID;
+  
+  try {
+    // 測試查詢：取得最近 7 天的數據
+    const today = new Date();
+    const oneWeekAgo = new Date(today.getTime() - 7 * 24 * 60 * 60 * 1000);
+    
+    const request = {
+      dateRanges: [{
+        startDate: formatDateTW(oneWeekAgo, 'yyyy-MM-dd'),
+        endDate: formatDateTW(today, 'yyyy-MM-dd')
+      }],
+      dimensions: [{ name: 'pagePath' }],
+      metrics: [
+        { name: 'screenPageViews' },
+        { name: 'totalUsers' },
+        { name: 'sessions' }
+      ],
+      dimensionFilter: {
+        filter: {
+          fieldName: 'pagePath',
+          stringFilter: {
+            matchType: 'CONTAINS',
+            value: CONFIG.PAGE_PATH_FILTER
+          }
+        }
+      },
+      limit: 100
+    };
+    
+    Logger.log('正在查詢 GA4 數據...');
+    Logger.log('Property ID: ' + propertyId);
+    Logger.log('日期範圍: ' + formatDateTW(oneWeekAgo, 'yyyy-MM-dd') + ' 至 ' + formatDateTW(today, 'yyyy-MM-dd'));
+    Logger.log('頁面路徑過濾: ' + CONFIG.PAGE_PATH_FILTER);
+    
+    const response = AnalyticsData.Properties.runReport(
+      request,
+      'properties/' + propertyId
+    );
+    
+    Logger.log('✅ 連線成功！');
+    Logger.log('回應資料: ' + JSON.stringify(response, null, 2));
+    
+    if (response.rows && response.rows.length > 0) {
+      // 匯總所有符合條件的頁面
+      let totalPageviews = 0;
+      let totalUsers = 0;
+      let totalSessions = 0;
+      
+      response.rows.forEach(row => {
+        totalPageviews += parseInt(row.metricValues[0].value) || 0;
+        totalUsers += parseInt(row.metricValues[1].value) || 0;
+        totalSessions += parseInt(row.metricValues[2].value) || 0;
+        Logger.log(`  路徑: ${row.dimensionValues[0].value} - 瀏覽: ${row.metricValues[0].value}, 訪客: ${row.metricValues[1].value}`);
+      });
+      
+      Logger.log('📊 匯總數據：');
+      Logger.log('  總瀏覽次數: ' + totalPageviews);
+      Logger.log('  總訪客數: ' + totalUsers);
+      Logger.log('  總工作階段: ' + totalSessions);
+    } else {
+      Logger.log('⚠️ 查詢成功，但該日期範圍內沒有數據');
+      Logger.log('   可能原因：');
+      Logger.log('   1. 頁面路徑過濾太嚴格（路徑不完全匹配）');
+      Logger.log('   2. 該日期範圍內真的沒有流量');
+      Logger.log('   3. GA4 數據有 24-48 小時延遲');
+    }
+    
+  } catch (error) {
+    Logger.log('❌ 錯誤: ' + error.toString());
+    Logger.log('詳細錯誤: ' + JSON.stringify(error, null, 2));
+    
+    if (error.toString().includes('PERMISSION_DENIED')) {
+      Logger.log('💡 提示：請確認你的 Google 帳號有該 GA4 Property 的存取權限');
+    } else if (error.toString().includes('not found')) {
+      Logger.log('💡 提示：請確認 GA4_PROPERTY_ID 是否正確');
+    } else if (error.toString().includes('API not enabled')) {
+      Logger.log('💡 提示：請在 Google Cloud Console 啟用 Google Analytics Data API');
+    }
+  }
+}
+
+/**
+ * 取得 GA4 週報數據（整合到週報系統用）
+ * 修正：匯總所有符合路徑過濾條件的頁面數據
+ */
+function getGA4WeeklyStats() {
+  if (!CONFIG.ENABLE_GA_REPORT) {
+    return null;
+  }
+  
+  const propertyId = CONFIG.GA4_PROPERTY_ID;
+  
+  try {
+    const today = new Date();
+    const oneWeekAgo = new Date(today.getTime() - 7 * 24 * 60 * 60 * 1000);
+    const twoWeeksAgo = new Date(today.getTime() - 14 * 24 * 60 * 60 * 1000);
+    
+    // 執行查詢的輔助函數（匯總所有符合條件的頁面）
+    const runReport = (startDate, endDate) => {
+      const request = {
+        dateRanges: [{ startDate: startDate, endDate: endDate }],
+        dimensions: [{ name: 'pagePath' }],
+        metrics: [
+          { name: 'screenPageViews' },
+          { name: 'totalUsers' },
+          { name: 'sessions' },
+          { name: 'averageSessionDuration' },
+          { name: 'bounceRate' }
+        ],
+        dimensionFilter: {
+          filter: {
+            fieldName: 'pagePath',
+            stringFilter: {
+              matchType: 'CONTAINS',
+              value: CONFIG.PAGE_PATH_FILTER
+            }
+          }
+        },
+        limit: 100  // 增加限制以取得所有符合的頁面
+      };
+      
+      const response = AnalyticsData.Properties.runReport(
+        request,
+        'properties/' + propertyId
+      );
+      
+      // 匯總所有符合條件的頁面數據
+      if (response.rows && response.rows.length > 0) {
+        let totalPageviews = 0;
+        let totalUsers = 0;
+        let totalSessions = 0;
+        let weightedDuration = 0;
+        let weightedBounceRate = 0;
+        
+        response.rows.forEach(row => {
+          const pageviews = parseInt(row.metricValues[0].value) || 0;
+          const users = parseInt(row.metricValues[1].value) || 0;
+          const sessions = parseInt(row.metricValues[2].value) || 0;
+          const avgDuration = parseFloat(row.metricValues[3].value) || 0;
+          const bounceRate = parseFloat(row.metricValues[4].value) || 0;
+          
+          totalPageviews += pageviews;
+          totalUsers += users;
+          totalSessions += sessions;
+          
+          // 加權平均（以 sessions 為權重）
+          weightedDuration += avgDuration * sessions;
+          weightedBounceRate += bounceRate * sessions;
+        });
+        
+        // 計算加權平均值
+        const avgSessionDuration = totalSessions > 0 ? weightedDuration / totalSessions : 0;
+        const avgBounceRate = totalSessions > 0 ? weightedBounceRate / totalSessions : 0;
+        
+        return {
+          pageviews: totalPageviews,
+          users: totalUsers,
+          sessions: totalSessions,
+          avgSessionDuration: avgSessionDuration.toFixed(1),
+          bounceRate: (avgBounceRate * 100).toFixed(1)
+        };
+      }
+      
+      return {
+        pageviews: 0,
+        users: 0,
+        sessions: 0,
+        avgSessionDuration: 0,
+        bounceRate: 0
+      };
+    };
+    
+    // 取得本週和上週數據
+    const thisWeek = runReport(formatDateTW(oneWeekAgo, 'yyyy-MM-dd'), formatDateTW(today, 'yyyy-MM-dd'));
+    const lastWeek = runReport(formatDateTW(twoWeeksAgo, 'yyyy-MM-dd'), formatDateTW(oneWeekAgo, 'yyyy-MM-dd'));
+    
+    return {
+      thisWeek: thisWeek,
+      lastWeek: lastWeek,
+      growth: {
+        pageviews: calculateGrowthRate(thisWeek.pageviews, lastWeek.pageviews),
+        users: calculateGrowthRate(thisWeek.users, lastWeek.users)
+      }
+    };
+    
+  } catch (error) {
+    Logger.log('Error fetching GA4 data: ' + error.toString());
+    return null;
+  }
 }
