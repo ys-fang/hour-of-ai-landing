@@ -507,8 +507,8 @@
 
         /* ===== Upcoming Events Carousel ===== */
         .upcoming-events-section {
-            background: var(--color-bg-light);
-            padding: var(--spacing-2xl) 0;
+            padding-bottom: var(--spacing-2xl);
+            margin-bottom: var(--spacing-xl);
         }
 
         .upcoming-events-header {
@@ -570,7 +570,7 @@
             display: flex;
             flex-direction: column;
             justify-content: flex-end;
-            padding: var(--spacing-xl) var(--spacing-3xl);
+            padding: var(--spacing-2xl) var(--spacing-3xl);
             position: relative;
         }
 
@@ -631,22 +631,7 @@
         }
 
         .event-card-arrow {
-            position: absolute;
-            top: var(--spacing-md);
-            right: var(--spacing-md);
-            background: rgba(255, 255, 255, 0.2);
-            border-radius: var(--border-radius-full);
-            width: 36px;
-            height: 36px;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            transition: all var(--transition-base);
-        }
-
-        .event-card:hover .event-card-arrow {
-            background: rgba(255, 255, 255, 0.3);
-            transform: translateX(4px);
+            display: none;
         }
 
         /* Carousel Navigation */
@@ -747,6 +732,17 @@
             background: linear-gradient(135deg, var(--color-navy), var(--color-primary-blue));
             color: var(--color-white);
             padding: var(--spacing-xl) 0;
+            position: relative;
+        }
+
+        .stats-bar::after {
+            content: '';
+            position: absolute;
+            bottom: 0;
+            left: 0;
+            right: 0;
+            height: 4px;
+            background: linear-gradient(90deg, var(--color-primary-orange), var(--color-yellow), var(--color-primary-teal), var(--color-primary-blue));
         }
 
         .stats-container {
@@ -776,16 +772,6 @@
             padding: var(--spacing-3xl) 0;
             position: relative;
             overflow: hidden;
-        }
-
-        .live-stats-section::before {
-            content: '';
-            position: absolute;
-            top: 0;
-            left: 0;
-            right: 0;
-            height: 4px;
-            background: linear-gradient(90deg, var(--color-primary-orange), var(--color-yellow), var(--color-primary-teal), var(--color-primary-blue));
         }
 
         /* Stats Header with Refresh Button */
@@ -3954,38 +3940,36 @@
         </div>
     </section>
 
-    <!-- Upcoming Events Carousel Section -->
-    <section class="upcoming-events-section" id="upcoming-events">
-        <div class="container">
-            <div class="upcoming-events-header">
-                <h2 class="section-title fade-in">
-                    <span class="material-icons medium" style="color: var(--color-primary-orange);">campaign</span>
-                    近期推廣活動
-                </h2>
-                <p class="section-subtitle fade-in">
-                    探索我們主辦的精彩活動，一起參與 AI 素養教育推廣
-                </p>
-            </div>
-            <div class="events-carousel-wrapper">
-                <button class="carousel-nav prev" id="carouselPrev" aria-label="上一個">
-                    <span class="material-icons">chevron_left</span>
-                </button>
-                <div class="events-carousel" id="eventsCarousel">
-                    <!-- Event cards will be rendered by JavaScript -->
-                </div>
-                <button class="carousel-nav next" id="carouselNext" aria-label="下一個">
-                    <span class="material-icons">chevron_right</span>
-                </button>
-            </div>
-            <div class="carousel-dots" id="carouselDots">
-                <!-- Dots will be rendered by JavaScript -->
-            </div>
-        </div>
-    </section>
-
     <!-- Live Statistics Dashboard -->
     <section class="live-stats-section" id="live-stats">
         <div class="container">
+            <!-- Upcoming Events Carousel Section -->
+            <div class="upcoming-events-section" id="upcoming-events">
+                <div class="upcoming-events-header">
+                    <h2 class="section-title fade-in">
+                        <span class="material-icons medium" style="color: var(--color-primary-orange);">campaign</span>
+                        近期推廣活動
+                    </h2>
+                    <p class="section-subtitle fade-in">
+                        探索我們主辦的精彩活動，一起參與 AI 素養教育推廣
+                    </p>
+                </div>
+                <div class="events-carousel-wrapper">
+                    <button class="carousel-nav prev" id="carouselPrev" aria-label="上一個">
+                        <span class="material-icons">chevron_left</span>
+                    </button>
+                    <div class="events-carousel" id="eventsCarousel">
+                        <!-- Event cards will be rendered by JavaScript -->
+                    </div>
+                    <button class="carousel-nav next" id="carouselNext" aria-label="下一個">
+                        <span class="material-icons">chevron_right</span>
+                    </button>
+                </div>
+                <div class="carousel-dots" id="carouselDots">
+                    <!-- Dots will be rendered by JavaScript -->
+                </div>
+            </div>
+
             <!-- Taiwan Global Ranking Section -->
             <div class="taiwan-global-rank-section fade-in" id="globalRankSection">
                 <div class="stats-header-wrapper">
