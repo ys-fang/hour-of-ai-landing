@@ -570,7 +570,7 @@
             display: flex;
             flex-direction: column;
             justify-content: flex-end;
-            padding: var(--spacing-lg);
+            padding: var(--spacing-xl) var(--spacing-3xl);
             position: relative;
         }
 
@@ -590,12 +590,16 @@
         .event-card-content {
             position: relative;
             z-index: 1;
+            text-align: left;
+            display: flex;
+            flex-direction: column;
+            align-items: flex-start;
+            gap: var(--spacing-xs);
         }
 
         .event-card-title {
             font-size: var(--font-size-xl);
             font-weight: var(--font-weight-bold);
-            margin-bottom: var(--spacing-xs);
             line-height: var(--line-height-tight);
         }
 
@@ -607,6 +611,23 @@
             -webkit-line-clamp: 2;
             -webkit-box-orient: vertical;
             overflow: hidden;
+        }
+
+        .event-card-btn {
+            display: inline-flex;
+            align-items: center;
+            gap: var(--spacing-xs);
+            margin-top: var(--spacing-sm);
+            padding: var(--spacing-xs) var(--spacing-md);
+            background: rgba(255, 255, 255, 0.2);
+            border-radius: var(--border-radius-full);
+            font-size: var(--font-size-xs);
+            font-weight: var(--font-weight-semibold);
+            transition: all var(--transition-base);
+        }
+
+        .event-card:hover .event-card-btn {
+            background: rgba(255, 255, 255, 0.3);
         }
 
         .event-card-arrow {
@@ -3913,6 +3934,26 @@
         </div>
     </section>
 
+    <!-- Stats Bar -->
+    <section class="stats-bar">
+        <div class="container">
+            <div class="stats-container">
+                <div class="stat-item fade-in">
+                    <h2>AI 不是特權</h2>
+                    <p>是每位孩子的學習權利</p>
+                </div>
+                <div class="stat-item fade-in">
+                    <h2>培養自學與思考力</h2>
+                    <p>孩子可以和 AI 共學</p>
+                </div>
+                <div class="stat-item fade-in">
+                    <h2>學會善用 AI</h2>
+                    <p>而不是被 AI 取代</p>
+                </div>
+            </div>
+        </div>
+    </section>
+
     <!-- Upcoming Events Carousel Section -->
     <section class="upcoming-events-section" id="upcoming-events">
         <div class="container">
@@ -3938,26 +3979,6 @@
             </div>
             <div class="carousel-dots" id="carouselDots">
                 <!-- Dots will be rendered by JavaScript -->
-            </div>
-        </div>
-    </section>
-
-    <!-- Stats Bar -->
-    <section class="stats-bar">
-        <div class="container">
-            <div class="stats-container">
-                <div class="stat-item fade-in">
-                    <h2>AI 不是特權</h2>
-                    <p>是每位孩子的學習權利</p>
-                </div>
-                <div class="stat-item fade-in">
-                    <h2>培養自學與思考力</h2>
-                    <p>孩子可以和 AI 共學</p>
-                </div>
-                <div class="stat-item fade-in">
-                    <h2>學會善用 AI</h2>
-                    <p>而不是被 AI 取代</p>
-                </div>
             </div>
         </div>
     </section>
@@ -5864,6 +5885,10 @@ Check Google Sheets to see how many entries were actually created.
                     <div class="event-card-content">
                         <h3 class="event-card-title">${event.title}</h3>
                         <p class="event-card-description">${event.description}</p>
+                        <span class="event-card-btn">
+                            <span class="material-icons small">open_in_new</span>
+                            前往活動
+                        </span>
                     </div>
                 </a>
             `).join('');
