@@ -505,6 +505,222 @@
             }
         }
 
+        /* ===== Upcoming Events Carousel ===== */
+        .upcoming-events-section {
+            background: var(--color-bg-light);
+            padding: var(--spacing-2xl) 0;
+        }
+
+        .upcoming-events-header {
+            text-align: center;
+            margin-bottom: var(--spacing-xl);
+        }
+
+        .upcoming-events-header .section-title {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: var(--spacing-sm);
+            font-size: var(--font-size-2xl);
+            color: var(--color-navy);
+            margin-bottom: var(--spacing-sm);
+        }
+
+        .upcoming-events-header .section-subtitle {
+            color: var(--color-text-secondary);
+            font-size: var(--font-size-base);
+        }
+
+        /* Carousel Container */
+        .events-carousel-wrapper {
+            position: relative;
+            max-width: 100%;
+            overflow: hidden;
+        }
+
+        .events-carousel {
+            display: flex;
+            gap: var(--spacing-lg);
+            overflow-x: auto;
+            scroll-snap-type: x mandatory;
+            scroll-behavior: smooth;
+            -webkit-overflow-scrolling: touch;
+            scrollbar-width: none;
+            -ms-overflow-style: none;
+            padding: var(--spacing-sm) 0;
+        }
+
+        .events-carousel::-webkit-scrollbar {
+            display: none;
+        }
+
+        /* Event Card - 16:9 ratio */
+        .event-card {
+            flex: 0 0 calc((100% - var(--spacing-lg) * 2) / 3);
+            scroll-snap-align: start;
+            aspect-ratio: 16 / 9;
+            background: linear-gradient(135deg, var(--color-primary-blue), var(--color-primary-teal));
+            border-radius: var(--border-radius-lg);
+            box-shadow: var(--shadow-lg);
+            overflow: hidden;
+            cursor: pointer;
+            transition: all var(--transition-base);
+            text-decoration: none;
+            color: var(--color-white);
+            display: flex;
+            flex-direction: column;
+            justify-content: flex-end;
+            padding: var(--spacing-lg);
+            position: relative;
+        }
+
+        .event-card::before {
+            content: '';
+            position: absolute;
+            inset: 0;
+            background: linear-gradient(180deg, transparent 30%, rgba(0, 0, 0, 0.4) 100%);
+            pointer-events: none;
+        }
+
+        .event-card:hover {
+            transform: translateY(-4px);
+            box-shadow: var(--shadow-xl);
+        }
+
+        .event-card-content {
+            position: relative;
+            z-index: 1;
+        }
+
+        .event-card-title {
+            font-size: var(--font-size-xl);
+            font-weight: var(--font-weight-bold);
+            margin-bottom: var(--spacing-xs);
+            line-height: var(--line-height-tight);
+        }
+
+        .event-card-description {
+            font-size: var(--font-size-sm);
+            opacity: 0.9;
+            line-height: var(--line-height-normal);
+            display: -webkit-box;
+            -webkit-line-clamp: 2;
+            -webkit-box-orient: vertical;
+            overflow: hidden;
+        }
+
+        .event-card-arrow {
+            position: absolute;
+            top: var(--spacing-md);
+            right: var(--spacing-md);
+            background: rgba(255, 255, 255, 0.2);
+            border-radius: var(--border-radius-full);
+            width: 36px;
+            height: 36px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            transition: all var(--transition-base);
+        }
+
+        .event-card:hover .event-card-arrow {
+            background: rgba(255, 255, 255, 0.3);
+            transform: translateX(4px);
+        }
+
+        /* Carousel Navigation */
+        .carousel-nav {
+            position: absolute;
+            top: 50%;
+            transform: translateY(-50%);
+            background: var(--color-white);
+            border: none;
+            border-radius: var(--border-radius-full);
+            width: 44px;
+            height: 44px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            box-shadow: var(--shadow-lg);
+            cursor: pointer;
+            z-index: 10;
+            transition: all var(--transition-base);
+            color: var(--color-navy);
+        }
+
+        .carousel-nav:hover {
+            background: var(--color-navy);
+            color: var(--color-white);
+        }
+
+        .carousel-nav:disabled {
+            opacity: 0.3;
+            cursor: not-allowed;
+        }
+
+        .carousel-nav.prev {
+            left: var(--spacing-sm);
+        }
+
+        .carousel-nav.next {
+            right: var(--spacing-sm);
+        }
+
+        /* Carousel Dots */
+        .carousel-dots {
+            display: flex;
+            justify-content: center;
+            gap: var(--spacing-xs);
+            margin-top: var(--spacing-lg);
+        }
+
+        .carousel-dot {
+            width: 10px;
+            height: 10px;
+            border-radius: var(--border-radius-full);
+            background: var(--color-border);
+            border: none;
+            cursor: pointer;
+            transition: all var(--transition-base);
+            padding: 0;
+        }
+
+        .carousel-dot.active {
+            background: var(--color-primary-blue);
+            width: 24px;
+        }
+
+        .carousel-dot:hover {
+            background: var(--color-primary-teal);
+        }
+
+        /* Responsive: Tablet - 2 cards */
+        @media (max-width: 992px) {
+            .event-card {
+                flex: 0 0 calc((100% - var(--spacing-lg)) / 2);
+            }
+        }
+
+        /* Responsive: Mobile - 1 card */
+        @media (max-width: 640px) {
+            .event-card {
+                flex: 0 0 100%;
+            }
+
+            .carousel-nav {
+                width: 36px;
+                height: 36px;
+            }
+
+            .carousel-nav.prev {
+                left: var(--spacing-xs);
+            }
+
+            .carousel-nav.next {
+                right: var(--spacing-xs);
+            }
+        }
+
         /* ===== Stats Bar ===== */
         .stats-bar {
             background: linear-gradient(135deg, var(--color-navy), var(--color-primary-blue));
@@ -3697,6 +3913,35 @@
         </div>
     </section>
 
+    <!-- Upcoming Events Carousel Section -->
+    <section class="upcoming-events-section" id="upcoming-events">
+        <div class="container">
+            <div class="upcoming-events-header">
+                <h2 class="section-title fade-in">
+                    <span class="material-icons medium" style="color: var(--color-primary-orange);">campaign</span>
+                    近期推廣活動
+                </h2>
+                <p class="section-subtitle fade-in">
+                    探索我們主辦的精彩活動，一起參與 AI 素養教育推廣
+                </p>
+            </div>
+            <div class="events-carousel-wrapper">
+                <button class="carousel-nav prev" id="carouselPrev" aria-label="上一個">
+                    <span class="material-icons">chevron_left</span>
+                </button>
+                <div class="events-carousel" id="eventsCarousel">
+                    <!-- Event cards will be rendered by JavaScript -->
+                </div>
+                <button class="carousel-nav next" id="carouselNext" aria-label="下一個">
+                    <span class="material-icons">chevron_right</span>
+                </button>
+            </div>
+            <div class="carousel-dots" id="carouselDots">
+                <!-- Dots will be rendered by JavaScript -->
+            </div>
+        </div>
+    </section>
+
     <!-- Stats Bar -->
     <section class="stats-bar">
         <div class="container">
@@ -5562,6 +5807,276 @@ Check Google Sheets to see how many entries were actually created.
             }
         });
 
+        // ===== Upcoming Events Carousel =====
+
+        // Placeholder event data (Phase 2: will be replaced with Google Sheets data)
+        const upcomingEventsConfig = {
+            AUTOPLAY_INTERVAL: 5000, // 5 seconds
+            events: [
+                {
+                    title: '活動名稱 1',
+                    description: '活動簡述內容，這裡是活動的簡要說明文字。',
+                    url: '#'
+                },
+                {
+                    title: '活動名稱 2',
+                    description: '活動簡述內容，這裡是活動的簡要說明文字。',
+                    url: '#'
+                },
+                {
+                    title: '活動名稱 3',
+                    description: '活動簡述內容，這裡是活動的簡要說明文字。',
+                    url: '#'
+                },
+                {
+                    title: '活動名稱 4',
+                    description: '活動簡述內容，這裡是活動的簡要說明文字。',
+                    url: '#'
+                },
+                {
+                    title: '活動名稱 5',
+                    description: '活動簡述內容，這裡是活動的簡要說明文字。',
+                    url: '#'
+                }
+            ]
+        };
+
+        // Carousel state
+        let carouselAutoplayTimer = null;
+        let carouselCurrentIndex = 0;
+
+        /**
+         * Render event cards in the carousel
+         */
+        function renderEventCards(events) {
+            const carousel = document.getElementById('eventsCarousel');
+            if (!carousel || !events || events.length === 0) return;
+
+            carousel.innerHTML = events.map((event, index) => `
+                <a href="${event.url}"
+                   class="event-card fade-in"
+                   target="_blank"
+                   rel="noopener noreferrer"
+                   data-event-index="${index}">
+                    <div class="event-card-arrow">
+                        <span class="material-icons">arrow_forward</span>
+                    </div>
+                    <div class="event-card-content">
+                        <h3 class="event-card-title">${event.title}</h3>
+                        <p class="event-card-description">${event.description}</p>
+                    </div>
+                </a>
+            `).join('');
+
+            // Trigger fade-in animation
+            setTimeout(() => {
+                carousel.querySelectorAll('.fade-in').forEach(el => el.classList.add('visible'));
+            }, 100);
+        }
+
+        /**
+         * Render carousel dots
+         */
+        function renderCarouselDots(totalPages) {
+            const dotsContainer = document.getElementById('carouselDots');
+            if (!dotsContainer || totalPages <= 1) {
+                if (dotsContainer) dotsContainer.innerHTML = '';
+                return;
+            }
+
+            dotsContainer.innerHTML = Array.from({ length: totalPages }, (_, i) => `
+                <button class="carousel-dot ${i === 0 ? 'active' : ''}"
+                        data-page="${i}"
+                        aria-label="前往第 ${i + 1} 頁"></button>
+            `).join('');
+
+            // Add click handlers
+            dotsContainer.querySelectorAll('.carousel-dot').forEach(dot => {
+                dot.addEventListener('click', () => {
+                    const page = parseInt(dot.dataset.page);
+                    scrollToPage(page);
+                    resetAutoplay();
+                });
+            });
+        }
+
+        /**
+         * Get visible cards count based on viewport
+         */
+        function getVisibleCardsCount() {
+            const width = window.innerWidth;
+            if (width <= 640) return 1;
+            if (width <= 992) return 2;
+            return 3;
+        }
+
+        /**
+         * Get total pages
+         */
+        function getTotalPages() {
+            const events = upcomingEventsConfig.events;
+            const visibleCards = getVisibleCardsCount();
+            return Math.ceil(events.length / visibleCards);
+        }
+
+        /**
+         * Scroll carousel to specific page
+         */
+        function scrollToPage(page) {
+            const carousel = document.getElementById('eventsCarousel');
+            if (!carousel) return;
+
+            const cards = carousel.querySelectorAll('.event-card');
+            if (cards.length === 0) return;
+
+            const visibleCards = getVisibleCardsCount();
+            const targetIndex = Math.min(page * visibleCards, cards.length - 1);
+            const targetCard = cards[targetIndex];
+
+            if (targetCard) {
+                carousel.scrollTo({
+                    left: targetCard.offsetLeft - carousel.offsetLeft,
+                    behavior: 'smooth'
+                });
+            }
+
+            carouselCurrentIndex = page;
+            updateCarouselDots(page);
+            updateNavButtons();
+        }
+
+        /**
+         * Update active dot
+         */
+        function updateCarouselDots(activePage) {
+            const dots = document.querySelectorAll('.carousel-dot');
+            dots.forEach((dot, i) => {
+                dot.classList.toggle('active', i === activePage);
+            });
+        }
+
+        /**
+         * Update navigation buttons state
+         */
+        function updateNavButtons() {
+            const prevBtn = document.getElementById('carouselPrev');
+            const nextBtn = document.getElementById('carouselNext');
+            const totalPages = getTotalPages();
+
+            if (prevBtn) prevBtn.disabled = carouselCurrentIndex === 0;
+            if (nextBtn) nextBtn.disabled = carouselCurrentIndex >= totalPages - 1;
+        }
+
+        /**
+         * Start autoplay
+         */
+        function startAutoplay() {
+            stopAutoplay();
+            carouselAutoplayTimer = setInterval(() => {
+                const totalPages = getTotalPages();
+                const nextPage = (carouselCurrentIndex + 1) % totalPages;
+                scrollToPage(nextPage);
+            }, upcomingEventsConfig.AUTOPLAY_INTERVAL);
+        }
+
+        /**
+         * Stop autoplay
+         */
+        function stopAutoplay() {
+            if (carouselAutoplayTimer) {
+                clearInterval(carouselAutoplayTimer);
+                carouselAutoplayTimer = null;
+            }
+        }
+
+        /**
+         * Reset autoplay (restart timer)
+         */
+        function resetAutoplay() {
+            startAutoplay();
+        }
+
+        /**
+         * Initialize events carousel
+         */
+        function initEventsCarousel() {
+            const carousel = document.getElementById('eventsCarousel');
+            const prevBtn = document.getElementById('carouselPrev');
+            const nextBtn = document.getElementById('carouselNext');
+
+            if (!carousel) return;
+
+            // Render cards and dots
+            renderEventCards(upcomingEventsConfig.events);
+            renderCarouselDots(getTotalPages());
+            updateNavButtons();
+
+            // Navigation button handlers
+            if (prevBtn) {
+                prevBtn.addEventListener('click', () => {
+                    if (carouselCurrentIndex > 0) {
+                        scrollToPage(carouselCurrentIndex - 1);
+                        resetAutoplay();
+                    }
+                });
+            }
+
+            if (nextBtn) {
+                nextBtn.addEventListener('click', () => {
+                    const totalPages = getTotalPages();
+                    if (carouselCurrentIndex < totalPages - 1) {
+                        scrollToPage(carouselCurrentIndex + 1);
+                        resetAutoplay();
+                    }
+                });
+            }
+
+            // Pause autoplay on hover/touch
+            carousel.addEventListener('mouseenter', stopAutoplay);
+            carousel.addEventListener('mouseleave', startAutoplay);
+            carousel.addEventListener('touchstart', stopAutoplay, { passive: true });
+            carousel.addEventListener('touchend', () => {
+                // Delay restart to allow scroll to complete
+                setTimeout(startAutoplay, 1000);
+            }, { passive: true });
+
+            // Handle scroll events for dot sync
+            let scrollTimeout;
+            carousel.addEventListener('scroll', () => {
+                clearTimeout(scrollTimeout);
+                scrollTimeout = setTimeout(() => {
+                    const scrollLeft = carousel.scrollLeft;
+                    const cardWidth = carousel.querySelector('.event-card')?.offsetWidth || 0;
+                    const gap = parseFloat(getComputedStyle(carousel).gap) || 0;
+                    const visibleCards = getVisibleCardsCount();
+                    const pageWidth = (cardWidth + gap) * visibleCards;
+                    const newPage = Math.round(scrollLeft / pageWidth);
+
+                    if (newPage !== carouselCurrentIndex) {
+                        carouselCurrentIndex = newPage;
+                        updateCarouselDots(newPage);
+                        updateNavButtons();
+                    }
+                }, 100);
+            });
+
+            // Handle window resize
+            let resizeTimeout;
+            window.addEventListener('resize', () => {
+                clearTimeout(resizeTimeout);
+                resizeTimeout = setTimeout(() => {
+                    renderCarouselDots(getTotalPages());
+                    scrollToPage(0);
+                    updateNavButtons();
+                }, 250);
+            });
+
+            // Start autoplay
+            startAutoplay();
+
+            console.log('✅ Events carousel initialized');
+        }
+
         // ===== Live Statistics Dashboard =====
 
         // 智慧統計 API URL 配置
@@ -6603,6 +7118,9 @@ Check Google Sheets to see how many entries were actually created.
 
             // Setup demo mode indicators based on environment
             setupDemoModeIndicators();
+
+            // Initialize upcoming events carousel
+            initEventsCarousel();
 
             // Initialize live statistics dashboard
             initStatistics();
