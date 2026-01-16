@@ -1708,11 +1708,106 @@
         }
 
         /* ===== AI Pillars Section ===== */
+        .pillars-intro {
+            text-align: center;
+            margin-bottom: var(--spacing-xl);
+            font-size: var(--font-size-lg);
+            color: var(--color-text-secondary);
+            max-width: 700px;
+            margin-left: auto;
+            margin-right: auto;
+        }
+
+        /* Progress Flow */
+        .pillars-flow {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            gap: var(--spacing-sm);
+            margin-bottom: var(--spacing-lg);
+            flex-wrap: wrap;
+        }
+
+        .pillars-flow-item {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: var(--spacing-xs);
+        }
+
+        .pillars-flow-icon {
+            width: 60px;
+            height: 60px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: var(--font-size-2xl);
+            font-weight: var(--font-weight-bold);
+            color: var(--color-white);
+            cursor: pointer;
+            transition: all var(--transition-base);
+            border: 3px solid transparent;
+        }
+
+        .pillars-flow-icon:hover {
+            transform: scale(1.1);
+        }
+
+        .pillars-flow-icon.active {
+            border-color: var(--color-navy);
+            box-shadow: var(--shadow-lg);
+        }
+
+        .pillars-flow-item:nth-child(1) .pillars-flow-icon { background: linear-gradient(135deg, var(--color-primary-orange), var(--color-yellow)); }
+        .pillars-flow-item:nth-child(3) .pillars-flow-icon { background: linear-gradient(135deg, var(--color-primary-blue), var(--color-primary-teal)); }
+        .pillars-flow-item:nth-child(5) .pillars-flow-icon { background: linear-gradient(135deg, var(--color-primary-teal), var(--color-primary-blue)); }
+        .pillars-flow-item:nth-child(7) .pillars-flow-icon { background: linear-gradient(135deg, var(--color-yellow), var(--color-coral)); }
+
+        .pillars-flow-label {
+            font-size: var(--font-size-sm);
+            font-weight: var(--font-weight-semibold);
+            color: var(--color-navy);
+        }
+
+        .pillars-flow-sublabel {
+            font-size: var(--font-size-xs);
+            color: var(--color-text-secondary);
+        }
+
+        .pillars-flow-arrow {
+            font-size: var(--font-size-xl);
+            color: var(--color-text-tertiary);
+            margin: 0 var(--spacing-xs);
+        }
+
+        .pillars-depth-bar {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: var(--spacing-sm);
+            margin-bottom: var(--spacing-2xl);
+            padding: var(--spacing-sm) var(--spacing-lg);
+            background: linear-gradient(90deg, var(--color-primary-orange), var(--color-primary-blue), var(--color-primary-teal), var(--color-yellow));
+            border-radius: var(--border-radius-full);
+            max-width: 500px;
+            margin-left: auto;
+            margin-right: auto;
+        }
+
+        .pillars-depth-bar span {
+            color: var(--color-white);
+            font-size: var(--font-size-sm);
+            font-weight: var(--font-weight-semibold);
+            text-shadow: 0 1px 2px rgba(0,0,0,0.3);
+        }
+
+        /* Pillar Cards Grid */
         .pillars-grid {
             display: grid;
             grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
             gap: var(--spacing-lg);
-            margin-top: var(--spacing-2xl);
+            margin-top: var(--spacing-xl);
         }
 
         .pillar-card {
@@ -1723,6 +1818,8 @@
             box-shadow: var(--shadow-md);
             transition: all var(--transition-base);
             border: 2px solid transparent;
+            cursor: pointer;
+            position: relative;
         }
 
         .pillar-card:hover {
@@ -1730,21 +1827,34 @@
             box-shadow: var(--shadow-xl);
         }
 
-        .pillar-card:nth-child(1) {
-            border-color: var(--color-primary-orange);
+        .pillar-card.active {
+            border-width: 3px;
         }
 
-        .pillar-card:nth-child(2) {
-            border-color: var(--color-primary-blue);
+        .pillar-card::after {
+            content: '點擊展開';
+            position: absolute;
+            bottom: var(--spacing-sm);
+            left: 50%;
+            transform: translateX(-50%);
+            font-size: var(--font-size-xs);
+            color: var(--color-text-tertiary);
+            opacity: 0;
+            transition: opacity var(--transition-base);
         }
 
-        .pillar-card:nth-child(3) {
-            border-color: var(--color-primary-teal);
+        .pillar-card:hover::after {
+            opacity: 1;
         }
 
-        .pillar-card:nth-child(4) {
-            border-color: var(--color-yellow);
+        .pillar-card.active::after {
+            content: '點擊收合';
         }
+
+        .pillar-card:nth-child(1) { border-color: var(--color-primary-orange); }
+        .pillar-card:nth-child(2) { border-color: var(--color-primary-blue); }
+        .pillar-card:nth-child(3) { border-color: var(--color-primary-teal); }
+        .pillar-card:nth-child(4) { border-color: var(--color-yellow); }
 
         .pillar-icon {
             width: 80px;
@@ -1759,20 +1869,17 @@
             color: var(--color-white);
         }
 
-        .pillar-card:nth-child(1) .pillar-icon {
-            background: linear-gradient(135deg, var(--color-primary-orange), var(--color-yellow));
-        }
+        .pillar-card:nth-child(1) .pillar-icon { background: linear-gradient(135deg, var(--color-primary-orange), var(--color-yellow)); }
+        .pillar-card:nth-child(2) .pillar-icon { background: linear-gradient(135deg, var(--color-primary-blue), var(--color-primary-teal)); }
+        .pillar-card:nth-child(3) .pillar-icon { background: linear-gradient(135deg, var(--color-primary-teal), var(--color-primary-blue)); }
+        .pillar-card:nth-child(4) .pillar-icon { background: linear-gradient(135deg, var(--color-yellow), var(--color-coral)); }
 
-        .pillar-card:nth-child(2) .pillar-icon {
-            background: linear-gradient(135deg, var(--color-primary-blue), var(--color-primary-teal));
-        }
-
-        .pillar-card:nth-child(3) .pillar-icon {
-            background: linear-gradient(135deg, var(--color-primary-teal), var(--color-primary-blue));
-        }
-
-        .pillar-card:nth-child(4) .pillar-icon {
-            background: linear-gradient(135deg, var(--color-yellow), var(--color-coral));
+        .pillar-english {
+            font-size: var(--font-size-sm);
+            color: var(--color-text-tertiary);
+            margin-bottom: var(--spacing-xs);
+            text-transform: uppercase;
+            letter-spacing: 1px;
         }
 
         .pillar-card h3 {
@@ -1780,14 +1887,221 @@
             font-weight: var(--font-weight-bold);
             line-height: var(--line-height-tight);
             color: var(--color-navy);
+            margin-bottom: var(--spacing-xs);
+        }
+
+        .pillar-subtitle {
+            font-size: var(--font-size-sm);
+            color: var(--color-text-secondary);
             margin-bottom: var(--spacing-sm);
         }
 
-        .pillar-card p {
+        .pillar-card p.pillar-brief {
             font-size: var(--font-size-sm);
             font-weight: var(--font-weight-normal);
             line-height: var(--line-height-relaxed);
             color: var(--color-text-secondary);
+        }
+
+        /* Expanded Detail Panel */
+        .pillar-detail {
+            background: var(--color-white);
+            border-radius: var(--border-radius-lg);
+            padding: 0;
+            margin-top: var(--spacing-lg);
+            box-shadow: var(--shadow-lg);
+            overflow: hidden;
+            max-height: 0;
+            opacity: 0;
+            transition: all 0.4s ease-out;
+        }
+
+        .pillar-detail.active {
+            max-height: 800px;
+            opacity: 1;
+            padding: var(--spacing-2xl);
+        }
+
+        .pillar-detail-header {
+            display: flex;
+            align-items: flex-start;
+            gap: var(--spacing-lg);
+            margin-bottom: var(--spacing-xl);
+            padding-bottom: var(--spacing-lg);
+            border-bottom: 2px solid var(--color-bg-light);
+        }
+
+        .pillar-detail-icon {
+            width: 80px;
+            height: 80px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: var(--font-size-3xl);
+            font-weight: var(--font-weight-bold);
+            color: var(--color-white);
+            flex-shrink: 0;
+        }
+
+        .pillar-detail[data-pillar="ask"] .pillar-detail-icon { background: linear-gradient(135deg, var(--color-primary-orange), var(--color-yellow)); }
+        .pillar-detail[data-pillar="use"] .pillar-detail-icon { background: linear-gradient(135deg, var(--color-primary-blue), var(--color-primary-teal)); }
+        .pillar-detail[data-pillar="manage"] .pillar-detail-icon { background: linear-gradient(135deg, var(--color-primary-teal), var(--color-primary-blue)); }
+        .pillar-detail[data-pillar="build"] .pillar-detail-icon { background: linear-gradient(135deg, var(--color-yellow), var(--color-coral)); }
+
+        .pillar-detail[data-pillar="ask"] { border-top: 4px solid var(--color-primary-orange); }
+        .pillar-detail[data-pillar="use"] { border-top: 4px solid var(--color-primary-blue); }
+        .pillar-detail[data-pillar="manage"] { border-top: 4px solid var(--color-primary-teal); }
+        .pillar-detail[data-pillar="build"] { border-top: 4px solid var(--color-yellow); }
+
+        .pillar-detail-title-group {
+            flex: 1;
+        }
+
+        .pillar-detail-english {
+            font-size: var(--font-size-sm);
+            color: var(--color-text-tertiary);
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            margin-bottom: var(--spacing-xs);
+        }
+
+        .pillar-detail-title {
+            font-size: var(--font-size-2xl);
+            font-weight: var(--font-weight-bold);
+            color: var(--color-navy);
+            margin-bottom: var(--spacing-xs);
+        }
+
+        .pillar-detail-subtitle {
+            font-size: var(--font-size-base);
+            color: var(--color-text-secondary);
+        }
+
+        .pillar-detail-headline {
+            font-size: var(--font-size-xl);
+            font-weight: var(--font-weight-semibold);
+            color: var(--color-navy);
+            margin-bottom: var(--spacing-xl);
+            padding: var(--spacing-md);
+            background: var(--color-bg-light);
+            border-radius: var(--border-radius-md);
+            border-left: 4px solid currentColor;
+        }
+
+        .pillar-detail[data-pillar="ask"] .pillar-detail-headline { border-left-color: var(--color-primary-orange); }
+        .pillar-detail[data-pillar="use"] .pillar-detail-headline { border-left-color: var(--color-primary-blue); }
+        .pillar-detail[data-pillar="manage"] .pillar-detail-headline { border-left-color: var(--color-primary-teal); }
+        .pillar-detail[data-pillar="build"] .pillar-detail-headline { border-left-color: var(--color-yellow); }
+
+        .pillar-detail-content {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: var(--spacing-xl);
+        }
+
+        .pillar-detail-section {
+            padding: var(--spacing-lg);
+            border-radius: var(--border-radius-md);
+        }
+
+        .pillar-detail-section.gap-section {
+            background: linear-gradient(135deg, #fff5f5, #fff);
+            border: 1px solid #ffcccc;
+        }
+
+        .pillar-detail-section.goal-section {
+            background: linear-gradient(135deg, #f0fff4, #fff);
+            border: 1px solid #9ae6b4;
+        }
+
+        .pillar-detail-section-title {
+            font-size: var(--font-size-sm);
+            font-weight: var(--font-weight-bold);
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            margin-bottom: var(--spacing-md);
+        }
+
+        .gap-section .pillar-detail-section-title {
+            color: #c53030;
+        }
+
+        .goal-section .pillar-detail-section-title {
+            color: #276749;
+        }
+
+        .pillar-detail-section p {
+            font-size: var(--font-size-base);
+            line-height: var(--line-height-relaxed);
+            color: var(--color-text-primary);
+        }
+
+        .pillar-detail-section ul {
+            list-style: none;
+            padding: 0;
+            margin: 0;
+        }
+
+        .pillar-detail-section ul li {
+            font-size: var(--font-size-base);
+            line-height: var(--line-height-relaxed);
+            color: var(--color-text-primary);
+            padding-left: var(--spacing-lg);
+            position: relative;
+            margin-bottom: var(--spacing-sm);
+        }
+
+        .pillar-detail-section ul li::before {
+            content: '•';
+            position: absolute;
+            left: 0;
+            color: #276749;
+            font-weight: bold;
+        }
+
+        .pillar-detail-insight {
+            margin-top: var(--spacing-xl);
+            padding: var(--spacing-lg);
+            background: linear-gradient(135deg, #fffbeb, #fff);
+            border-radius: var(--border-radius-md);
+            border: 1px solid #f6e05e;
+            display: flex;
+            align-items: flex-start;
+            gap: var(--spacing-md);
+        }
+
+        .pillar-detail-insight .insight-icon {
+            font-size: var(--font-size-xl);
+        }
+
+        .pillar-detail-insight p {
+            font-size: var(--font-size-base);
+            font-weight: var(--font-weight-medium);
+            color: var(--color-navy);
+            line-height: var(--line-height-relaxed);
+            margin: 0;
+        }
+
+        /* Footer message */
+        .pillars-footer {
+            text-align: center;
+            margin-top: var(--spacing-2xl);
+            padding: var(--spacing-xl);
+            background: var(--color-white);
+            border-radius: var(--border-radius-lg);
+            box-shadow: var(--shadow-sm);
+        }
+
+        .pillars-footer p {
+            font-size: var(--font-size-base);
+            color: var(--color-text-secondary);
+            line-height: var(--line-height-relaxed);
+            margin: 0;
+        }
+
+        .pillars-footer p strong {
+            color: var(--color-navy);
         }
 
         /* ===== Activities Section ===== */
@@ -3778,8 +4092,55 @@
                 grid-template-columns: 1fr;
             }
 
+            .pillars-flow {
+                gap: var(--spacing-xs);
+            }
+
+            .pillars-flow-icon {
+                width: 50px;
+                height: 50px;
+                font-size: var(--font-size-xl);
+            }
+
+            .pillars-flow-label {
+                font-size: var(--font-size-xs);
+            }
+
+            .pillars-flow-sublabel {
+                display: none;
+            }
+
+            .pillars-flow-arrow {
+                font-size: var(--font-size-base);
+                margin: 0;
+            }
+
+            .pillars-depth-bar {
+                padding: var(--spacing-xs) var(--spacing-md);
+                font-size: var(--font-size-xs);
+            }
+
             .pillars-grid {
                 grid-template-columns: 1fr;
+            }
+
+            .pillar-detail.active {
+                padding: var(--spacing-lg);
+            }
+
+            .pillar-detail-header {
+                flex-direction: column;
+                align-items: center;
+                text-align: center;
+            }
+
+            .pillar-detail-content {
+                grid-template-columns: 1fr;
+            }
+
+            .pillar-detail-insight {
+                flex-direction: column;
+                text-align: center;
             }
 
             .activities-grid {
@@ -4172,30 +4533,201 @@
     <section class="section" id="pillars" style="background: var(--color-bg-light);">
         <div class="container">
             <h2 class="section-title fade-in">AI 素養四大支柱</h2>
-            <p class="section-subtitle fade-in">
-                培養全方位的 AI 素養,讓學生不僅會使用 AI,更能理解、管理與創造
+            <p class="pillars-intro fade-in">
+                AI 素養不是一次到位，而是一段由淺入深的學習歷程
             </p>
+
+            <!-- Progress Flow Visualization -->
+            <div class="pillars-flow fade-in">
+                <div class="pillars-flow-item">
+                    <div class="pillars-flow-icon" data-pillar="ask" onclick="togglePillarDetail('ask')">問</div>
+                    <span class="pillars-flow-label">問 (Ask)</span>
+                    <span class="pillars-flow-sublabel">對話</span>
+                </div>
+                <span class="pillars-flow-arrow">→</span>
+                <div class="pillars-flow-item">
+                    <div class="pillars-flow-icon" data-pillar="use" onclick="togglePillarDetail('use')">用</div>
+                    <span class="pillars-flow-label">用 (Use)</span>
+                    <span class="pillars-flow-sublabel">應用</span>
+                </div>
+                <span class="pillars-flow-arrow">→</span>
+                <div class="pillars-flow-item">
+                    <div class="pillars-flow-icon" data-pillar="manage" onclick="togglePillarDetail('manage')">管</div>
+                    <span class="pillars-flow-label">管 (Manage)</span>
+                    <span class="pillars-flow-sublabel">判斷</span>
+                </div>
+                <span class="pillars-flow-arrow">→</span>
+                <div class="pillars-flow-item">
+                    <div class="pillars-flow-icon" data-pillar="build" onclick="togglePillarDetail('build')">造</div>
+                    <span class="pillars-flow-label">造 (Build)</span>
+                    <span class="pillars-flow-sublabel">創造</span>
+                </div>
+            </div>
+
+            <!-- Depth Indicator Bar -->
+            <div class="pillars-depth-bar fade-in">
+                <span>深度 (Depth of Literacy) →</span>
+            </div>
+
+            <!-- Pillar Cards -->
             <div class="pillars-grid">
-                <div class="pillar-card fade-in">
+                <div class="pillar-card fade-in" data-pillar="ask" onclick="togglePillarDetail('ask')">
                     <div class="pillar-icon">問</div>
+                    <div class="pillar-english">Ask</div>
                     <h3>問 AI</h3>
-                    <p>學習如何正確提問,與 AI 有效對話,獲取所需資訊</p>
+                    <div class="pillar-subtitle">精準提問與人機協作</div>
+                    <p class="pillar-brief">學會跟 AI 對話，而不是丟一句話給它</p>
                 </div>
-                <div class="pillar-card fade-in">
+                <div class="pillar-card fade-in" data-pillar="use" onclick="togglePillarDetail('use')">
                     <div class="pillar-icon">用</div>
+                    <div class="pillar-english">Use</div>
                     <h3>用 AI</h3>
-                    <p>掌握 AI 工具的實際應用,提升學習與工作效率</p>
+                    <div class="pillar-subtitle">工具掌握與效率提升</div>
+                    <p class="pillar-brief">把 AI 放進流程，而不是多開一個工具</p>
                 </div>
-                <div class="pillar-card fade-in">
+                <div class="pillar-card fade-in" data-pillar="manage" onclick="togglePillarDetail('manage')">
                     <div class="pillar-icon">管</div>
+                    <div class="pillar-english">Manage</div>
                     <h3>管 AI</h3>
-                    <p>理解 AI 的倫理與社會影響,培養批判性思考能力</p>
+                    <div class="pillar-subtitle">批判思考與倫理素養</div>
+                    <p class="pillar-brief">確保「人仍然在駕駛座上」</p>
                 </div>
-                <div class="pillar-card fade-in">
+                <div class="pillar-card fade-in" data-pillar="build" onclick="togglePillarDetail('build')">
                     <div class="pillar-icon">造</div>
+                    <div class="pillar-english">Build</div>
                     <h3>造 AI</h3>
-                    <p>學習 AI 的基本原理,嘗試創造自己的 AI 應用</p>
+                    <div class="pillar-subtitle">原理理解與創新應用</div>
+                    <p class="pillar-brief">從使用者，走向能創造價值的人</p>
                 </div>
+            </div>
+
+            <!-- Expandable Detail Panels -->
+            <div class="pillar-detail" id="pillar-detail-ask" data-pillar="ask">
+                <div class="pillar-detail-header">
+                    <div class="pillar-detail-icon">問</div>
+                    <div class="pillar-detail-title-group">
+                        <div class="pillar-detail-english">Ask</div>
+                        <h3 class="pillar-detail-title">問 AI</h3>
+                        <div class="pillar-detail-subtitle">精準提問與人機協作</div>
+                    </div>
+                </div>
+                <div class="pillar-detail-headline">學會跟 AI 對話，而不是丟一句話給它</div>
+                <div class="pillar-detail-content">
+                    <div class="pillar-detail-section gap-section">
+                        <div class="pillar-detail-section-title">現況挑戰 (The Gap)</div>
+                        <p>學生常覺得「AI 不準」，其實是因為他們只丟了一句模糊的話給 AI。這反映出思考的懶惰。</p>
+                    </div>
+                    <div class="pillar-detail-section goal-section">
+                        <div class="pillar-detail-section-title">素養目標 (The Goal)</div>
+                        <ul>
+                            <li>把模糊需求轉成明確指令</li>
+                            <li>追問、修正、深化 (Iterative Refinement)</li>
+                            <li>用 AI 做資訊輔助，而非直接交答案</li>
+                        </ul>
+                    </div>
+                </div>
+                <div class="pillar-detail-insight">
+                    <span class="insight-icon">💡</span>
+                    <p>「問」是一種思考訓練：你知不知道自己真正要什麼？</p>
+                </div>
+            </div>
+
+            <div class="pillar-detail" id="pillar-detail-use" data-pillar="use">
+                <div class="pillar-detail-header">
+                    <div class="pillar-detail-icon">用</div>
+                    <div class="pillar-detail-title-group">
+                        <div class="pillar-detail-english">Use</div>
+                        <h3 class="pillar-detail-title">用 AI</h3>
+                        <div class="pillar-detail-subtitle">工具掌握與效率提升</div>
+                    </div>
+                </div>
+                <div class="pillar-detail-headline">把 AI 放進流程，而不是多開一個工具</div>
+                <div class="pillar-detail-content">
+                    <div class="pillar-detail-section gap-section">
+                        <div class="pillar-detail-section-title">現況挑戰 (The Gap)</div>
+                        <p>不是問要不要用 AI，而是擔心全交給 AI 後，把學生該練的能力拿走，導致學習「變薄」。</p>
+                    </div>
+                    <div class="pillar-detail-section goal-section">
+                        <div class="pillar-detail-section-title">素養目標 (The Goal)</div>
+                        <ul>
+                            <li>理解不同 AI 工具的強項</li>
+                            <li>解決重複性任務</li>
+                            <li>提升產出品質與效率</li>
+                        </ul>
+                    </div>
+                </div>
+                <div class="pillar-detail-insight">
+                    <span class="insight-icon">💡</span>
+                    <p>關鍵判準：用完之後，學習有沒有變好？</p>
+                </div>
+            </div>
+
+            <div class="pillar-detail" id="pillar-detail-manage" data-pillar="manage">
+                <div class="pillar-detail-header">
+                    <div class="pillar-detail-icon">管</div>
+                    <div class="pillar-detail-title-group">
+                        <div class="pillar-detail-english">Manage</div>
+                        <h3 class="pillar-detail-title">管 AI</h3>
+                        <div class="pillar-detail-subtitle">批判思考與倫理素養</div>
+                    </div>
+                </div>
+                <div class="pillar-detail-headline">確保「人仍然在駕駛座上」</div>
+                <div class="pillar-detail-content">
+                    <div class="pillar-detail-section gap-section">
+                        <div class="pillar-detail-section-title">現況挑戰 (The Gap)</div>
+                        <p>AI 出錯不是問題，問題是出錯時「沒有人知道該誰負責」。不能以外包心態面對風險。</p>
+                    </div>
+                    <div class="pillar-detail-section goal-section">
+                        <div class="pillar-detail-section-title">素養目標 (The Goal)</div>
+                        <ul>
+                            <li>不盲信 AI 產出</li>
+                            <li>理解偏見、隱私、智財風險</li>
+                            <li>清楚人與 AI 的責任邊界</li>
+                        </ul>
+                    </div>
+                </div>
+                <div class="pillar-detail-insight">
+                    <span class="insight-icon">💡</span>
+                    <p>定義責任：哪些判斷絕不能外包？哪些後果必須由人承擔？</p>
+                </div>
+            </div>
+
+            <div class="pillar-detail" id="pillar-detail-build" data-pillar="build">
+                <div class="pillar-detail-header">
+                    <div class="pillar-detail-icon">造</div>
+                    <div class="pillar-detail-title-group">
+                        <div class="pillar-detail-english">Build</div>
+                        <h3 class="pillar-detail-title">造 AI</h3>
+                        <div class="pillar-detail-subtitle">原理理解與創新應用</div>
+                    </div>
+                </div>
+                <div class="pillar-detail-headline">從使用者，走向能創造價值的人</div>
+                <div class="pillar-detail-content">
+                    <div class="pillar-detail-section gap-section">
+                        <div class="pillar-detail-section-title">現況挑戰 (The Gap)</div>
+                        <p>誤以為「造」就是要寫程式或訓練模型，導致老師與學生感到恐懼與排斥。</p>
+                    </div>
+                    <div class="pillar-detail-section goal-section">
+                        <div class="pillar-detail-section-title">素養目標 (The Goal)</div>
+                        <ul>
+                            <li>理解 AI 的基本原理 (Why it works)</li>
+                            <li>組合工具與流程 (Workflow Design)</li>
+                            <li>用 AI 解決真實問題 (Problem Solving)</li>
+                        </ul>
+                    </div>
+                </div>
+                <div class="pillar-detail-insight">
+                    <span class="insight-icon">💡</span>
+                    <p>培養主體性：知道 AI 為何這樣判斷，並決定用它解決什麼問題。</p>
+                </div>
+            </div>
+
+            <!-- Footer Message -->
+            <div class="pillars-footer fade-in">
+                <p>
+                    <strong>這不是四個要一次教完的能力，而是一條可以慢慢累積的學習進程。</strong><br>
+                    這不只是學生的學習目標，也是未來所有人的基本能力。
+                </p>
             </div>
         </div>
     </section>
@@ -7111,6 +7643,36 @@ Check Google Sheets to see how many entries were actually created.
                 if (statsDashboard) {
                     statsDashboard.classList.remove('demo-mode');
                 }
+            }
+        }
+
+        // ===== AI Pillars Toggle =====
+        function togglePillarDetail(pillarId) {
+            const detailPanel = document.getElementById(`pillar-detail-${pillarId}`);
+            const pillarCard = document.querySelector(`.pillar-card[data-pillar="${pillarId}"]`);
+            const flowIcon = document.querySelector(`.pillars-flow-icon[data-pillar="${pillarId}"]`);
+            const allDetails = document.querySelectorAll('.pillar-detail');
+            const allCards = document.querySelectorAll('.pillar-card');
+            const allFlowIcons = document.querySelectorAll('.pillars-flow-icon');
+
+            // Check if this panel is already active
+            const isActive = detailPanel.classList.contains('active');
+
+            // Close all panels first
+            allDetails.forEach(panel => panel.classList.remove('active'));
+            allCards.forEach(card => card.classList.remove('active'));
+            allFlowIcons.forEach(icon => icon.classList.remove('active'));
+
+            // If the clicked panel wasn't active, open it
+            if (!isActive) {
+                detailPanel.classList.add('active');
+                if (pillarCard) pillarCard.classList.add('active');
+                if (flowIcon) flowIcon.classList.add('active');
+
+                // Scroll to the detail panel smoothly
+                setTimeout(() => {
+                    detailPanel.scrollIntoView({ behavior: 'smooth', block: 'nearest' });
+                }, 100);
             }
         }
 
