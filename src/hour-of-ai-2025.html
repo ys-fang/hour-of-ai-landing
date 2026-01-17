@@ -2095,7 +2095,7 @@
             border-radius: var(--border-radius-lg);
             max-width: 700px;
             width: 100%;
-            max-height: 90vh;
+            max-height: 85vh;
             overflow: hidden;
             position: relative;
             transform: translateY(20px) scale(0.95);
@@ -2108,12 +2108,18 @@
             transform: translateY(0) scale(1);
         }
 
+        .pillar-modal-header {
+            display: flex;
+            justify-content: flex-end;
+            padding: var(--spacing-sm) var(--spacing-md);
+            background: var(--color-white);
+            flex-shrink: 0;
+            border-bottom: 1px solid var(--color-bg-light);
+        }
+
         .pillar-modal-close {
-            position: absolute;
-            top: var(--spacing-md);
-            right: var(--spacing-md);
-            width: 40px;
-            height: 40px;
+            width: 36px;
+            height: 36px;
             border: none;
             background: var(--color-bg-light);
             border-radius: 50%;
@@ -2121,7 +2127,6 @@
             display: flex;
             align-items: center;
             justify-content: center;
-            z-index: 10;
             transition: background 0.2s ease, transform 0.2s ease;
         }
 
@@ -2131,15 +2136,16 @@
         }
 
         .pillar-modal-close .material-icons {
-            font-size: 24px;
+            font-size: 22px;
             color: var(--color-text-secondary);
         }
 
         .pillar-modal-content {
-            padding: var(--spacing-2xl);
+            padding: var(--spacing-xl) var(--spacing-2xl) var(--spacing-2xl);
             overflow-y: auto;
             -webkit-overflow-scrolling: touch;
             flex: 1;
+            overscroll-behavior: contain;
         }
 
         /* Modal content styles - reuse pillar-detail inner styles */
@@ -2303,17 +2309,23 @@
         /* Mobile responsive for modal */
         @media (max-width: 768px) {
             .pillar-modal-overlay {
-                padding: var(--spacing-sm);
+                padding: 0;
                 align-items: flex-end;
             }
 
             .pillar-modal {
-                max-height: 85vh;
+                max-height: 80vh;
+                max-height: 80dvh; /* Dynamic viewport height for mobile browsers */
                 border-radius: var(--border-radius-lg) var(--border-radius-lg) 0 0;
+                margin-bottom: 0;
+            }
+
+            .pillar-modal-header {
+                padding: var(--spacing-sm) var(--spacing-md);
             }
 
             .pillar-modal-content {
-                padding: var(--spacing-lg);
+                padding: var(--spacing-md) var(--spacing-lg) var(--spacing-xl);
             }
 
             .pillar-modal-content .pillar-detail-header {
@@ -2336,6 +2348,14 @@
                 flex-direction: column;
                 text-align: center;
             }
+        }
+
+        /* Body scroll lock for modal */
+        body.modal-open {
+            overflow: hidden;
+            position: fixed;
+            width: 100%;
+            height: 100%;
         }
 
         /* Footer message */
@@ -7904,6 +7924,9 @@ Check Google Sheets to see how many entries were actually created.
             openPillarModal(pillarId, detailPanel);
         }
 
+        // Store scroll position for iOS scroll lock
+        let scrollPosition = 0;
+
         function openPillarModal(pillarId, detailPanel) {
             const modal = document.getElementById('pillarModal');
             const modalContent = document.getElementById('pillarModalContent');
@@ -7912,9 +7935,13 @@ Check Google Sheets to see how many entries were actually created.
             modalContent.innerHTML = detailPanel.innerHTML;
             modalContent.setAttribute('data-pillar', pillarId);
 
+            // Lock body scroll (iOS compatible)
+            scrollPosition = window.pageYOffset;
+            document.body.classList.add('modal-open');
+            document.body.style.top = `-${scrollPosition}px`;
+
             // Show modal
             modal.classList.add('active');
-            document.body.style.overflow = 'hidden';
 
             // Focus trap for accessibility
             const closeBtn = modal.querySelector('.pillar-modal-close');
@@ -7927,7 +7954,11 @@ Check Google Sheets to see how many entries were actually created.
             const allFlowIcons = document.querySelectorAll('.pillars-flow-icon');
 
             modal.classList.remove('active');
-            document.body.style.overflow = '';
+
+            // Unlock body scroll and restore position
+            document.body.classList.remove('modal-open');
+            document.body.style.top = '';
+            window.scrollTo(0, scrollPosition);
 
             // Reset card/icon active states
             allCards.forEach(card => card.classList.remove('active'));
@@ -7938,6 +7969,7 @@ Check Google Sheets to see how many entries were actually created.
         function setupPillarModal() {
             const modal = document.getElementById('pillarModal');
             const closeBtn = modal.querySelector('.pillar-modal-close');
+            const modalContent = document.getElementById('pillarModalContent');
 
             // Close on close button click
             closeBtn.addEventListener('click', closePillarModal);
@@ -7955,6 +7987,14 @@ Check Google Sheets to see how many entries were actually created.
                     closePillarModal();
                 }
             });
+
+            // Prevent touchmove on overlay (iOS scroll fix)
+            modal.addEventListener('touchmove', (e) => {
+                // Only allow scrolling inside modal content
+                if (!modalContent.contains(e.target)) {
+                    e.preventDefault();
+                }
+            }, { passive: false });
         }
 
         // ===== Initialize =====
@@ -8043,9 +8083,11 @@ Check Google Sheets to see how many entries were actually created.
     <!-- Pillar Detail Modal -->
     <div class="pillar-modal-overlay" id="pillarModal">
         <div class="pillar-modal" role="dialog" aria-modal="true">
-            <button class="pillar-modal-close" aria-label="關閉">
-                <span class="material-icons">close</span>
-            </button>
+            <div class="pillar-modal-header">
+                <button class="pillar-modal-close" aria-label="關閉">
+                    <span class="material-icons">close</span>
+                </button>
+            </div>
             <div class="pillar-modal-content" id="pillarModalContent">
                 <!-- Content will be injected here -->
             </div>
