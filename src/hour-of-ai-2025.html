@@ -7955,10 +7955,10 @@ Check Google Sheets to see how many entries were actually created.
 
             modal.classList.remove('active');
 
-            // Unlock body scroll and restore position
+            // Unlock body scroll and restore position instantly (no animation)
             document.body.classList.remove('modal-open');
             document.body.style.top = '';
-            window.scrollTo(0, scrollPosition);
+            window.scrollTo({ top: scrollPosition, left: 0, behavior: 'instant' });
 
             // Reset card/icon active states
             allCards.forEach(card => card.classList.remove('active'));
