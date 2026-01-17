@@ -4838,38 +4838,6 @@
                 AI 素養不是一次到位，而是一段由淺入深的學習歷程
             </p>
 
-            <!-- Progress Flow Visualization -->
-            <div class="pillars-flow fade-in">
-                <div class="pillars-flow-item">
-                    <div class="pillars-flow-icon" data-pillar="ask" onclick="togglePillarDetail('ask')">問</div>
-                    <span class="pillars-flow-label">問 (Ask)</span>
-                    <span class="pillars-flow-sublabel">對話</span>
-                </div>
-                <span class="pillars-flow-arrow">→</span>
-                <div class="pillars-flow-item">
-                    <div class="pillars-flow-icon" data-pillar="use" onclick="togglePillarDetail('use')">用</div>
-                    <span class="pillars-flow-label">用 (Use)</span>
-                    <span class="pillars-flow-sublabel">應用</span>
-                </div>
-                <span class="pillars-flow-arrow">→</span>
-                <div class="pillars-flow-item">
-                    <div class="pillars-flow-icon" data-pillar="manage" onclick="togglePillarDetail('manage')">管</div>
-                    <span class="pillars-flow-label">管 (Manage)</span>
-                    <span class="pillars-flow-sublabel">判斷</span>
-                </div>
-                <span class="pillars-flow-arrow">→</span>
-                <div class="pillars-flow-item">
-                    <div class="pillars-flow-icon" data-pillar="build" onclick="togglePillarDetail('build')">造</div>
-                    <span class="pillars-flow-label">造 (Build)</span>
-                    <span class="pillars-flow-sublabel">創造</span>
-                </div>
-            </div>
-
-            <!-- Depth Indicator Bar -->
-            <div class="pillars-depth-bar fade-in">
-                <span>深度 (Depth of Literacy) →</span>
-            </div>
-
             <!-- Pillar Cards -->
             <div class="pillars-grid">
                 <div class="pillar-card fade-in" data-pillar="ask" onclick="togglePillarDetail('ask')">
@@ -7967,17 +7935,13 @@ Check Google Sheets to see how many entries were actually created.
         function togglePillarDetail(pillarId) {
             const detailPanel = document.getElementById(`pillar-detail-${pillarId}`);
             const pillarCard = document.querySelector(`.pillar-card[data-pillar="${pillarId}"]`);
-            const flowIcon = document.querySelector(`.pillars-flow-icon[data-pillar="${pillarId}"]`);
             const allCards = document.querySelectorAll('.pillar-card');
-            const allFlowIcons = document.querySelectorAll('.pillars-flow-icon');
 
-            // Reset all cards and icons
+            // Reset all cards
             allCards.forEach(card => card.classList.remove('active'));
-            allFlowIcons.forEach(icon => icon.classList.remove('active'));
 
-            // Mark the clicked card/icon as active
+            // Mark the clicked card as active
             if (pillarCard) pillarCard.classList.add('active');
-            if (flowIcon) flowIcon.classList.add('active');
 
             // Open modal with content
             openPillarModal(pillarId, detailPanel);
@@ -8010,7 +7974,6 @@ Check Google Sheets to see how many entries were actually created.
         function closePillarModal() {
             const modal = document.getElementById('pillarModal');
             const allCards = document.querySelectorAll('.pillar-card');
-            const allFlowIcons = document.querySelectorAll('.pillars-flow-icon');
 
             modal.classList.remove('active');
 
@@ -8019,9 +7982,8 @@ Check Google Sheets to see how many entries were actually created.
             document.body.style.top = '';
             window.scrollTo({ top: scrollPosition, left: 0, behavior: 'instant' });
 
-            // Reset card/icon active states
+            // Reset card active states
             allCards.forEach(card => card.classList.remove('active'));
-            allFlowIcons.forEach(icon => icon.classList.remove('active'));
         }
 
         // Setup modal event listeners on DOMContentLoaded
