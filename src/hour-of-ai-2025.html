@@ -1831,24 +1831,6 @@
             border-width: 3px;
         }
 
-        .pillar-card::after {
-            content: '點擊查看詳情';
-            position: absolute;
-            bottom: var(--spacing-sm);
-            left: 50%;
-            transform: translateX(-50%);
-            font-size: var(--font-size-xs);
-            color: var(--color-text-tertiary);
-            opacity: 0;
-            transition: opacity var(--transition-base);
-        }
-
-        .pillar-card:hover::after {
-            opacity: 1;
-        }
-
-        /* Active state uses same text since modal handles its own close */
-
         .pillar-card:nth-child(1) { border-color: var(--color-primary-orange); }
         .pillar-card:nth-child(2) { border-color: var(--color-primary-blue); }
         .pillar-card:nth-child(3) { border-color: var(--color-primary-teal); }
@@ -1899,6 +1881,67 @@
             font-weight: var(--font-weight-normal);
             line-height: var(--line-height-relaxed);
             color: var(--color-text-secondary);
+        }
+
+        .pillar-details-button {
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            gap: var(--spacing-xs);
+            font-size: var(--font-size-sm);
+            font-weight: var(--font-weight-semibold);
+            margin-top: var(--spacing-md);
+            padding: var(--spacing-sm) var(--spacing-lg);
+            border: 2px solid var(--color-text-tertiary);
+            border-radius: var(--border-radius-full);
+            background: transparent;
+            color: var(--color-text-secondary);
+            cursor: pointer;
+            transition: all var(--transition-base);
+        }
+
+        .pillar-details-button:hover {
+            transform: translateY(-2px);
+        }
+
+        .pillar-details-button .material-icons {
+            font-size: 18px;
+        }
+
+        .pillar-card:nth-child(1) .pillar-details-button {
+            border-color: var(--color-primary-orange);
+            color: var(--color-primary-orange);
+        }
+        .pillar-card:nth-child(1) .pillar-details-button:hover {
+            background: var(--color-primary-orange);
+            color: var(--color-white);
+        }
+
+        .pillar-card:nth-child(2) .pillar-details-button {
+            border-color: var(--color-primary-blue);
+            color: var(--color-primary-blue);
+        }
+        .pillar-card:nth-child(2) .pillar-details-button:hover {
+            background: var(--color-primary-blue);
+            color: var(--color-white);
+        }
+
+        .pillar-card:nth-child(3) .pillar-details-button {
+            border-color: var(--color-primary-teal);
+            color: var(--color-primary-teal);
+        }
+        .pillar-card:nth-child(3) .pillar-details-button:hover {
+            background: var(--color-primary-teal);
+            color: var(--color-white);
+        }
+
+        .pillar-card:nth-child(4) .pillar-details-button {
+            border-color: var(--color-yellow);
+            color: #b8860b;
+        }
+        .pillar-card:nth-child(4) .pillar-details-button:hover {
+            background: var(--color-yellow);
+            color: var(--color-navy);
         }
 
         /* Hidden Detail Panel - content is displayed in modal */
@@ -4835,6 +4878,10 @@
                     <h3>問 AI</h3>
                     <div class="pillar-subtitle">精準提問與人機協作</div>
                     <p class="pillar-brief">學會跟 AI 對話，而不是丟一句話給它</p>
+                    <button class="pillar-details-button">
+                        <span class="material-icons">visibility</span>
+                        <span>查看詳細</span>
+                    </button>
                 </div>
                 <div class="pillar-card fade-in" data-pillar="use" onclick="togglePillarDetail('use')">
                     <div class="pillar-icon">用</div>
@@ -4842,6 +4889,10 @@
                     <h3>用 AI</h3>
                     <div class="pillar-subtitle">工具掌握與效率提升</div>
                     <p class="pillar-brief">把 AI 放進流程，而不是多開一個工具</p>
+                    <button class="pillar-details-button">
+                        <span class="material-icons">visibility</span>
+                        <span>查看詳細</span>
+                    </button>
                 </div>
                 <div class="pillar-card fade-in" data-pillar="manage" onclick="togglePillarDetail('manage')">
                     <div class="pillar-icon">管</div>
@@ -4849,6 +4900,10 @@
                     <h3>管 AI</h3>
                     <div class="pillar-subtitle">批判思考與倫理素養</div>
                     <p class="pillar-brief">確保「人仍然在駕駛座上」</p>
+                    <button class="pillar-details-button">
+                        <span class="material-icons">visibility</span>
+                        <span>查看詳細</span>
+                    </button>
                 </div>
                 <div class="pillar-card fade-in" data-pillar="build" onclick="togglePillarDetail('build')">
                     <div class="pillar-icon">造</div>
@@ -4856,6 +4911,10 @@
                     <h3>造 AI</h3>
                     <div class="pillar-subtitle">原理理解與創新應用</div>
                     <p class="pillar-brief">從使用者，走向能創造價值的人</p>
+                    <button class="pillar-details-button">
+                        <span class="material-icons">visibility</span>
+                        <span>查看詳細</span>
+                    </button>
                 </div>
             </div>
 
