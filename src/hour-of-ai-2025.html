@@ -1832,7 +1832,7 @@
         }
 
         .pillar-card::after {
-            content: '點擊展開';
+            content: '點擊查看詳情';
             position: absolute;
             bottom: var(--spacing-sm);
             left: 50%;
@@ -1847,9 +1847,7 @@
             opacity: 1;
         }
 
-        .pillar-card.active::after {
-            content: '點擊收合';
-        }
+        /* Active state uses same text since modal handles its own close */
 
         .pillar-card:nth-child(1) { border-color: var(--color-primary-orange); }
         .pillar-card:nth-child(2) { border-color: var(--color-primary-blue); }
@@ -1903,23 +1901,9 @@
             color: var(--color-text-secondary);
         }
 
-        /* Expanded Detail Panel */
+        /* Hidden Detail Panel - content is displayed in modal */
         .pillar-detail {
-            background: var(--color-white);
-            border-radius: var(--border-radius-lg);
-            padding: 0;
-            margin-top: var(--spacing-lg);
-            box-shadow: var(--shadow-lg);
-            overflow: hidden;
-            max-height: 0;
-            opacity: 0;
-            transition: all 0.4s ease-out;
-        }
-
-        .pillar-detail.active {
-            max-height: 800px;
-            opacity: 1;
-            padding: var(--spacing-2xl);
+            display: none;
         }
 
         .pillar-detail-header {
@@ -2081,6 +2065,277 @@
             color: var(--color-navy);
             line-height: var(--line-height-relaxed);
             margin: 0;
+        }
+
+        /* Pillar Modal Styles */
+        .pillar-modal-overlay {
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: rgba(0, 0, 0, 0.6);
+            z-index: 9999;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            padding: var(--spacing-md);
+            opacity: 0;
+            visibility: hidden;
+            transition: opacity 0.3s ease, visibility 0.3s ease;
+        }
+
+        .pillar-modal-overlay.active {
+            opacity: 1;
+            visibility: visible;
+        }
+
+        .pillar-modal {
+            background: var(--color-white);
+            border-radius: var(--border-radius-lg);
+            max-width: 700px;
+            width: 100%;
+            max-height: 90vh;
+            overflow: hidden;
+            position: relative;
+            transform: translateY(20px) scale(0.95);
+            transition: transform 0.3s ease;
+            display: flex;
+            flex-direction: column;
+        }
+
+        .pillar-modal-overlay.active .pillar-modal {
+            transform: translateY(0) scale(1);
+        }
+
+        .pillar-modal-close {
+            position: absolute;
+            top: var(--spacing-md);
+            right: var(--spacing-md);
+            width: 40px;
+            height: 40px;
+            border: none;
+            background: var(--color-bg-light);
+            border-radius: 50%;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            z-index: 10;
+            transition: background 0.2s ease, transform 0.2s ease;
+        }
+
+        .pillar-modal-close:hover {
+            background: var(--color-bg-dark);
+            transform: scale(1.1);
+        }
+
+        .pillar-modal-close .material-icons {
+            font-size: 24px;
+            color: var(--color-text-secondary);
+        }
+
+        .pillar-modal-content {
+            padding: var(--spacing-2xl);
+            overflow-y: auto;
+            -webkit-overflow-scrolling: touch;
+            flex: 1;
+        }
+
+        /* Modal content styles - reuse pillar-detail inner styles */
+        .pillar-modal-content .pillar-detail-header {
+            display: flex;
+            align-items: flex-start;
+            gap: var(--spacing-lg);
+            margin-bottom: var(--spacing-xl);
+            padding-bottom: var(--spacing-lg);
+            border-bottom: 2px solid var(--color-bg-light);
+        }
+
+        .pillar-modal-content .pillar-detail-icon {
+            width: 80px;
+            height: 80px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: var(--font-size-3xl);
+            font-weight: var(--font-weight-bold);
+            color: var(--color-white);
+            flex-shrink: 0;
+        }
+
+        .pillar-modal-content[data-pillar="ask"] .pillar-detail-icon { background: linear-gradient(135deg, var(--color-primary-orange), var(--color-yellow)); }
+        .pillar-modal-content[data-pillar="use"] .pillar-detail-icon { background: linear-gradient(135deg, var(--color-primary-blue), var(--color-primary-teal)); }
+        .pillar-modal-content[data-pillar="manage"] .pillar-detail-icon { background: linear-gradient(135deg, var(--color-primary-teal), var(--color-primary-blue)); }
+        .pillar-modal-content[data-pillar="build"] .pillar-detail-icon { background: linear-gradient(135deg, var(--color-yellow), var(--color-coral)); }
+
+        .pillar-modal-content .pillar-detail-title-group {
+            flex: 1;
+        }
+
+        .pillar-modal-content .pillar-detail-english {
+            font-size: var(--font-size-sm);
+            color: var(--color-text-tertiary);
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            margin-bottom: var(--spacing-xs);
+        }
+
+        .pillar-modal-content .pillar-detail-title {
+            font-size: var(--font-size-2xl);
+            font-weight: var(--font-weight-bold);
+            color: var(--color-navy);
+            margin-bottom: var(--spacing-xs);
+        }
+
+        .pillar-modal-content .pillar-detail-subtitle {
+            font-size: var(--font-size-base);
+            color: var(--color-text-secondary);
+        }
+
+        .pillar-modal-content .pillar-detail-headline {
+            font-size: var(--font-size-xl);
+            font-weight: var(--font-weight-semibold);
+            color: var(--color-navy);
+            margin-bottom: var(--spacing-xl);
+            padding: var(--spacing-md);
+            background: var(--color-bg-light);
+            border-radius: var(--border-radius-md);
+            border-left: 4px solid currentColor;
+        }
+
+        .pillar-modal-content[data-pillar="ask"] .pillar-detail-headline { border-left-color: var(--color-primary-orange); }
+        .pillar-modal-content[data-pillar="use"] .pillar-detail-headline { border-left-color: var(--color-primary-blue); }
+        .pillar-modal-content[data-pillar="manage"] .pillar-detail-headline { border-left-color: var(--color-primary-teal); }
+        .pillar-modal-content[data-pillar="build"] .pillar-detail-headline { border-left-color: var(--color-yellow); }
+
+        .pillar-modal-content .pillar-detail-content {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: var(--spacing-xl);
+        }
+
+        .pillar-modal-content .pillar-detail-section {
+            padding: var(--spacing-lg);
+            border-radius: var(--border-radius-md);
+        }
+
+        .pillar-modal-content .pillar-detail-section.gap-section {
+            background: linear-gradient(135deg, #fff5f5, #fff);
+            border: 1px solid #ffcccc;
+        }
+
+        .pillar-modal-content .pillar-detail-section.goal-section {
+            background: linear-gradient(135deg, #f0fff4, #fff);
+            border: 1px solid #9ae6b4;
+        }
+
+        .pillar-modal-content .pillar-detail-section-title {
+            font-size: var(--font-size-sm);
+            font-weight: var(--font-weight-bold);
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            margin-bottom: var(--spacing-md);
+        }
+
+        .pillar-modal-content .gap-section .pillar-detail-section-title {
+            color: #c53030;
+        }
+
+        .pillar-modal-content .goal-section .pillar-detail-section-title {
+            color: #276749;
+        }
+
+        .pillar-modal-content .pillar-detail-section p {
+            font-size: var(--font-size-base);
+            line-height: var(--line-height-relaxed);
+            color: var(--color-text-primary);
+            margin: 0;
+        }
+
+        .pillar-modal-content .pillar-detail-section ul {
+            list-style: none;
+            padding: 0;
+            margin: 0;
+        }
+
+        .pillar-modal-content .pillar-detail-section ul li {
+            font-size: var(--font-size-base);
+            line-height: var(--line-height-relaxed);
+            color: var(--color-text-primary);
+            padding-left: var(--spacing-lg);
+            position: relative;
+            margin-bottom: var(--spacing-sm);
+        }
+
+        .pillar-modal-content .pillar-detail-section ul li::before {
+            content: '\2022';
+            position: absolute;
+            left: 0;
+            color: #276749;
+            font-weight: bold;
+        }
+
+        .pillar-modal-content .pillar-detail-insight {
+            margin-top: var(--spacing-xl);
+            padding: var(--spacing-lg);
+            background: linear-gradient(135deg, #fffbeb, #fff);
+            border-radius: var(--border-radius-md);
+            border: 1px solid #f6e05e;
+            display: flex;
+            align-items: flex-start;
+            gap: var(--spacing-md);
+        }
+
+        .pillar-modal-content .pillar-detail-insight .insight-icon {
+            font-size: var(--font-size-xl);
+        }
+
+        .pillar-modal-content .pillar-detail-insight p {
+            font-size: var(--font-size-base);
+            font-weight: var(--font-weight-medium);
+            color: var(--color-navy);
+            line-height: var(--line-height-relaxed);
+            margin: 0;
+        }
+
+        /* Mobile responsive for modal */
+        @media (max-width: 768px) {
+            .pillar-modal-overlay {
+                padding: var(--spacing-sm);
+                align-items: flex-end;
+            }
+
+            .pillar-modal {
+                max-height: 85vh;
+                border-radius: var(--border-radius-lg) var(--border-radius-lg) 0 0;
+            }
+
+            .pillar-modal-content {
+                padding: var(--spacing-lg);
+            }
+
+            .pillar-modal-content .pillar-detail-header {
+                flex-direction: column;
+                align-items: center;
+                text-align: center;
+            }
+
+            .pillar-modal-content .pillar-detail-icon {
+                width: 60px;
+                height: 60px;
+                font-size: var(--font-size-2xl);
+            }
+
+            .pillar-modal-content .pillar-detail-content {
+                grid-template-columns: 1fr;
+            }
+
+            .pillar-modal-content .pillar-detail-insight {
+                flex-direction: column;
+                text-align: center;
+            }
         }
 
         /* Footer message */
@@ -4124,24 +4379,7 @@
                 grid-template-columns: 1fr;
             }
 
-            .pillar-detail.active {
-                padding: var(--spacing-lg);
-            }
-
-            .pillar-detail-header {
-                flex-direction: column;
-                align-items: center;
-                text-align: center;
-            }
-
-            .pillar-detail-content {
-                grid-template-columns: 1fr;
-            }
-
-            .pillar-detail-insight {
-                flex-direction: column;
-                text-align: center;
-            }
+            /* pillar-detail mobile styles moved to modal section */
 
             .activities-grid {
                 grid-template-columns: 1fr;
@@ -7646,34 +7884,77 @@ Check Google Sheets to see how many entries were actually created.
             }
         }
 
-        // ===== AI Pillars Toggle =====
+        // ===== AI Pillars Modal =====
         function togglePillarDetail(pillarId) {
             const detailPanel = document.getElementById(`pillar-detail-${pillarId}`);
             const pillarCard = document.querySelector(`.pillar-card[data-pillar="${pillarId}"]`);
             const flowIcon = document.querySelector(`.pillars-flow-icon[data-pillar="${pillarId}"]`);
-            const allDetails = document.querySelectorAll('.pillar-detail');
             const allCards = document.querySelectorAll('.pillar-card');
             const allFlowIcons = document.querySelectorAll('.pillars-flow-icon');
 
-            // Check if this panel is already active
-            const isActive = detailPanel.classList.contains('active');
-
-            // Close all panels first
-            allDetails.forEach(panel => panel.classList.remove('active'));
+            // Reset all cards and icons
             allCards.forEach(card => card.classList.remove('active'));
             allFlowIcons.forEach(icon => icon.classList.remove('active'));
 
-            // If the clicked panel wasn't active, open it
-            if (!isActive) {
-                detailPanel.classList.add('active');
-                if (pillarCard) pillarCard.classList.add('active');
-                if (flowIcon) flowIcon.classList.add('active');
+            // Mark the clicked card/icon as active
+            if (pillarCard) pillarCard.classList.add('active');
+            if (flowIcon) flowIcon.classList.add('active');
 
-                // Scroll to the detail panel smoothly
-                setTimeout(() => {
-                    detailPanel.scrollIntoView({ behavior: 'smooth', block: 'nearest' });
-                }, 100);
-            }
+            // Open modal with content
+            openPillarModal(pillarId, detailPanel);
+        }
+
+        function openPillarModal(pillarId, detailPanel) {
+            const modal = document.getElementById('pillarModal');
+            const modalContent = document.getElementById('pillarModalContent');
+
+            // Clone the content from the detail panel
+            modalContent.innerHTML = detailPanel.innerHTML;
+            modalContent.setAttribute('data-pillar', pillarId);
+
+            // Show modal
+            modal.classList.add('active');
+            document.body.style.overflow = 'hidden';
+
+            // Focus trap for accessibility
+            const closeBtn = modal.querySelector('.pillar-modal-close');
+            if (closeBtn) closeBtn.focus();
+        }
+
+        function closePillarModal() {
+            const modal = document.getElementById('pillarModal');
+            const allCards = document.querySelectorAll('.pillar-card');
+            const allFlowIcons = document.querySelectorAll('.pillars-flow-icon');
+
+            modal.classList.remove('active');
+            document.body.style.overflow = '';
+
+            // Reset card/icon active states
+            allCards.forEach(card => card.classList.remove('active'));
+            allFlowIcons.forEach(icon => icon.classList.remove('active'));
+        }
+
+        // Setup modal event listeners on DOMContentLoaded
+        function setupPillarModal() {
+            const modal = document.getElementById('pillarModal');
+            const closeBtn = modal.querySelector('.pillar-modal-close');
+
+            // Close on close button click
+            closeBtn.addEventListener('click', closePillarModal);
+
+            // Close on overlay click (outside modal)
+            modal.addEventListener('click', (e) => {
+                if (e.target === modal) {
+                    closePillarModal();
+                }
+            });
+
+            // Close on Escape key
+            document.addEventListener('keydown', (e) => {
+                if (e.key === 'Escape' && modal.classList.contains('active')) {
+                    closePillarModal();
+                }
+            });
         }
 
         // ===== Initialize =====
@@ -7688,6 +7969,9 @@ Check Google Sheets to see how many entries were actually created.
 
             // Initialize live statistics dashboard
             initStatistics();
+
+            // Setup pillar modal event listeners
+            setupPillarModal();
 
             // Trigger fade-in for elements already in viewport
             document.querySelectorAll('.fade-in').forEach(el => {
@@ -7755,5 +8039,17 @@ Check Google Sheets to see how many entries were actually created.
         10. Test the form!
         */
     </script>
+
+    <!-- Pillar Detail Modal -->
+    <div class="pillar-modal-overlay" id="pillarModal">
+        <div class="pillar-modal" role="dialog" aria-modal="true">
+            <button class="pillar-modal-close" aria-label="關閉">
+                <span class="material-icons">close</span>
+            </button>
+            <div class="pillar-modal-content" id="pillarModalContent">
+                <!-- Content will be injected here -->
+            </div>
+        </div>
+    </div>
 </body>
 </html>
