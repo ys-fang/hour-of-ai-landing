@@ -1837,14 +1837,13 @@
         .pillar-card:nth-child(4) { border-color: var(--color-yellow); }
 
         .pillar-icon {
-            width: 80px;
-            height: 80px;
-            margin: 0 auto var(--spacing-md);
-            border-radius: 50%;
-            display: flex;
+            display: inline-flex;
             align-items: center;
             justify-content: center;
-            font-size: var(--font-size-3xl);
+            padding: var(--spacing-sm) var(--spacing-lg);
+            margin: 0 auto var(--spacing-md);
+            border-radius: var(--border-radius-md);
+            font-size: var(--font-size-xl);
             font-weight: var(--font-weight-bold);
             color: var(--color-white);
         }
@@ -1857,17 +1856,9 @@
         .pillar-english {
             font-size: var(--font-size-sm);
             color: var(--color-text-tertiary);
-            margin-bottom: var(--spacing-xs);
+            margin-bottom: var(--spacing-sm);
             text-transform: uppercase;
             letter-spacing: 1px;
-        }
-
-        .pillar-card h3 {
-            font-size: var(--font-size-xl);
-            font-weight: var(--font-weight-bold);
-            line-height: var(--line-height-tight);
-            color: var(--color-navy);
-            margin-bottom: var(--spacing-xs);
         }
 
         .pillar-subtitle {
@@ -4841,9 +4832,8 @@
             <!-- Pillar Cards -->
             <div class="pillars-grid">
                 <div class="pillar-card fade-in" data-pillar="ask" onclick="togglePillarDetail('ask')">
-                    <div class="pillar-icon">問</div>
+                    <div class="pillar-icon">問 AI</div>
                     <div class="pillar-english">Engage</div>
-                    <h3>問 AI</h3>
                     <div class="pillar-subtitle">精準提問與人機協作</div>
                     <p class="pillar-brief">學會跟 AI 對話，而不是丟一句話給它</p>
                     <button class="pillar-details-button">
@@ -4852,9 +4842,8 @@
                     </button>
                 </div>
                 <div class="pillar-card fade-in" data-pillar="use" onclick="togglePillarDetail('use')">
-                    <div class="pillar-icon">用</div>
+                    <div class="pillar-icon">用 AI</div>
                     <div class="pillar-english">Create</div>
-                    <h3>用 AI</h3>
                     <div class="pillar-subtitle">工具掌握與效率提升</div>
                     <p class="pillar-brief">把 AI 放進流程，而不是多開一個工具</p>
                     <button class="pillar-details-button">
@@ -4863,9 +4852,8 @@
                     </button>
                 </div>
                 <div class="pillar-card fade-in" data-pillar="manage" onclick="togglePillarDetail('manage')">
-                    <div class="pillar-icon">管</div>
+                    <div class="pillar-icon">管 AI</div>
                     <div class="pillar-english">Manage</div>
-                    <h3>管 AI</h3>
                     <div class="pillar-subtitle">批判思考與倫理素養</div>
                     <p class="pillar-brief">確保「人仍然在駕駛座上」</p>
                     <button class="pillar-details-button">
@@ -4874,9 +4862,8 @@
                     </button>
                 </div>
                 <div class="pillar-card fade-in" data-pillar="build" onclick="togglePillarDetail('build')">
-                    <div class="pillar-icon">造</div>
+                    <div class="pillar-icon">造 AI</div>
                     <div class="pillar-english">Design</div>
-                    <h3>造 AI</h3>
                     <div class="pillar-subtitle">原理理解與創新應用</div>
                     <p class="pillar-brief">從使用者，走向能創造價值的人</p>
                     <button class="pillar-details-button">
