@@ -2101,6 +2101,115 @@
             margin: 0;
         }
 
+        /* Pillar Tabs Styles */
+        .pillar-tabs {
+            margin-top: var(--spacing-lg);
+        }
+
+        .pillar-tabs-nav {
+            display: flex;
+            gap: var(--spacing-xs);
+            margin-bottom: var(--spacing-md);
+            border-bottom: 2px solid var(--color-bg-light);
+            padding-bottom: var(--spacing-xs);
+        }
+
+        .pillar-tab-btn {
+            flex: 1;
+            padding: var(--spacing-sm) var(--spacing-md);
+            border: none;
+            background: transparent;
+            font-size: var(--font-size-sm);
+            font-weight: var(--font-weight-semibold);
+            color: var(--color-text-tertiary);
+            cursor: pointer;
+            border-radius: var(--border-radius-md);
+            transition: all var(--transition-base);
+        }
+
+        .pillar-tab-btn:hover {
+            background: var(--color-bg-light);
+            color: var(--color-text-secondary);
+        }
+
+        .pillar-tab-btn.active {
+            background: var(--color-navy);
+            color: var(--color-white);
+        }
+
+        .pillar-tabs-content {
+            position: relative;
+        }
+
+        .pillar-tab-panel {
+            display: none;
+            animation: fadeIn 0.3s ease;
+        }
+
+        .pillar-tab-panel.active {
+            display: block;
+        }
+
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(10px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        .pillar-level-header {
+            display: flex;
+            align-items: center;
+            gap: var(--spacing-md);
+            margin-bottom: var(--spacing-md);
+        }
+
+        .pillar-level-icon {
+            font-size: var(--font-size-2xl);
+        }
+
+        .pillar-level-title {
+            display: flex;
+            flex-direction: column;
+        }
+
+        .pillar-level-title strong {
+            font-size: var(--font-size-lg);
+            color: var(--color-navy);
+        }
+
+        .pillar-level-english {
+            font-size: var(--font-size-xs);
+            color: var(--color-text-tertiary);
+            text-transform: uppercase;
+            letter-spacing: 1px;
+        }
+
+        .pillar-level-desc {
+            font-size: var(--font-size-base);
+            color: var(--color-text-primary);
+            line-height: var(--line-height-relaxed);
+            margin-bottom: var(--spacing-md);
+        }
+
+        .pillar-level-example {
+            display: flex;
+            align-items: center;
+            gap: var(--spacing-sm);
+            padding: var(--spacing-sm) var(--spacing-md);
+            background: var(--color-bg-light);
+            border-radius: var(--border-radius-md);
+            font-size: var(--font-size-sm);
+        }
+
+        .example-label {
+            font-weight: var(--font-weight-semibold);
+            color: var(--color-primary-blue);
+            white-space: nowrap;
+        }
+
+        .pillar-level-example > span:last-child {
+            color: var(--color-text-secondary);
+        }
+
         /* Pillar Modal Styles */
         .pillar-modal-overlay {
             position: fixed;
@@ -2340,6 +2449,106 @@
             margin: 0;
         }
 
+        /* Modal Tab Styles */
+        .pillar-modal-content .pillar-tabs {
+            margin-top: var(--spacing-lg);
+        }
+
+        .pillar-modal-content .pillar-tabs-nav {
+            display: flex;
+            gap: var(--spacing-xs);
+            margin-bottom: var(--spacing-md);
+            border-bottom: 2px solid var(--color-bg-light);
+            padding-bottom: var(--spacing-xs);
+        }
+
+        .pillar-modal-content .pillar-tab-btn {
+            flex: 1;
+            padding: var(--spacing-sm) var(--spacing-md);
+            border: none;
+            background: transparent;
+            font-size: var(--font-size-sm);
+            font-weight: var(--font-weight-semibold);
+            color: var(--color-text-tertiary);
+            cursor: pointer;
+            border-radius: var(--border-radius-md);
+            transition: all var(--transition-base);
+        }
+
+        .pillar-modal-content .pillar-tab-btn:hover {
+            background: var(--color-bg-light);
+            color: var(--color-text-secondary);
+        }
+
+        .pillar-modal-content .pillar-tab-btn.active {
+            background: var(--color-navy);
+            color: var(--color-white);
+        }
+
+        .pillar-modal-content .pillar-tab-panel {
+            display: none;
+            animation: fadeIn 0.3s ease;
+        }
+
+        .pillar-modal-content .pillar-tab-panel.active {
+            display: block;
+        }
+
+        .pillar-modal-content .pillar-level-header {
+            display: flex;
+            align-items: center;
+            gap: var(--spacing-md);
+            margin-bottom: var(--spacing-md);
+        }
+
+        .pillar-modal-content .pillar-level-icon {
+            font-size: var(--font-size-2xl);
+        }
+
+        .pillar-modal-content .pillar-level-title {
+            display: flex;
+            flex-direction: column;
+        }
+
+        .pillar-modal-content .pillar-level-title strong {
+            font-size: var(--font-size-lg);
+            color: var(--color-navy);
+        }
+
+        .pillar-modal-content .pillar-level-english {
+            font-size: var(--font-size-xs);
+            color: var(--color-text-tertiary);
+            text-transform: uppercase;
+            letter-spacing: 1px;
+        }
+
+        .pillar-modal-content .pillar-level-desc {
+            font-size: var(--font-size-base);
+            color: var(--color-text-primary);
+            line-height: var(--line-height-relaxed);
+            margin-bottom: var(--spacing-md);
+        }
+
+        .pillar-modal-content .pillar-level-example {
+            display: flex;
+            align-items: center;
+            gap: var(--spacing-sm);
+            padding: var(--spacing-sm) var(--spacing-md);
+            background: var(--color-bg-light);
+            border-radius: var(--border-radius-md);
+            font-size: var(--font-size-sm);
+        }
+
+        .pillar-modal-content .example-label {
+            font-weight: var(--font-weight-semibold);
+            color: var(--color-primary-blue);
+            white-space: nowrap;
+        }
+
+        .pillar-modal-content .pillar-level-example > span:last-child {
+            color: var(--color-text-secondary);
+        }
+
         /* Mobile responsive for modal */
         @media (max-width: 768px) {
             .pillar-modal-overlay {
@@ -2381,6 +2590,22 @@
             .pillar-modal-content .pillar-detail-insight {
                 flex-direction: column;
                 text-align: center;
+            }
+
+            /* Mobile tab styles */
+            .pillar-modal-content .pillar-tabs-nav {
+                gap: var(--spacing-xs);
+            }
+
+            .pillar-modal-content .pillar-tab-btn {
+                padding: var(--spacing-xs) var(--spacing-sm);
+                font-size: var(--font-size-xs);
+            }
+
+            .pillar-modal-content .pillar-level-example {
+                flex-direction: column;
+                align-items: flex-start;
+                gap: var(--spacing-xs);
             }
         }
 
@@ -4878,26 +5103,66 @@
                 <div class="pillar-detail-header">
                     <div class="pillar-detail-icon">問</div>
                     <div class="pillar-detail-title-group">
-                        <div class="pillar-detail-english">Engage</div>
+                        <div class="pillar-detail-english">Engaging with AI</div>
                         <h3 class="pillar-detail-title">問 AI</h3>
                         <div class="pillar-detail-subtitle">精準提問與人機協作</div>
                     </div>
                 </div>
                 <div class="pillar-detail-headline">學會跟 AI 對話，而不是丟一句話給它</div>
-                <div class="pillar-detail-content">
-                    <div class="pillar-detail-section gap-section">
-                        <div class="pillar-detail-section-title">現況挑戰 (The Gap)</div>
-                        <p>學生常覺得「AI 不準」，其實是因為他們只丟了一句模糊的話給 AI。這反映出思考的懶惰。</p>
+
+                <!-- Progression Tabs -->
+                <div class="pillar-tabs">
+                    <div class="pillar-tabs-nav">
+                        <button class="pillar-tab-btn active" data-tab="basic">基礎</button>
+                        <button class="pillar-tab-btn" data-tab="proficient">精熟</button>
+                        <button class="pillar-tab-btn" data-tab="advanced">進階</button>
                     </div>
-                    <div class="pillar-detail-section goal-section">
-                        <div class="pillar-detail-section-title">素養目標 (The Goal)</div>
-                        <ul>
-                            <li>把模糊需求轉成明確指令</li>
-                            <li>追問、修正、深化 (Iterative Refinement)</li>
-                            <li>用 AI 做資訊輔助，而非直接交答案</li>
-                        </ul>
+                    <div class="pillar-tabs-content">
+                        <div class="pillar-tab-panel active" data-tab="basic">
+                            <div class="pillar-level-header">
+                                <span class="pillar-level-icon">🎯</span>
+                                <div class="pillar-level-title">
+                                    <strong>精準提問</strong>
+                                    <span class="pillar-level-english">Precision</span>
+                                </div>
+                            </div>
+                            <p class="pillar-level-desc">能清楚描述人、事、時、地、物與目標。不再問模糊問題。</p>
+                            <div class="pillar-level-example">
+                                <span class="example-label">關鍵能力</span>
+                                <span>將模糊需求轉成明確指令</span>
+                            </div>
+                        </div>
+                        <div class="pillar-tab-panel" data-tab="proficient">
+                            <div class="pillar-level-header">
+                                <span class="pillar-level-icon">🔄</span>
+                                <div class="pillar-level-title">
+                                    <strong>迭代追問</strong>
+                                    <span class="pillar-level-english">Iteration</span>
+                                </div>
+                            </div>
+                            <p class="pillar-level-desc">透過連續對話、反問與收斂，引導 AI 修正方向。像蘇格拉底式的對話。</p>
+                            <div class="pillar-level-example">
+                                <span class="example-label">關鍵能力</span>
+                                <span>追問、修正、深化對話品質</span>
+                            </div>
+                        </div>
+                        <div class="pillar-tab-panel" data-tab="advanced">
+                            <div class="pillar-level-header">
+                                <span class="pillar-level-icon">🧠</span>
+                                <div class="pillar-level-title">
+                                    <strong>框架思維</strong>
+                                    <span class="pillar-level-english">Framework</span>
+                                </div>
+                            </div>
+                            <p class="pillar-level-desc">要求 AI 提供解決問題的思維模型與系統性分析。問的不是答案，是方法論。</p>
+                            <div class="pillar-level-example">
+                                <span class="example-label">關鍵能力</span>
+                                <span>用 AI 做資訊輔助與結構化思考</span>
+                            </div>
+                        </div>
                     </div>
                 </div>
+
                 <div class="pillar-detail-insight">
                     <span class="insight-icon">💡</span>
                     <p>「問」是一種思考訓練：你知不知道自己真正要什麼？</p>
@@ -4908,26 +5173,66 @@
                 <div class="pillar-detail-header">
                     <div class="pillar-detail-icon">用</div>
                     <div class="pillar-detail-title-group">
-                        <div class="pillar-detail-english">Create</div>
+                        <div class="pillar-detail-english">Creating with AI</div>
                         <h3 class="pillar-detail-title">用 AI</h3>
                         <div class="pillar-detail-subtitle">工具掌握與效率提升</div>
                     </div>
                 </div>
                 <div class="pillar-detail-headline">把 AI 放進流程，而不是多開一個工具</div>
-                <div class="pillar-detail-content">
-                    <div class="pillar-detail-section gap-section">
-                        <div class="pillar-detail-section-title">現況挑戰 (The Gap)</div>
-                        <p>不是問要不要用 AI，而是擔心全交給 AI 後，把學生該練的能力拿走，導致學習「變薄」。</p>
+
+                <!-- Progression Tabs -->
+                <div class="pillar-tabs">
+                    <div class="pillar-tabs-nav">
+                        <button class="pillar-tab-btn active" data-tab="basic">基礎</button>
+                        <button class="pillar-tab-btn" data-tab="proficient">精熟</button>
+                        <button class="pillar-tab-btn" data-tab="advanced">進階</button>
                     </div>
-                    <div class="pillar-detail-section goal-section">
-                        <div class="pillar-detail-section-title">素養目標 (The Goal)</div>
-                        <ul>
-                            <li>理解不同 AI 工具的強項</li>
-                            <li>解決重複性任務</li>
-                            <li>提升產出品質與效率</li>
-                        </ul>
+                    <div class="pillar-tabs-content">
+                        <div class="pillar-tab-panel active" data-tab="basic">
+                            <div class="pillar-level-header">
+                                <span class="pillar-level-icon">✏️</span>
+                                <div class="pillar-level-title">
+                                    <strong>生活單點</strong>
+                                    <span class="pillar-level-english">Task</span>
+                                </div>
+                            </div>
+                            <p class="pillar-level-desc">解決單一需求。例如：規劃旅遊、寫信、摘要文章。</p>
+                            <div class="pillar-level-example">
+                                <span class="example-label">關鍵能力</span>
+                                <span>理解不同 AI 工具的強項</span>
+                            </div>
+                        </div>
+                        <div class="pillar-tab-panel" data-tab="proficient">
+                            <div class="pillar-level-header">
+                                <span class="pillar-level-icon">🔗</span>
+                                <div class="pillar-level-title">
+                                    <strong>專業串聯</strong>
+                                    <span class="pillar-level-english">Workflow</span>
+                                </div>
+                            </div>
+                            <p class="pillar-level-desc">建立自動化工作流，串接產出。例如：行銷文案→自動製圖→排程發布。</p>
+                            <div class="pillar-level-example">
+                                <span class="example-label">關鍵能力</span>
+                                <span>組合多個工具提升效率</span>
+                            </div>
+                        </div>
+                        <div class="pillar-tab-panel" data-tab="advanced">
+                            <div class="pillar-level-header">
+                                <span class="pillar-level-icon">🤖</span>
+                                <div class="pillar-level-title">
+                                    <strong>自主代理</strong>
+                                    <span class="pillar-level-english">Agents</span>
+                                </div>
+                            </div>
+                            <p class="pillar-level-desc">指揮 AI 跨域調用工具去「執行」任務。例如：給模糊目標，讓 Agent 自行比價下單。</p>
+                            <div class="pillar-level-example">
+                                <span class="example-label">關鍵能力</span>
+                                <span>設計 AI 代理執行複雜任務</span>
+                            </div>
+                        </div>
                     </div>
                 </div>
+
                 <div class="pillar-detail-insight">
                     <span class="insight-icon">💡</span>
                     <p>關鍵判準：用完之後，學習有沒有變好？</p>
@@ -4938,26 +5243,66 @@
                 <div class="pillar-detail-header">
                     <div class="pillar-detail-icon">管</div>
                     <div class="pillar-detail-title-group">
-                        <div class="pillar-detail-english">Manage</div>
+                        <div class="pillar-detail-english">Managing AI</div>
                         <h3 class="pillar-detail-title">管 AI</h3>
                         <div class="pillar-detail-subtitle">批判思考與倫理素養</div>
                     </div>
                 </div>
                 <div class="pillar-detail-headline">確保「人仍然在駕駛座上」</div>
-                <div class="pillar-detail-content">
-                    <div class="pillar-detail-section gap-section">
-                        <div class="pillar-detail-section-title">現況挑戰 (The Gap)</div>
-                        <p>AI 出錯不是問題，問題是出錯時「沒有人知道該誰負責」。不能以外包心態面對風險。</p>
+
+                <!-- Progression Tabs -->
+                <div class="pillar-tabs">
+                    <div class="pillar-tabs-nav">
+                        <button class="pillar-tab-btn active" data-tab="basic">基礎</button>
+                        <button class="pillar-tab-btn" data-tab="proficient">精熟</button>
+                        <button class="pillar-tab-btn" data-tab="advanced">進階</button>
                     </div>
-                    <div class="pillar-detail-section goal-section">
-                        <div class="pillar-detail-section-title">素養目標 (The Goal)</div>
-                        <ul>
-                            <li>不盲信 AI 產出</li>
-                            <li>理解偏見、隱私、智財風險</li>
-                            <li>清楚人與 AI 的責任邊界</li>
-                        </ul>
+                    <div class="pillar-tabs-content">
+                        <div class="pillar-tab-panel active" data-tab="basic">
+                            <div class="pillar-level-header">
+                                <span class="pillar-level-icon">👁️</span>
+                                <div class="pillar-level-title">
+                                    <strong>管好一 AI</strong>
+                                    <span class="pillar-level-english">Supervision</span>
+                                </div>
+                            </div>
+                            <p class="pillar-level-desc">具備識讀能力，能查核事實，避免單一 AI 幻覺。（指導員層級）</p>
+                            <div class="pillar-level-example">
+                                <span class="example-label">關鍵能力</span>
+                                <span>不盲信 AI 產出，能驗證資訊</span>
+                            </div>
+                        </div>
+                        <div class="pillar-tab-panel" data-tab="proficient">
+                            <div class="pillar-level-header">
+                                <span class="pillar-level-icon">🎛️</span>
+                                <div class="pillar-level-title">
+                                    <strong>管好群 AI</strong>
+                                    <span class="pillar-level-english">Orchestration</span>
+                                </div>
+                            </div>
+                            <p class="pillar-level-desc">同時調度多個不同功能的 Agents 協作。（調度員層級）</p>
+                            <div class="pillar-level-example">
+                                <span class="example-label">關鍵能力</span>
+                                <span>協調多個 AI 系統的輸出</span>
+                            </div>
+                        </div>
+                        <div class="pillar-tab-panel" data-tab="advanced">
+                            <div class="pillar-level-header">
+                                <span class="pillar-level-icon">👔</span>
+                                <div class="pillar-level-title">
+                                    <strong>管好人機協作</strong>
+                                    <span class="pillar-level-english">Leadership</span>
+                                </div>
+                            </div>
+                            <p class="pillar-level-desc">領導「人+AI」混合團隊，劃分權責與倫理邊界。（指揮官層級）</p>
+                            <div class="pillar-level-example">
+                                <span class="example-label">關鍵能力</span>
+                                <span>定義人與 AI 的責任邊界</span>
+                            </div>
+                        </div>
                     </div>
                 </div>
+
                 <div class="pillar-detail-insight">
                     <span class="insight-icon">💡</span>
                     <p>定義責任：哪些判斷絕不能外包？哪些後果必須由人承擔？</p>
@@ -4968,26 +5313,66 @@
                 <div class="pillar-detail-header">
                     <div class="pillar-detail-icon">造</div>
                     <div class="pillar-detail-title-group">
-                        <div class="pillar-detail-english">Design</div>
+                        <div class="pillar-detail-english">Designing AI</div>
                         <h3 class="pillar-detail-title">造 AI</h3>
                         <div class="pillar-detail-subtitle">原理理解與創新應用</div>
                     </div>
                 </div>
                 <div class="pillar-detail-headline">從使用者，走向能創造價值的人</div>
-                <div class="pillar-detail-content">
-                    <div class="pillar-detail-section gap-section">
-                        <div class="pillar-detail-section-title">現況挑戰 (The Gap)</div>
-                        <p>誤以為「造」就是要寫程式或訓練模型，導致老師與學生感到恐懼與排斥。</p>
+
+                <!-- Progression Tabs -->
+                <div class="pillar-tabs">
+                    <div class="pillar-tabs-nav">
+                        <button class="pillar-tab-btn active" data-tab="basic">基礎</button>
+                        <button class="pillar-tab-btn" data-tab="proficient">精熟</button>
+                        <button class="pillar-tab-btn" data-tab="advanced">進階</button>
                     </div>
-                    <div class="pillar-detail-section goal-section">
-                        <div class="pillar-detail-section-title">素養目標 (The Goal)</div>
-                        <ul>
-                            <li>理解 AI 的基本原理 (Why it works)</li>
-                            <li>組合工具與流程 (Workflow Design)</li>
-                            <li>用 AI 解決真實問題 (Problem Solving)</li>
-                        </ul>
+                    <div class="pillar-tabs-content">
+                        <div class="pillar-tab-panel active" data-tab="basic">
+                            <div class="pillar-level-header">
+                                <span class="pillar-level-icon">📦</span>
+                                <div class="pillar-level-title">
+                                    <strong>封裝經驗</strong>
+                                    <span class="pillar-level-english">Prompting</span>
+                                </div>
+                            </div>
+                            <p class="pillar-level-desc">將個人成功的指令存成模板 (Template)。（造工具）</p>
+                            <div class="pillar-level-example">
+                                <span class="example-label">關鍵能力</span>
+                                <span>理解 AI 的基本原理</span>
+                            </div>
+                        </div>
+                        <div class="pillar-tab-panel" data-tab="proficient">
+                            <div class="pillar-level-header">
+                                <span class="pillar-level-icon">🧩</span>
+                                <div class="pillar-level-title">
+                                    <strong>連結知識</strong>
+                                    <span class="pillar-level-english">RAG</span>
+                                </div>
+                            </div>
+                            <p class="pillar-level-desc">餵養特定資料，造出懂團隊語言的知識庫。（造大腦）</p>
+                            <div class="pillar-level-example">
+                                <span class="example-label">關鍵能力</span>
+                                <span>組合工具與流程設計</span>
+                            </div>
+                        </div>
+                        <div class="pillar-tab-panel" data-tab="advanced">
+                            <div class="pillar-level-header">
+                                <span class="pillar-level-icon">🏗️</span>
+                                <div class="pillar-level-title">
+                                    <strong>深入場景</strong>
+                                    <span class="pillar-level-english">Product</span>
+                                </div>
+                            </div>
+                            <p class="pillar-level-desc">針對具體痛點，開發出可重複使用的服務/產品。（造護城河）</p>
+                            <div class="pillar-level-example">
+                                <span class="example-label">關鍵能力</span>
+                                <span>用 AI 解決真實問題</span>
+                            </div>
+                        </div>
                     </div>
                 </div>
+
                 <div class="pillar-detail-insight">
                     <span class="insight-icon">💡</span>
                     <p>培養主體性：知道 AI 為何這樣判斷，並決定用它解決什麼問題。</p>
@@ -8003,6 +8388,27 @@ Check Google Sheets to see how many entries were actually created.
                     e.preventDefault();
                 }
             }, { passive: false });
+
+            // Tab switching (event delegation for dynamically injected content)
+            modalContent.addEventListener('click', (e) => {
+                const tabBtn = e.target.closest('.pillar-tab-btn');
+                if (!tabBtn) return;
+
+                const tabsContainer = tabBtn.closest('.pillar-tabs');
+                const tabName = tabBtn.dataset.tab;
+
+                // Update active tab button
+                tabsContainer.querySelectorAll('.pillar-tab-btn').forEach(btn => {
+                    btn.classList.remove('active');
+                });
+                tabBtn.classList.add('active');
+
+                // Update active tab panel
+                tabsContainer.querySelectorAll('.pillar-tab-panel').forEach(panel => {
+                    panel.classList.remove('active');
+                });
+                tabsContainer.querySelector(`.pillar-tab-panel[data-tab="${tabName}"]`).classList.add('active');
+            });
         }
 
         // ===== Initialize =====
