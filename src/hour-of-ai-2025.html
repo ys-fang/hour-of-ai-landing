@@ -1831,40 +1831,19 @@
             border-width: 3px;
         }
 
-        .pillar-card::after {
-            content: '點擊展開';
-            position: absolute;
-            bottom: var(--spacing-sm);
-            left: 50%;
-            transform: translateX(-50%);
-            font-size: var(--font-size-xs);
-            color: var(--color-text-tertiary);
-            opacity: 0;
-            transition: opacity var(--transition-base);
-        }
-
-        .pillar-card:hover::after {
-            opacity: 1;
-        }
-
-        .pillar-card.active::after {
-            content: '點擊收合';
-        }
-
         .pillar-card:nth-child(1) { border-color: var(--color-primary-orange); }
         .pillar-card:nth-child(2) { border-color: var(--color-primary-blue); }
         .pillar-card:nth-child(3) { border-color: var(--color-primary-teal); }
         .pillar-card:nth-child(4) { border-color: var(--color-yellow); }
 
         .pillar-icon {
-            width: 80px;
-            height: 80px;
-            margin: 0 auto var(--spacing-md);
-            border-radius: 50%;
-            display: flex;
+            display: inline-flex;
             align-items: center;
             justify-content: center;
-            font-size: var(--font-size-3xl);
+            padding: var(--spacing-sm) var(--spacing-lg);
+            margin: 0 auto var(--spacing-md);
+            border-radius: var(--border-radius-md);
+            font-size: var(--font-size-xl);
             font-weight: var(--font-weight-bold);
             color: var(--color-white);
         }
@@ -1877,17 +1856,9 @@
         .pillar-english {
             font-size: var(--font-size-sm);
             color: var(--color-text-tertiary);
-            margin-bottom: var(--spacing-xs);
+            margin-bottom: var(--spacing-sm);
             text-transform: uppercase;
             letter-spacing: 1px;
-        }
-
-        .pillar-card h3 {
-            font-size: var(--font-size-xl);
-            font-weight: var(--font-weight-bold);
-            line-height: var(--line-height-tight);
-            color: var(--color-navy);
-            margin-bottom: var(--spacing-xs);
         }
 
         .pillar-subtitle {
@@ -1903,23 +1874,70 @@
             color: var(--color-text-secondary);
         }
 
-        /* Expanded Detail Panel */
-        .pillar-detail {
-            background: var(--color-white);
-            border-radius: var(--border-radius-lg);
-            padding: 0;
-            margin-top: var(--spacing-lg);
-            box-shadow: var(--shadow-lg);
-            overflow: hidden;
-            max-height: 0;
-            opacity: 0;
-            transition: all 0.4s ease-out;
+        .pillar-details-button {
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            gap: var(--spacing-xs);
+            font-size: var(--font-size-sm);
+            font-weight: var(--font-weight-semibold);
+            margin-top: var(--spacing-md);
+            padding: var(--spacing-sm) var(--spacing-lg);
+            border: 2px solid var(--color-text-tertiary);
+            border-radius: var(--border-radius-full);
+            background: transparent;
+            color: var(--color-text-secondary);
+            cursor: pointer;
+            transition: all var(--transition-base);
         }
 
-        .pillar-detail.active {
-            max-height: 800px;
-            opacity: 1;
-            padding: var(--spacing-2xl);
+        .pillar-details-button:hover {
+            transform: translateY(-2px);
+        }
+
+        .pillar-details-button .material-icons {
+            font-size: 18px;
+        }
+
+        .pillar-card:nth-child(1) .pillar-details-button {
+            border-color: var(--color-primary-orange);
+            color: var(--color-primary-orange);
+        }
+        .pillar-card:nth-child(1) .pillar-details-button:hover {
+            background: var(--color-primary-orange);
+            color: var(--color-white);
+        }
+
+        .pillar-card:nth-child(2) .pillar-details-button {
+            border-color: var(--color-primary-blue);
+            color: var(--color-primary-blue);
+        }
+        .pillar-card:nth-child(2) .pillar-details-button:hover {
+            background: var(--color-primary-blue);
+            color: var(--color-white);
+        }
+
+        .pillar-card:nth-child(3) .pillar-details-button {
+            border-color: var(--color-primary-teal);
+            color: var(--color-primary-teal);
+        }
+        .pillar-card:nth-child(3) .pillar-details-button:hover {
+            background: var(--color-primary-teal);
+            color: var(--color-white);
+        }
+
+        .pillar-card:nth-child(4) .pillar-details-button {
+            border-color: var(--color-yellow);
+            color: #b8860b;
+        }
+        .pillar-card:nth-child(4) .pillar-details-button:hover {
+            background: var(--color-yellow);
+            color: var(--color-navy);
+        }
+
+        /* Hidden Detail Panel - content is displayed in modal */
+        .pillar-detail {
+            display: none;
         }
 
         .pillar-detail-header {
@@ -2081,6 +2099,522 @@
             color: var(--color-navy);
             line-height: var(--line-height-relaxed);
             margin: 0;
+        }
+
+        /* Pillar Tabs Styles */
+        .pillar-tabs {
+            margin-top: var(--spacing-lg);
+        }
+
+        .pillar-tabs-nav {
+            display: flex;
+            gap: var(--spacing-xs);
+            margin-bottom: var(--spacing-md);
+            border-bottom: 2px solid var(--color-bg-light);
+            padding-bottom: var(--spacing-xs);
+        }
+
+        .pillar-tab-btn {
+            flex: 1;
+            padding: var(--spacing-sm) var(--spacing-md);
+            border: none;
+            background: transparent;
+            font-size: var(--font-size-sm);
+            font-weight: var(--font-weight-semibold);
+            color: var(--color-text-tertiary);
+            cursor: pointer;
+            border-radius: var(--border-radius-md);
+            transition: all var(--transition-base);
+        }
+
+        .pillar-tab-btn:hover {
+            background: var(--color-bg-light);
+            color: var(--color-text-secondary);
+        }
+
+        .pillar-tab-btn.active {
+            background: var(--color-navy);
+            color: var(--color-white);
+        }
+
+        .pillar-tabs-content {
+            position: relative;
+        }
+
+        .pillar-tab-panel {
+            display: none;
+            animation: fadeIn 0.3s ease;
+        }
+
+        .pillar-tab-panel.active {
+            display: block;
+        }
+
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(10px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        .pillar-level-header {
+            display: flex;
+            align-items: center;
+            gap: var(--spacing-md);
+            margin-bottom: var(--spacing-md);
+        }
+
+        .pillar-level-icon {
+            font-size: var(--font-size-2xl);
+        }
+
+        .pillar-level-title {
+            display: flex;
+            flex-direction: column;
+        }
+
+        .pillar-level-title strong {
+            font-size: var(--font-size-lg);
+            color: var(--color-navy);
+        }
+
+        .pillar-level-english {
+            font-size: var(--font-size-xs);
+            color: var(--color-text-tertiary);
+            text-transform: uppercase;
+            letter-spacing: 1px;
+        }
+
+        .pillar-level-desc {
+            font-size: var(--font-size-base);
+            color: var(--color-text-primary);
+            line-height: var(--line-height-relaxed);
+            margin-bottom: var(--spacing-md);
+        }
+
+        .pillar-level-example {
+            display: flex;
+            align-items: center;
+            gap: var(--spacing-sm);
+            padding: var(--spacing-sm) var(--spacing-md);
+            background: var(--color-bg-light);
+            border-radius: var(--border-radius-md);
+            font-size: var(--font-size-sm);
+        }
+
+        .example-label {
+            font-weight: var(--font-weight-semibold);
+            color: var(--color-primary-blue);
+            white-space: nowrap;
+        }
+
+        .pillar-level-example > span:last-child {
+            color: var(--color-text-secondary);
+        }
+
+        /* Pillar Modal Styles */
+        .pillar-modal-overlay {
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: rgba(0, 0, 0, 0.6);
+            z-index: 9999;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            padding: var(--spacing-md);
+            opacity: 0;
+            visibility: hidden;
+            transition: opacity 0.3s ease, visibility 0.3s ease;
+        }
+
+        .pillar-modal-overlay.active {
+            opacity: 1;
+            visibility: visible;
+        }
+
+        .pillar-modal {
+            background: var(--color-white);
+            border-radius: var(--border-radius-lg);
+            max-width: 700px;
+            width: 100%;
+            max-height: 85vh;
+            overflow: hidden;
+            position: relative;
+            transform: translateY(20px) scale(0.95);
+            transition: transform 0.3s ease;
+            display: flex;
+            flex-direction: column;
+        }
+
+        .pillar-modal-overlay.active .pillar-modal {
+            transform: translateY(0) scale(1);
+        }
+
+        .pillar-modal-header {
+            display: flex;
+            justify-content: flex-end;
+            padding: var(--spacing-sm) var(--spacing-md);
+            background: var(--color-white);
+            flex-shrink: 0;
+            border-bottom: 1px solid var(--color-bg-light);
+        }
+
+        .pillar-modal-close {
+            width: 36px;
+            height: 36px;
+            border: none;
+            background: var(--color-bg-light);
+            border-radius: 50%;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            transition: background 0.2s ease, transform 0.2s ease;
+        }
+
+        .pillar-modal-close:hover {
+            background: var(--color-bg-dark);
+            transform: scale(1.1);
+        }
+
+        .pillar-modal-close .material-icons {
+            font-size: 22px;
+            color: var(--color-text-secondary);
+        }
+
+        .pillar-modal-content {
+            padding: var(--spacing-xl) var(--spacing-2xl) var(--spacing-2xl);
+            overflow-y: auto;
+            -webkit-overflow-scrolling: touch;
+            flex: 1;
+            overscroll-behavior: contain;
+        }
+
+        /* Modal content styles - reuse pillar-detail inner styles */
+        .pillar-modal-content .pillar-detail-header {
+            display: flex;
+            align-items: flex-start;
+            gap: var(--spacing-lg);
+            margin-bottom: var(--spacing-xl);
+            padding-bottom: var(--spacing-lg);
+            border-bottom: 2px solid var(--color-bg-light);
+        }
+
+        .pillar-modal-content .pillar-detail-icon {
+            width: 80px;
+            height: 80px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: var(--font-size-3xl);
+            font-weight: var(--font-weight-bold);
+            color: var(--color-white);
+            flex-shrink: 0;
+        }
+
+        .pillar-modal-content[data-pillar="ask"] .pillar-detail-icon { background: linear-gradient(135deg, var(--color-primary-orange), var(--color-yellow)); }
+        .pillar-modal-content[data-pillar="use"] .pillar-detail-icon { background: linear-gradient(135deg, var(--color-primary-blue), var(--color-primary-teal)); }
+        .pillar-modal-content[data-pillar="manage"] .pillar-detail-icon { background: linear-gradient(135deg, var(--color-primary-teal), var(--color-primary-blue)); }
+        .pillar-modal-content[data-pillar="build"] .pillar-detail-icon { background: linear-gradient(135deg, var(--color-yellow), var(--color-coral)); }
+
+        .pillar-modal-content .pillar-detail-title-group {
+            flex: 1;
+        }
+
+        .pillar-modal-content .pillar-detail-english {
+            font-size: var(--font-size-sm);
+            color: var(--color-text-tertiary);
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            margin-bottom: var(--spacing-xs);
+        }
+
+        .pillar-modal-content .pillar-detail-title {
+            font-size: var(--font-size-2xl);
+            font-weight: var(--font-weight-bold);
+            color: var(--color-navy);
+            margin-bottom: var(--spacing-xs);
+        }
+
+        .pillar-modal-content .pillar-detail-subtitle {
+            font-size: var(--font-size-base);
+            color: var(--color-text-secondary);
+        }
+
+        .pillar-modal-content .pillar-detail-headline {
+            font-size: var(--font-size-xl);
+            font-weight: var(--font-weight-semibold);
+            color: var(--color-navy);
+            margin-bottom: var(--spacing-xl);
+            padding: var(--spacing-md);
+            background: var(--color-bg-light);
+            border-radius: var(--border-radius-md);
+            border-left: 4px solid currentColor;
+        }
+
+        .pillar-modal-content[data-pillar="ask"] .pillar-detail-headline { border-left-color: var(--color-primary-orange); }
+        .pillar-modal-content[data-pillar="use"] .pillar-detail-headline { border-left-color: var(--color-primary-blue); }
+        .pillar-modal-content[data-pillar="manage"] .pillar-detail-headline { border-left-color: var(--color-primary-teal); }
+        .pillar-modal-content[data-pillar="build"] .pillar-detail-headline { border-left-color: var(--color-yellow); }
+
+        .pillar-modal-content .pillar-detail-content {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: var(--spacing-xl);
+        }
+
+        .pillar-modal-content .pillar-detail-section {
+            padding: var(--spacing-lg);
+            border-radius: var(--border-radius-md);
+        }
+
+        .pillar-modal-content .pillar-detail-section.gap-section {
+            background: linear-gradient(135deg, #fff5f5, #fff);
+            border: 1px solid #ffcccc;
+        }
+
+        .pillar-modal-content .pillar-detail-section.goal-section {
+            background: linear-gradient(135deg, #f0fff4, #fff);
+            border: 1px solid #9ae6b4;
+        }
+
+        .pillar-modal-content .pillar-detail-section-title {
+            font-size: var(--font-size-sm);
+            font-weight: var(--font-weight-bold);
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            margin-bottom: var(--spacing-md);
+        }
+
+        .pillar-modal-content .gap-section .pillar-detail-section-title {
+            color: #c53030;
+        }
+
+        .pillar-modal-content .goal-section .pillar-detail-section-title {
+            color: #276749;
+        }
+
+        .pillar-modal-content .pillar-detail-section p {
+            font-size: var(--font-size-base);
+            line-height: var(--line-height-relaxed);
+            color: var(--color-text-primary);
+            margin: 0;
+        }
+
+        .pillar-modal-content .pillar-detail-section ul {
+            list-style: none;
+            padding: 0;
+            margin: 0;
+        }
+
+        .pillar-modal-content .pillar-detail-section ul li {
+            font-size: var(--font-size-base);
+            line-height: var(--line-height-relaxed);
+            color: var(--color-text-primary);
+            padding-left: var(--spacing-lg);
+            position: relative;
+            margin-bottom: var(--spacing-sm);
+        }
+
+        .pillar-modal-content .pillar-detail-section ul li::before {
+            content: '\2022';
+            position: absolute;
+            left: 0;
+            color: #276749;
+            font-weight: bold;
+        }
+
+        .pillar-modal-content .pillar-detail-insight {
+            margin-top: var(--spacing-xl);
+            padding: var(--spacing-lg);
+            background: linear-gradient(135deg, #fffbeb, #fff);
+            border-radius: var(--border-radius-md);
+            border: 1px solid #f6e05e;
+            display: flex;
+            align-items: flex-start;
+            gap: var(--spacing-md);
+        }
+
+        .pillar-modal-content .pillar-detail-insight .insight-icon {
+            font-size: var(--font-size-xl);
+        }
+
+        .pillar-modal-content .pillar-detail-insight p {
+            font-size: var(--font-size-base);
+            font-weight: var(--font-weight-medium);
+            color: var(--color-navy);
+            line-height: var(--line-height-relaxed);
+            margin: 0;
+        }
+
+        /* Modal Tab Styles */
+        .pillar-modal-content .pillar-tabs {
+            margin-top: var(--spacing-lg);
+        }
+
+        .pillar-modal-content .pillar-tabs-nav {
+            display: flex;
+            gap: var(--spacing-xs);
+            margin-bottom: var(--spacing-md);
+            border-bottom: 2px solid var(--color-bg-light);
+            padding-bottom: var(--spacing-xs);
+        }
+
+        .pillar-modal-content .pillar-tab-btn {
+            flex: 1;
+            padding: var(--spacing-sm) var(--spacing-md);
+            border: none;
+            background: transparent;
+            font-size: var(--font-size-sm);
+            font-weight: var(--font-weight-semibold);
+            color: var(--color-text-tertiary);
+            cursor: pointer;
+            border-radius: var(--border-radius-md);
+            transition: all var(--transition-base);
+        }
+
+        .pillar-modal-content .pillar-tab-btn:hover {
+            background: var(--color-bg-light);
+            color: var(--color-text-secondary);
+        }
+
+        .pillar-modal-content .pillar-tab-btn.active {
+            background: var(--color-navy);
+            color: var(--color-white);
+        }
+
+        .pillar-modal-content .pillar-tab-panel {
+            display: none;
+            animation: fadeIn 0.3s ease;
+        }
+
+        .pillar-modal-content .pillar-tab-panel.active {
+            display: block;
+        }
+
+        .pillar-modal-content .pillar-level-header {
+            display: flex;
+            align-items: center;
+            gap: var(--spacing-md);
+            margin-bottom: var(--spacing-md);
+        }
+
+        .pillar-modal-content .pillar-level-icon {
+            font-size: var(--font-size-2xl);
+        }
+
+        .pillar-modal-content .pillar-level-title {
+            display: flex;
+            flex-direction: column;
+        }
+
+        .pillar-modal-content .pillar-level-title strong {
+            font-size: var(--font-size-lg);
+            color: var(--color-navy);
+        }
+
+        .pillar-modal-content .pillar-level-english {
+            font-size: var(--font-size-xs);
+            color: var(--color-text-tertiary);
+            text-transform: uppercase;
+            letter-spacing: 1px;
+        }
+
+        .pillar-modal-content .pillar-level-desc {
+            font-size: var(--font-size-base);
+            color: var(--color-text-primary);
+            line-height: var(--line-height-relaxed);
+            margin-bottom: var(--spacing-md);
+        }
+
+        .pillar-modal-content .pillar-level-example {
+            display: flex;
+            align-items: center;
+            gap: var(--spacing-sm);
+            padding: var(--spacing-sm) var(--spacing-md);
+            background: var(--color-bg-light);
+            border-radius: var(--border-radius-md);
+            font-size: var(--font-size-sm);
+        }
+
+        .pillar-modal-content .example-label {
+            font-weight: var(--font-weight-semibold);
+            color: var(--color-primary-blue);
+            white-space: nowrap;
+        }
+
+        .pillar-modal-content .pillar-level-example > span:last-child {
+            color: var(--color-text-secondary);
+        }
+
+        /* Mobile responsive for modal */
+        @media (max-width: 768px) {
+            .pillar-modal-overlay {
+                padding: 0;
+                align-items: flex-end;
+            }
+
+            .pillar-modal {
+                max-height: 80vh;
+                max-height: 80dvh; /* Dynamic viewport height for mobile browsers */
+                border-radius: var(--border-radius-lg) var(--border-radius-lg) 0 0;
+                margin-bottom: 0;
+            }
+
+            .pillar-modal-header {
+                padding: var(--spacing-sm) var(--spacing-md);
+            }
+
+            .pillar-modal-content {
+                padding: var(--spacing-md) var(--spacing-lg) var(--spacing-xl);
+            }
+
+            .pillar-modal-content .pillar-detail-header {
+                flex-direction: column;
+                align-items: center;
+                text-align: center;
+            }
+
+            .pillar-modal-content .pillar-detail-icon {
+                width: 60px;
+                height: 60px;
+                font-size: var(--font-size-2xl);
+            }
+
+            .pillar-modal-content .pillar-detail-content {
+                grid-template-columns: 1fr;
+            }
+
+            .pillar-modal-content .pillar-detail-insight {
+                flex-direction: column;
+                text-align: center;
+            }
+
+            /* Mobile tab styles */
+            .pillar-modal-content .pillar-tabs-nav {
+                gap: var(--spacing-xs);
+            }
+
+            .pillar-modal-content .pillar-tab-btn {
+                padding: var(--spacing-xs) var(--spacing-sm);
+                font-size: var(--font-size-xs);
+            }
+
+            .pillar-modal-content .pillar-level-example {
+                flex-direction: column;
+                align-items: flex-start;
+                gap: var(--spacing-xs);
+            }
+        }
+
+        /* Body scroll lock for modal */
+        body.modal-open {
+            overflow: hidden;
+            position: fixed;
+            width: 100%;
+            height: 100%;
         }
 
         /* Footer message */
@@ -4124,24 +4658,7 @@
                 grid-template-columns: 1fr;
             }
 
-            .pillar-detail.active {
-                padding: var(--spacing-lg);
-            }
-
-            .pillar-detail-header {
-                flex-direction: column;
-                align-items: center;
-                text-align: center;
-            }
-
-            .pillar-detail-content {
-                grid-template-columns: 1fr;
-            }
-
-            .pillar-detail-insight {
-                flex-direction: column;
-                text-align: center;
-            }
+            /* pillar-detail mobile styles moved to modal section */
 
             .activities-grid {
                 grid-template-columns: 1fr;
@@ -4537,67 +5054,47 @@
                 AI 素養不是一次到位，而是一段由淺入深的學習歷程
             </p>
 
-            <!-- Progress Flow Visualization -->
-            <div class="pillars-flow fade-in">
-                <div class="pillars-flow-item">
-                    <div class="pillars-flow-icon" data-pillar="ask" onclick="togglePillarDetail('ask')">問</div>
-                    <span class="pillars-flow-label">問 (Ask)</span>
-                    <span class="pillars-flow-sublabel">對話</span>
-                </div>
-                <span class="pillars-flow-arrow">→</span>
-                <div class="pillars-flow-item">
-                    <div class="pillars-flow-icon" data-pillar="use" onclick="togglePillarDetail('use')">用</div>
-                    <span class="pillars-flow-label">用 (Use)</span>
-                    <span class="pillars-flow-sublabel">應用</span>
-                </div>
-                <span class="pillars-flow-arrow">→</span>
-                <div class="pillars-flow-item">
-                    <div class="pillars-flow-icon" data-pillar="manage" onclick="togglePillarDetail('manage')">管</div>
-                    <span class="pillars-flow-label">管 (Manage)</span>
-                    <span class="pillars-flow-sublabel">判斷</span>
-                </div>
-                <span class="pillars-flow-arrow">→</span>
-                <div class="pillars-flow-item">
-                    <div class="pillars-flow-icon" data-pillar="build" onclick="togglePillarDetail('build')">造</div>
-                    <span class="pillars-flow-label">造 (Build)</span>
-                    <span class="pillars-flow-sublabel">創造</span>
-                </div>
-            </div>
-
-            <!-- Depth Indicator Bar -->
-            <div class="pillars-depth-bar fade-in">
-                <span>深度 (Depth of Literacy) →</span>
-            </div>
-
             <!-- Pillar Cards -->
             <div class="pillars-grid">
                 <div class="pillar-card fade-in" data-pillar="ask" onclick="togglePillarDetail('ask')">
-                    <div class="pillar-icon">問</div>
-                    <div class="pillar-english">Ask</div>
-                    <h3>問 AI</h3>
+                    <div class="pillar-icon">問 AI</div>
+                    <div class="pillar-english">Engage</div>
                     <div class="pillar-subtitle">精準提問與人機協作</div>
                     <p class="pillar-brief">學會跟 AI 對話，而不是丟一句話給它</p>
+                    <button class="pillar-details-button">
+                        <span class="material-icons">visibility</span>
+                        <span>查看詳細</span>
+                    </button>
                 </div>
                 <div class="pillar-card fade-in" data-pillar="use" onclick="togglePillarDetail('use')">
-                    <div class="pillar-icon">用</div>
-                    <div class="pillar-english">Use</div>
-                    <h3>用 AI</h3>
+                    <div class="pillar-icon">用 AI</div>
+                    <div class="pillar-english">Create</div>
                     <div class="pillar-subtitle">工具掌握與效率提升</div>
                     <p class="pillar-brief">把 AI 放進流程，而不是多開一個工具</p>
+                    <button class="pillar-details-button">
+                        <span class="material-icons">visibility</span>
+                        <span>查看詳細</span>
+                    </button>
                 </div>
                 <div class="pillar-card fade-in" data-pillar="manage" onclick="togglePillarDetail('manage')">
-                    <div class="pillar-icon">管</div>
+                    <div class="pillar-icon">管 AI</div>
                     <div class="pillar-english">Manage</div>
-                    <h3>管 AI</h3>
                     <div class="pillar-subtitle">批判思考與倫理素養</div>
                     <p class="pillar-brief">確保「人仍然在駕駛座上」</p>
+                    <button class="pillar-details-button">
+                        <span class="material-icons">visibility</span>
+                        <span>查看詳細</span>
+                    </button>
                 </div>
                 <div class="pillar-card fade-in" data-pillar="build" onclick="togglePillarDetail('build')">
-                    <div class="pillar-icon">造</div>
-                    <div class="pillar-english">Build</div>
-                    <h3>造 AI</h3>
+                    <div class="pillar-icon">造 AI</div>
+                    <div class="pillar-english">Design</div>
                     <div class="pillar-subtitle">原理理解與創新應用</div>
                     <p class="pillar-brief">從使用者，走向能創造價值的人</p>
+                    <button class="pillar-details-button">
+                        <span class="material-icons">visibility</span>
+                        <span>查看詳細</span>
+                    </button>
                 </div>
             </div>
 
@@ -4606,26 +5103,66 @@
                 <div class="pillar-detail-header">
                     <div class="pillar-detail-icon">問</div>
                     <div class="pillar-detail-title-group">
-                        <div class="pillar-detail-english">Ask</div>
+                        <div class="pillar-detail-english">Engaging with AI</div>
                         <h3 class="pillar-detail-title">問 AI</h3>
                         <div class="pillar-detail-subtitle">精準提問與人機協作</div>
                     </div>
                 </div>
                 <div class="pillar-detail-headline">學會跟 AI 對話，而不是丟一句話給它</div>
-                <div class="pillar-detail-content">
-                    <div class="pillar-detail-section gap-section">
-                        <div class="pillar-detail-section-title">現況挑戰 (The Gap)</div>
-                        <p>學生常覺得「AI 不準」，其實是因為他們只丟了一句模糊的話給 AI。這反映出思考的懶惰。</p>
+
+                <!-- Progression Tabs -->
+                <div class="pillar-tabs">
+                    <div class="pillar-tabs-nav">
+                        <button class="pillar-tab-btn active" data-tab="basic">基礎</button>
+                        <button class="pillar-tab-btn" data-tab="proficient">精熟</button>
+                        <button class="pillar-tab-btn" data-tab="advanced">進階</button>
                     </div>
-                    <div class="pillar-detail-section goal-section">
-                        <div class="pillar-detail-section-title">素養目標 (The Goal)</div>
-                        <ul>
-                            <li>把模糊需求轉成明確指令</li>
-                            <li>追問、修正、深化 (Iterative Refinement)</li>
-                            <li>用 AI 做資訊輔助，而非直接交答案</li>
-                        </ul>
+                    <div class="pillar-tabs-content">
+                        <div class="pillar-tab-panel active" data-tab="basic">
+                            <div class="pillar-level-header">
+                                <span class="pillar-level-icon">🎯</span>
+                                <div class="pillar-level-title">
+                                    <strong>精準提問</strong>
+                                    <span class="pillar-level-english">Precision</span>
+                                </div>
+                            </div>
+                            <p class="pillar-level-desc">能清楚描述人、事、時、地、物與目標。不再問模糊問題。</p>
+                            <div class="pillar-level-example">
+                                <span class="example-label">關鍵能力</span>
+                                <span>將模糊需求轉成明確指令</span>
+                            </div>
+                        </div>
+                        <div class="pillar-tab-panel" data-tab="proficient">
+                            <div class="pillar-level-header">
+                                <span class="pillar-level-icon">🔄</span>
+                                <div class="pillar-level-title">
+                                    <strong>迭代追問</strong>
+                                    <span class="pillar-level-english">Iteration</span>
+                                </div>
+                            </div>
+                            <p class="pillar-level-desc">透過連續對話、反問與收斂，引導 AI 修正方向。像蘇格拉底式的對話。</p>
+                            <div class="pillar-level-example">
+                                <span class="example-label">關鍵能力</span>
+                                <span>追問、修正、深化對話品質</span>
+                            </div>
+                        </div>
+                        <div class="pillar-tab-panel" data-tab="advanced">
+                            <div class="pillar-level-header">
+                                <span class="pillar-level-icon">🧠</span>
+                                <div class="pillar-level-title">
+                                    <strong>框架思維</strong>
+                                    <span class="pillar-level-english">Framework</span>
+                                </div>
+                            </div>
+                            <p class="pillar-level-desc">要求 AI 提供解決問題的思維模型與系統性分析。問的不是答案，是方法論。</p>
+                            <div class="pillar-level-example">
+                                <span class="example-label">關鍵能力</span>
+                                <span>用 AI 做資訊輔助與結構化思考</span>
+                            </div>
+                        </div>
                     </div>
                 </div>
+
                 <div class="pillar-detail-insight">
                     <span class="insight-icon">💡</span>
                     <p>「問」是一種思考訓練：你知不知道自己真正要什麼？</p>
@@ -4636,26 +5173,66 @@
                 <div class="pillar-detail-header">
                     <div class="pillar-detail-icon">用</div>
                     <div class="pillar-detail-title-group">
-                        <div class="pillar-detail-english">Use</div>
+                        <div class="pillar-detail-english">Creating with AI</div>
                         <h3 class="pillar-detail-title">用 AI</h3>
                         <div class="pillar-detail-subtitle">工具掌握與效率提升</div>
                     </div>
                 </div>
                 <div class="pillar-detail-headline">把 AI 放進流程，而不是多開一個工具</div>
-                <div class="pillar-detail-content">
-                    <div class="pillar-detail-section gap-section">
-                        <div class="pillar-detail-section-title">現況挑戰 (The Gap)</div>
-                        <p>不是問要不要用 AI，而是擔心全交給 AI 後，把學生該練的能力拿走，導致學習「變薄」。</p>
+
+                <!-- Progression Tabs -->
+                <div class="pillar-tabs">
+                    <div class="pillar-tabs-nav">
+                        <button class="pillar-tab-btn active" data-tab="basic">基礎</button>
+                        <button class="pillar-tab-btn" data-tab="proficient">精熟</button>
+                        <button class="pillar-tab-btn" data-tab="advanced">進階</button>
                     </div>
-                    <div class="pillar-detail-section goal-section">
-                        <div class="pillar-detail-section-title">素養目標 (The Goal)</div>
-                        <ul>
-                            <li>理解不同 AI 工具的強項</li>
-                            <li>解決重複性任務</li>
-                            <li>提升產出品質與效率</li>
-                        </ul>
+                    <div class="pillar-tabs-content">
+                        <div class="pillar-tab-panel active" data-tab="basic">
+                            <div class="pillar-level-header">
+                                <span class="pillar-level-icon">✏️</span>
+                                <div class="pillar-level-title">
+                                    <strong>生活單點</strong>
+                                    <span class="pillar-level-english">Task</span>
+                                </div>
+                            </div>
+                            <p class="pillar-level-desc">解決單一需求。例如：規劃旅遊、寫信、摘要文章。</p>
+                            <div class="pillar-level-example">
+                                <span class="example-label">關鍵能力</span>
+                                <span>理解不同 AI 工具的強項</span>
+                            </div>
+                        </div>
+                        <div class="pillar-tab-panel" data-tab="proficient">
+                            <div class="pillar-level-header">
+                                <span class="pillar-level-icon">🔗</span>
+                                <div class="pillar-level-title">
+                                    <strong>專業串聯</strong>
+                                    <span class="pillar-level-english">Workflow</span>
+                                </div>
+                            </div>
+                            <p class="pillar-level-desc">建立自動化工作流，串接產出。例如：行銷文案→自動製圖→排程發布。</p>
+                            <div class="pillar-level-example">
+                                <span class="example-label">關鍵能力</span>
+                                <span>組合多個工具提升效率</span>
+                            </div>
+                        </div>
+                        <div class="pillar-tab-panel" data-tab="advanced">
+                            <div class="pillar-level-header">
+                                <span class="pillar-level-icon">🤖</span>
+                                <div class="pillar-level-title">
+                                    <strong>自主代理</strong>
+                                    <span class="pillar-level-english">Agents</span>
+                                </div>
+                            </div>
+                            <p class="pillar-level-desc">指揮 AI 跨域調用工具去「執行」任務。例如：給模糊目標，讓 Agent 自行比價下單。</p>
+                            <div class="pillar-level-example">
+                                <span class="example-label">關鍵能力</span>
+                                <span>設計 AI 代理執行複雜任務</span>
+                            </div>
+                        </div>
                     </div>
                 </div>
+
                 <div class="pillar-detail-insight">
                     <span class="insight-icon">💡</span>
                     <p>關鍵判準：用完之後，學習有沒有變好？</p>
@@ -4666,26 +5243,66 @@
                 <div class="pillar-detail-header">
                     <div class="pillar-detail-icon">管</div>
                     <div class="pillar-detail-title-group">
-                        <div class="pillar-detail-english">Manage</div>
+                        <div class="pillar-detail-english">Managing AI</div>
                         <h3 class="pillar-detail-title">管 AI</h3>
                         <div class="pillar-detail-subtitle">批判思考與倫理素養</div>
                     </div>
                 </div>
                 <div class="pillar-detail-headline">確保「人仍然在駕駛座上」</div>
-                <div class="pillar-detail-content">
-                    <div class="pillar-detail-section gap-section">
-                        <div class="pillar-detail-section-title">現況挑戰 (The Gap)</div>
-                        <p>AI 出錯不是問題，問題是出錯時「沒有人知道該誰負責」。不能以外包心態面對風險。</p>
+
+                <!-- Progression Tabs -->
+                <div class="pillar-tabs">
+                    <div class="pillar-tabs-nav">
+                        <button class="pillar-tab-btn active" data-tab="basic">基礎</button>
+                        <button class="pillar-tab-btn" data-tab="proficient">精熟</button>
+                        <button class="pillar-tab-btn" data-tab="advanced">進階</button>
                     </div>
-                    <div class="pillar-detail-section goal-section">
-                        <div class="pillar-detail-section-title">素養目標 (The Goal)</div>
-                        <ul>
-                            <li>不盲信 AI 產出</li>
-                            <li>理解偏見、隱私、智財風險</li>
-                            <li>清楚人與 AI 的責任邊界</li>
-                        </ul>
+                    <div class="pillar-tabs-content">
+                        <div class="pillar-tab-panel active" data-tab="basic">
+                            <div class="pillar-level-header">
+                                <span class="pillar-level-icon">👁️</span>
+                                <div class="pillar-level-title">
+                                    <strong>管好一 AI</strong>
+                                    <span class="pillar-level-english">Supervision</span>
+                                </div>
+                            </div>
+                            <p class="pillar-level-desc">具備識讀能力，能查核事實，避免單一 AI 幻覺。（指導員層級）</p>
+                            <div class="pillar-level-example">
+                                <span class="example-label">關鍵能力</span>
+                                <span>不盲信 AI 產出，能驗證資訊</span>
+                            </div>
+                        </div>
+                        <div class="pillar-tab-panel" data-tab="proficient">
+                            <div class="pillar-level-header">
+                                <span class="pillar-level-icon">🎛️</span>
+                                <div class="pillar-level-title">
+                                    <strong>管好群 AI</strong>
+                                    <span class="pillar-level-english">Orchestration</span>
+                                </div>
+                            </div>
+                            <p class="pillar-level-desc">同時調度多個不同功能的 Agents 協作。（調度員層級）</p>
+                            <div class="pillar-level-example">
+                                <span class="example-label">關鍵能力</span>
+                                <span>協調多個 AI 系統的輸出</span>
+                            </div>
+                        </div>
+                        <div class="pillar-tab-panel" data-tab="advanced">
+                            <div class="pillar-level-header">
+                                <span class="pillar-level-icon">👔</span>
+                                <div class="pillar-level-title">
+                                    <strong>管好人機協作</strong>
+                                    <span class="pillar-level-english">Leadership</span>
+                                </div>
+                            </div>
+                            <p class="pillar-level-desc">領導「人+AI」混合團隊，劃分權責與倫理邊界。（指揮官層級）</p>
+                            <div class="pillar-level-example">
+                                <span class="example-label">關鍵能力</span>
+                                <span>定義人與 AI 的責任邊界</span>
+                            </div>
+                        </div>
                     </div>
                 </div>
+
                 <div class="pillar-detail-insight">
                     <span class="insight-icon">💡</span>
                     <p>定義責任：哪些判斷絕不能外包？哪些後果必須由人承擔？</p>
@@ -4696,26 +5313,66 @@
                 <div class="pillar-detail-header">
                     <div class="pillar-detail-icon">造</div>
                     <div class="pillar-detail-title-group">
-                        <div class="pillar-detail-english">Build</div>
+                        <div class="pillar-detail-english">Designing AI</div>
                         <h3 class="pillar-detail-title">造 AI</h3>
                         <div class="pillar-detail-subtitle">原理理解與創新應用</div>
                     </div>
                 </div>
                 <div class="pillar-detail-headline">從使用者，走向能創造價值的人</div>
-                <div class="pillar-detail-content">
-                    <div class="pillar-detail-section gap-section">
-                        <div class="pillar-detail-section-title">現況挑戰 (The Gap)</div>
-                        <p>誤以為「造」就是要寫程式或訓練模型，導致老師與學生感到恐懼與排斥。</p>
+
+                <!-- Progression Tabs -->
+                <div class="pillar-tabs">
+                    <div class="pillar-tabs-nav">
+                        <button class="pillar-tab-btn active" data-tab="basic">基礎</button>
+                        <button class="pillar-tab-btn" data-tab="proficient">精熟</button>
+                        <button class="pillar-tab-btn" data-tab="advanced">進階</button>
                     </div>
-                    <div class="pillar-detail-section goal-section">
-                        <div class="pillar-detail-section-title">素養目標 (The Goal)</div>
-                        <ul>
-                            <li>理解 AI 的基本原理 (Why it works)</li>
-                            <li>組合工具與流程 (Workflow Design)</li>
-                            <li>用 AI 解決真實問題 (Problem Solving)</li>
-                        </ul>
+                    <div class="pillar-tabs-content">
+                        <div class="pillar-tab-panel active" data-tab="basic">
+                            <div class="pillar-level-header">
+                                <span class="pillar-level-icon">📦</span>
+                                <div class="pillar-level-title">
+                                    <strong>封裝經驗</strong>
+                                    <span class="pillar-level-english">Prompting</span>
+                                </div>
+                            </div>
+                            <p class="pillar-level-desc">將個人成功的指令存成模板 (Template)。（造工具）</p>
+                            <div class="pillar-level-example">
+                                <span class="example-label">關鍵能力</span>
+                                <span>理解 AI 的基本原理</span>
+                            </div>
+                        </div>
+                        <div class="pillar-tab-panel" data-tab="proficient">
+                            <div class="pillar-level-header">
+                                <span class="pillar-level-icon">🧩</span>
+                                <div class="pillar-level-title">
+                                    <strong>連結知識</strong>
+                                    <span class="pillar-level-english">RAG</span>
+                                </div>
+                            </div>
+                            <p class="pillar-level-desc">餵養特定資料，造出懂團隊語言的知識庫。（造大腦）</p>
+                            <div class="pillar-level-example">
+                                <span class="example-label">關鍵能力</span>
+                                <span>組合工具與流程設計</span>
+                            </div>
+                        </div>
+                        <div class="pillar-tab-panel" data-tab="advanced">
+                            <div class="pillar-level-header">
+                                <span class="pillar-level-icon">🏗️</span>
+                                <div class="pillar-level-title">
+                                    <strong>深入場景</strong>
+                                    <span class="pillar-level-english">Product</span>
+                                </div>
+                            </div>
+                            <p class="pillar-level-desc">針對具體痛點，開發出可重複使用的服務/產品。（造護城河）</p>
+                            <div class="pillar-level-example">
+                                <span class="example-label">關鍵能力</span>
+                                <span>用 AI 解決真實問題</span>
+                            </div>
+                        </div>
                     </div>
                 </div>
+
                 <div class="pillar-detail-insight">
                     <span class="insight-icon">💡</span>
                     <p>培養主體性：知道 AI 為何這樣判斷，並決定用它解決什麼問題。</p>
@@ -7646,34 +8303,112 @@ Check Google Sheets to see how many entries were actually created.
             }
         }
 
-        // ===== AI Pillars Toggle =====
+        // ===== AI Pillars Modal =====
         function togglePillarDetail(pillarId) {
             const detailPanel = document.getElementById(`pillar-detail-${pillarId}`);
             const pillarCard = document.querySelector(`.pillar-card[data-pillar="${pillarId}"]`);
-            const flowIcon = document.querySelector(`.pillars-flow-icon[data-pillar="${pillarId}"]`);
-            const allDetails = document.querySelectorAll('.pillar-detail');
             const allCards = document.querySelectorAll('.pillar-card');
-            const allFlowIcons = document.querySelectorAll('.pillars-flow-icon');
 
-            // Check if this panel is already active
-            const isActive = detailPanel.classList.contains('active');
-
-            // Close all panels first
-            allDetails.forEach(panel => panel.classList.remove('active'));
+            // Reset all cards
             allCards.forEach(card => card.classList.remove('active'));
-            allFlowIcons.forEach(icon => icon.classList.remove('active'));
 
-            // If the clicked panel wasn't active, open it
-            if (!isActive) {
-                detailPanel.classList.add('active');
-                if (pillarCard) pillarCard.classList.add('active');
-                if (flowIcon) flowIcon.classList.add('active');
+            // Mark the clicked card as active
+            if (pillarCard) pillarCard.classList.add('active');
 
-                // Scroll to the detail panel smoothly
-                setTimeout(() => {
-                    detailPanel.scrollIntoView({ behavior: 'smooth', block: 'nearest' });
-                }, 100);
-            }
+            // Open modal with content
+            openPillarModal(pillarId, detailPanel);
+        }
+
+        // Store scroll position for iOS scroll lock
+        let scrollPosition = 0;
+
+        function openPillarModal(pillarId, detailPanel) {
+            const modal = document.getElementById('pillarModal');
+            const modalContent = document.getElementById('pillarModalContent');
+
+            // Clone the content from the detail panel
+            modalContent.innerHTML = detailPanel.innerHTML;
+            modalContent.setAttribute('data-pillar', pillarId);
+
+            // Lock body scroll (iOS compatible)
+            scrollPosition = window.pageYOffset;
+            document.body.classList.add('modal-open');
+            document.body.style.top = `-${scrollPosition}px`;
+
+            // Show modal
+            modal.classList.add('active');
+
+            // Focus trap for accessibility
+            const closeBtn = modal.querySelector('.pillar-modal-close');
+            if (closeBtn) closeBtn.focus();
+        }
+
+        function closePillarModal() {
+            const modal = document.getElementById('pillarModal');
+            const allCards = document.querySelectorAll('.pillar-card');
+
+            modal.classList.remove('active');
+
+            // Unlock body scroll and restore position instantly (no animation)
+            document.body.classList.remove('modal-open');
+            document.body.style.top = '';
+            window.scrollTo({ top: scrollPosition, left: 0, behavior: 'instant' });
+
+            // Reset card active states
+            allCards.forEach(card => card.classList.remove('active'));
+        }
+
+        // Setup modal event listeners on DOMContentLoaded
+        function setupPillarModal() {
+            const modal = document.getElementById('pillarModal');
+            const closeBtn = modal.querySelector('.pillar-modal-close');
+            const modalContent = document.getElementById('pillarModalContent');
+
+            // Close on close button click
+            closeBtn.addEventListener('click', closePillarModal);
+
+            // Close on overlay click (outside modal)
+            modal.addEventListener('click', (e) => {
+                if (e.target === modal) {
+                    closePillarModal();
+                }
+            });
+
+            // Close on Escape key
+            document.addEventListener('keydown', (e) => {
+                if (e.key === 'Escape' && modal.classList.contains('active')) {
+                    closePillarModal();
+                }
+            });
+
+            // Prevent touchmove on overlay (iOS scroll fix)
+            modal.addEventListener('touchmove', (e) => {
+                // Only allow scrolling inside modal content
+                if (!modalContent.contains(e.target)) {
+                    e.preventDefault();
+                }
+            }, { passive: false });
+
+            // Tab switching (event delegation for dynamically injected content)
+            modalContent.addEventListener('click', (e) => {
+                const tabBtn = e.target.closest('.pillar-tab-btn');
+                if (!tabBtn) return;
+
+                const tabsContainer = tabBtn.closest('.pillar-tabs');
+                const tabName = tabBtn.dataset.tab;
+
+                // Update active tab button
+                tabsContainer.querySelectorAll('.pillar-tab-btn').forEach(btn => {
+                    btn.classList.remove('active');
+                });
+                tabBtn.classList.add('active');
+
+                // Update active tab panel
+                tabsContainer.querySelectorAll('.pillar-tab-panel').forEach(panel => {
+                    panel.classList.remove('active');
+                });
+                tabsContainer.querySelector(`.pillar-tab-panel[data-tab="${tabName}"]`).classList.add('active');
+            });
         }
 
         // ===== Initialize =====
@@ -7688,6 +8423,9 @@ Check Google Sheets to see how many entries were actually created.
 
             // Initialize live statistics dashboard
             initStatistics();
+
+            // Setup pillar modal event listeners
+            setupPillarModal();
 
             // Trigger fade-in for elements already in viewport
             document.querySelectorAll('.fade-in').forEach(el => {
@@ -7755,5 +8493,19 @@ Check Google Sheets to see how many entries were actually created.
         10. Test the form!
         */
     </script>
+
+    <!-- Pillar Detail Modal -->
+    <div class="pillar-modal-overlay" id="pillarModal">
+        <div class="pillar-modal" role="dialog" aria-modal="true">
+            <div class="pillar-modal-header">
+                <button class="pillar-modal-close" aria-label="關閉">
+                    <span class="material-icons">close</span>
+                </button>
+            </div>
+            <div class="pillar-modal-content" id="pillarModalContent">
+                <!-- Content will be injected here -->
+            </div>
+        </div>
+    </div>
 </body>
 </html>
