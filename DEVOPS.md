@@ -70,9 +70,10 @@
 
 | 項目 | 值 |
 |------|-----|
-| **URL** | http://localhost:5000 (或其他 port) |
+| **URL** | http://localhost:5000 |
 | **模式** | Demo Mode（不會實際提交到 Google Sheets）|
-| **啟動方式** | 任意靜態伺服器，如 `npx serve .` |
+| **啟動方式** | `npm run dev`（Vite 開發伺服器）|
+| **建置方式** | `npm run build`（產出至 dist/）|
 
 ---
 
@@ -142,7 +143,11 @@ const allowedOrigins = [
 
 ### 5.2 自動部署（GitHub Actions）
 
-當 push 到 `main` branch 時，GitHub Actions 會自動部署到 Firebase Hosting。
+當 push 到 `main` branch 時，GitHub Actions 會自動：
+1. 安裝 Node.js 20
+2. 執行 `npm ci` 安裝依賴
+3. 執行 `npm run build` 建置 Vite 專案
+4. 部署 `dist/` 資料夾到 Firebase Hosting
 
 **Workflow 檔案**: `.github/workflows/firebase-deploy.yml`
 
@@ -158,6 +163,9 @@ const allowedOrigins = [
 如需手動部署，可使用：
 
 ```bash
+# 建置專案
+npm run build
+
 # 部署到 Firebase Production
 firebase deploy --only hosting
 ```
@@ -267,22 +275,74 @@ firebase deploy --only hosting
 - **Theme Color**: 設定為 `#003D82`（均一深藍色）
 - **Preconnect**: 已對 Google Fonts 等外部資源設定 preconnect
 
+### 9.4 AI 爬蟲優化
+
+| 檔案 | 路徑 | 用途 |
+|------|------|------|
+| llms.txt | /llms.txt | 提供給 AI 爬蟲的結構化網站說明 |
+| JSON-LD | index.html head | Schema.org EducationalEvent 結構化資料 |
+
 ---
 
-## 10. 未來規劃
+## 10. 專案結構
+
+### 10.1 目錄架構
+
+```
+hour-of-ai-landing/
+├── src/                    # 原始碼
+│   ├── index.html          # HTML 模板
+│   ├── styles/
+│   │   └── main.css        # 樣式表
+│   └── scripts/
+│       └── main.js         # JavaScript
+├── public/                 # 靜態資源（會直接複製到 dist/）
+│   ├── favicon.ico
+│   ├── robots.txt
+│   ├── sitemap.xml
+│   └── llms.txt
+├── dist/                   # 建置輸出（由 Vite 產生）
+├── package.json            # npm 設定
+├── vite.config.js          # Vite 設定
+├── firebase.json           # Firebase Hosting 設定
+└── .github/workflows/      # GitHub Actions
+```
+
+### 10.2 建置工具
+
+| 工具 | 版本 | 用途 |
+|------|------|------|
+| Vite | ^5.4.0 | 現代化前端建置工具 |
+| Node.js | 20.x | 執行環境 |
+
+### 10.3 npm 指令
+
+| 指令 | 說明 |
+|------|------|
+| `npm run dev` | 啟動開發伺服器（localhost:5000） |
+| `npm run build` | 建置 production 版本至 dist/ |
+| `npm run preview` | 預覽建置結果 |
+
+---
+
+## 11. 未來規劃
 
 - [x] ~~設定 GitHub Action，main branch merge 後自動部署到 Firebase~~ ✅ 已完成 (2026-01-23)
 - [x] ~~加入 OG meta tags（社群媒體分享預覽）~~ ✅ 已完成 (2026-01-23)
 - [x] ~~加入 sitemap.xml 和 robots.txt~~ ✅ 已完成 (2026-01-23)
 - [x] ~~Lighthouse 優化（lazy loading、theme-color）~~ ✅ 已完成 (2026-01-23)
+- [x] ~~模組化重構（Vite 建置、CSS/JS 分離）~~ ✅ 已完成 (2026-01-23)
+- [x] ~~JSON-LD 結構化資料~~ ✅ 已完成 (2026-01-23)
+- [x] ~~llms.txt（AI 爬蟲優化）~~ ✅ 已完成 (2026-01-23)
 - [ ] 設定 hoa.junyiacademy.org 網域指向 Firebase Hosting（程式碼已準備好，等待 DNS 設定）
 - [ ] 考慮是否需要 Staging 環境（介於 Preview 和 Production 之間）
 - [ ] 加入 Apple Touch Icon
 - [ ] PWA 支援
+- [ ] HTML 元件進一步拆分（header, footer, sections）
 
 ---
 
-## 11. 文件維護指引
+## 12. 文件維護指引
 
 > **給 AI 助手的指引**: 當進行以下變更時，請同步更新此文件：
 > - 新增或修改部署環境
@@ -294,4 +354,4 @@ firebase deploy --only hosting
 ---
 
 *建立日期：2026-01-23*
-*最後更新：2026-01-23 - 新增 SEO 優化（OG tags, sitemap, robots.txt, lazy loading）*
+*最後更新：2026-01-23 - 模組化重構（Vite 建置、CSS/JS 分離、JSON-LD、llms.txt）*

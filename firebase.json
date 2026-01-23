@@ -1,18 +1,11 @@
 {
   "hosting": {
-    "public": ".",
+    "public": "dist",
     "ignore": [
       "firebase.json",
       ".firebaserc",
-      "firestore.rules",
-      "firestore.indexes.json",
       "**/.*",
-      "**/node_modules/**",
-      "backend/**",
-      "docs/**",
-      "testing/**",
-      "README.md",
-      "vercel.json"
+      "**/node_modules/**"
     ],
     "headers": [
       {

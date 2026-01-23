@@ -48,8 +48,11 @@ temp/
 coverage/
 .nyc_output/
 
-# Node Modules (if added)
-node_modules/.firebase/
+# Node Modules
+node_modules/
+
+# Build Output
+dist/
 
 # Firebase cache
 .firebase/

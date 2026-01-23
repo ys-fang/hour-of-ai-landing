@@ -1,0 +1,70 @@
+# Hour of AI - Taiwan
+> Provided by Junyi Academy Foundation
+
+This website promotes AI literacy education in Taiwan through the "Hour of AI" initiative.
+
+## About
+
+Hour of AI is an annual educational campaign inspired by Hour of Code, initiated by Code.org. Junyi Academy Foundation hosts the Taiwan edition, providing free AI education resources and platforms to help students, teachers, and communities learn about AI in just one hour.
+
+## Organization
+
+- Name: Junyi Academy Foundation (均一平台教育基金會)
+- Website: https://www.junyiacademy.org/
+- Contact: support@junyiacademy.org
+- Phone: (02) 2393-1231
+- Address: 2F, No. 25, Baoqing Rd., Zhongzheng Dist., Taipei City, Taiwan
+
+## Key Concepts: Four Pillars of AI Literacy
+
+### 1. Engage with AI (問 AI)
+Learn to communicate precisely with AI systems through clear prompting, iterative questioning, and framework thinking.
+
+### 2. Create with AI (用 AI)
+Master AI tools for daily tasks, professional workflows, and autonomous agent orchestration.
+
+### 3. Manage AI (管 AI)
+Develop critical thinking to supervise AI outputs, orchestrate multiple AI systems, and lead human-AI collaboration.
+
+### 4. Design AI (造 AI)
+Progress from prompt templating to building knowledge bases and creating AI-powered products.
+
+## Featured Activities
+
+### 1. Data World: AI Revealed (數據世界：AI 原來如此)
+- Provider: Active AI
+- Target: Elementary school (upper grades) and above
+- Content: Learn how AI processes data and understand AI fundamentals
+
+### 2. My Semiconductor Adventure (我的半導體冒險)
+- Provider: AI Square
+- Target: Junior high school and above
+- Content: Explore the relationship between semiconductors and AI
+
+## How to Participate
+
+Organizations can register to host Hour of AI events at their locations. Junyi Academy provides:
+- Free access to AI learning platforms
+- Complete teaching materials
+- Support for event planning
+- Certificates for participants
+
+## Global Context
+
+Hour of AI is a worldwide initiative coordinated by Code.org and CSforAll. Taiwan's participation contributes to the global movement of promoting AI literacy education.
+
+## Links
+
+- Taiwan Official Page: https://www.junyiacademy.org/event/2025-hour-of-ai/
+- Hour of AI Global: https://hourofai.org/
+- Code.org: https://code.org/
+- CSforAll: https://csforall.org/
+
+## Mission
+
+"AI is not a privilege - it's every child's learning right."
+
+We believe in:
+- Cultivating independent learning with AI as a partner
+- Teaching students to leverage AI, not be replaced by it
+- Building AI literacy as a fundamental skill for all
