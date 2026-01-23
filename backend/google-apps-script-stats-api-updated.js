@@ -418,7 +418,10 @@ function doPost(e) {
 function validateOrigin(e, data) {
   const allowedOrigins = [
     'https://www.junyiacademy.org',
-    'https://junyiacademy.org'
+    'https://junyiacademy.org',
+    // Firebase Hosting (測試/開發環境)
+    'https://hour-of-ai-landing-junyi.web.app',
+    'https://hour-of-ai-landing-junyi.firebaseapp.com'
   ];
 
   // Check origin from data (more reliable than headers)
