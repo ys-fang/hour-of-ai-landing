@@ -50,3 +50,6 @@ coverage/
 
 # Node Modules (if added)
 node_modules/.firebase/
+
+# Firebase cache
+.firebase/

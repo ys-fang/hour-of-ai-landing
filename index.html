@@ -6224,7 +6224,14 @@
                 return 'PLEASE_SET_HOA_CONFIG_IN_WORDPRESS';
             }
 
-            // 4. GitHub Pages 或本地測試環境
+            // 4. Firebase Hosting 環境
+            if (hostname.includes('hour-of-ai-landing-junyi.web.app') ||
+                hostname.includes('hour-of-ai-landing-junyi.firebaseapp.com')) {
+                console.log('🔥 Detected Firebase Hosting - using production API');
+                return 'https://script.google.com/macros/s/AKfycbwZ1VRm8MxtqLms24V3Q4sJ5Jklu9o9V14q-B9QHTlw1e45Q2GcrzGA6E1RrxbMybRTFw/exec';
+            }
+
+            // 5. GitHub Pages 或本地測試環境
             console.log('🧪 Using demo mode - statistics will show sample data');
             return 'DEMO_MODE';
         }
