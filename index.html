@@ -6231,13 +6231,21 @@
 
             // 3. 偵測域名環境
             const hostname = window.location.hostname;
+
+            // 3a. Hour of AI 專屬子網域 (正式環境)
+            if (hostname === 'hoa.junyiacademy.org') {
+                console.log('🎯 Detected hoa.junyiacademy.org - using production API');
+                return 'https://script.google.com/macros/s/AKfycbwZ1VRm8MxtqLms24V3Q4sJ5Jklu9o9V14q-B9QHTlw1e45Q2GcrzGA6E1RrxbMybRTFw/exec';
+            }
+
+            // 3b. 其他 junyiacademy.org 子網域 (WordPress 環境)
             if (hostname.includes('junyiacademy.org')) {
                 console.log('🌐 Detected Junyiacademy domain - using production fallback');
                 // WordPress 部署時需要設定 window.HOA_CONFIG
                 return 'PLEASE_SET_HOA_CONFIG_IN_WORDPRESS';
             }
 
-            // 4. Firebase Hosting 環境
+            // 4. Firebase Hosting 環境 (測試/開發)
             if (hostname.includes('hour-of-ai-landing-junyi.web.app') ||
                 hostname.includes('hour-of-ai-landing-junyi.firebaseapp.com')) {
                 console.log('🔥 Detected Firebase Hosting - using production API');
