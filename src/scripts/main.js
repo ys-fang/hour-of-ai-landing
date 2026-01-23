@@ -2439,3 +2439,8 @@ Check Google Sheets to see how many entries were actually created.
         9. Paste the URL in the CONFIG.FORM_SUBMIT_URL above
         10. Test the form!
         */
+
+        // ===== Expose functions to global scope for inline onclick handlers =====
+        window.toggleCard = toggleCard;
+        window.togglePillarDetail = togglePillarDetail;
+        window.refreshStatistics = refreshStatistics;
