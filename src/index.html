@@ -25,10 +25,15 @@
     <meta name="twitter:description" content="均一 x Hour of AI - 均一平台教育基金會邀請您一起推動 AI 素養教育，讓學習力再進化">
     <meta name="twitter:image" content="https://storage.googleapis.com/wpassets.junyiacademy.org/1/2025/11/均一首頁最新消息Hour-of-AI＿25Q3＿V1.jpg">
 
-    <!-- Favicon -->
+    <!-- Favicon & PWA -->
     <link rel="icon" type="image/x-icon" href="/favicon.ico">
     <link rel="shortcut icon" type="image/x-icon" href="/favicon.ico">
     <link rel="apple-touch-icon" href="/favicon.ico">
+    <link rel="manifest" href="/manifest.json">
+
+    <!-- Preload Critical Resources -->
+    <link rel="preload" href="https://fonts.googleapis.com/css2?family=Noto+Sans+TC:wght@400;500;700;900&display=swap" as="style">
+    <link rel="preload" href="https://storage.googleapis.com/wpassets.junyiacademy.org/1/2025/11/均一首頁最新消息Hour-of-AI＿25Q3＿V1.jpg" as="image">
 
     <!-- Fonts -->
     <link rel="preconnect" href="https://fonts.googleapis.com">
@@ -389,7 +394,7 @@
                 <div class="stats-controls">
                     <div class="stats-meta">
                         <span id="statsCacheIndicator" class="stats-update-time">載入中...</span>
-                        <button id="statsRefreshBtn" class="stats-refresh-btn" onclick="refreshStatistics()" title="重新整理統計資料" aria-label="重新整理統計資料">
+                        <button id="statsRefreshBtn" class="stats-refresh-btn" title="重新整理統計資料" aria-label="重新整理統計資料">
                             <span class="material-icons">refresh</span>
                         </button>
                     </div>
@@ -418,7 +423,7 @@
 
             <!-- Pillar Cards -->
             <div class="pillars-grid">
-                <div class="pillar-card fade-in" data-pillar="ask" onclick="togglePillarDetail('ask')">
+                <div class="pillar-card fade-in" data-pillar="ask">
                     <div class="pillar-icon">問 AI</div>
                     <div class="pillar-english">Engage</div>
                     <div class="pillar-subtitle">精準提問與人機協作</div>
@@ -428,7 +433,7 @@
                         <span>查看詳細</span>
                     </button>
                 </div>
-                <div class="pillar-card fade-in" data-pillar="use" onclick="togglePillarDetail('use')">
+                <div class="pillar-card fade-in" data-pillar="use">
                     <div class="pillar-icon">用 AI</div>
                     <div class="pillar-english">Create</div>
                     <div class="pillar-subtitle">工具掌握與效率提升</div>
@@ -438,7 +443,7 @@
                         <span>查看詳細</span>
                     </button>
                 </div>
-                <div class="pillar-card fade-in" data-pillar="manage" onclick="togglePillarDetail('manage')">
+                <div class="pillar-card fade-in" data-pillar="manage">
                     <div class="pillar-icon">管 AI</div>
                     <div class="pillar-english">Manage</div>
                     <div class="pillar-subtitle">批判思考與倫理素養</div>
@@ -448,7 +453,7 @@
                         <span>查看詳細</span>
                     </button>
                 </div>
-                <div class="pillar-card fade-in" data-pillar="build" onclick="togglePillarDetail('build')">
+                <div class="pillar-card fade-in" data-pillar="build">
                     <div class="pillar-icon">造 AI</div>
                     <div class="pillar-english">Design</div>
                     <div class="pillar-subtitle">原理理解與創新應用</div>

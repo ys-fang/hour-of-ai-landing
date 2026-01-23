@@ -1,0 +1,20 @@
+{
+  "name": "均一 x Hour of AI",
+  "short_name": "Hour of AI",
+  "description": "均一平台教育基金會邀請您一起推動 AI 素養教育，讓學習力再進化",
+  "start_url": "/",
+  "display": "standalone",
+  "background_color": "#ffffff",
+  "theme_color": "#003D82",
+  "orientation": "portrait-primary",
+  "icons": [
+    {
+      "src": "/favicon.ico",
+      "sizes": "48x48 32x32",
+      "type": "image/x-icon"
+    }
+  ],
+  "categories": ["education"],
+  "lang": "zh-TW",
+  "dir": "ltr"
+}

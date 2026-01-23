@@ -322,6 +322,21 @@ hour-of-ai-landing/
 | `npm run dev` | 啟動開發伺服器（localhost:5000） |
 | `npm run build` | 建置 production 版本至 dist/ |
 | `npm run preview` | 預覽建置結果 |
+| `npm run lint` | 檢查程式碼品質 |
+| `npm run lint:fix` | 自動修復 lint 問題 |
+| `npm run format` | 格式化程式碼 |
+
+### 10.4 PWA 支援
+
+| 檔案 | 說明 |
+|------|------|
+| manifest.json | PWA 配置（名稱、圖示、主題色） |
+| sw.js | Service Worker（離線快取） |
+
+PWA 功能：
+- 可安裝到手機桌面
+- 基本離線支援（Network First 策略）
+- 主題色與啟動畫面
 
 ---
 
@@ -334,11 +349,17 @@ hour-of-ai-landing/
 - [x] ~~模組化重構（Vite 建置、CSS/JS 分離）~~ ✅ 已完成 (2026-01-23)
 - [x] ~~JSON-LD 結構化資料~~ ✅ 已完成 (2026-01-23)
 - [x] ~~llms.txt（AI 爬蟲優化）~~ ✅ 已完成 (2026-01-23)
+- [x] ~~PWA 支援（manifest.json + Service Worker）~~ ✅ 已完成 (2026-01-23)
+- [x] ~~404 錯誤頁面~~ ✅ 已完成 (2026-01-23)
+- [x] ~~移除 inline onclick（改用 addEventListener）~~ ✅ 已完成 (2026-01-23)
+- [x] ~~ESLint + Prettier 設定~~ ✅ 已完成 (2026-01-23)
+- [x] ~~安全性 Headers（Referrer-Policy, Permissions-Policy）~~ ✅ 已完成 (2026-01-23)
+- [x] ~~Preload 關鍵資源~~ ✅ 已完成 (2026-01-23)
 - [ ] 設定 hoa.junyiacademy.org 網域指向 Firebase Hosting（程式碼已準備好，等待 DNS 設定）
 - [ ] 考慮是否需要 Staging 環境（介於 Preview 和 Production 之間）
-- [ ] 加入 Apple Touch Icon
-- [ ] PWA 支援
+- [ ] 正式 Apple Touch Icon（需 180x180 PNG）
 - [ ] HTML 元件進一步拆分（header, footer, sections）
+- [ ] 圖片 WebP 格式優化
 
 ---
 
@@ -354,4 +375,4 @@ hour-of-ai-landing/
 ---
 
 *建立日期：2026-01-23*
-*最後更新：2026-01-23 - 模組化重構（Vite 建置、CSS/JS 分離、JSON-LD、llms.txt）*
+*最後更新：2026-01-23 - 全面優化（PWA、404頁面、ESLint/Prettier、安全性Headers）*

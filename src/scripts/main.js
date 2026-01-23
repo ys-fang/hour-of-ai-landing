@@ -2374,6 +2374,20 @@ Check Google Sheets to see how many entries were actually created.
             // Setup pillar modal event listeners
             setupPillarModal();
 
+            // Setup pillar card click listeners
+            document.querySelectorAll('.pillar-card[data-pillar]').forEach(card => {
+                card.addEventListener('click', () => {
+                    const pillarId = card.getAttribute('data-pillar');
+                    togglePillarDetail(pillarId);
+                });
+            });
+
+            // Setup stats refresh button
+            const statsRefreshBtn = document.getElementById('statsRefreshBtn');
+            if (statsRefreshBtn) {
+                statsRefreshBtn.addEventListener('click', refreshStatistics);
+            }
+
             // Trigger fade-in for elements already in viewport
             document.querySelectorAll('.fade-in').forEach(el => {
                 const rect = el.getBoundingClientRect();
@@ -2381,6 +2395,13 @@ Check Google Sheets to see how many entries were actually created.
                     el.classList.add('visible');
                 }
             });
+
+            // Register Service Worker for PWA
+            if ('serviceWorker' in navigator) {
+                navigator.serviceWorker.register('/sw.js')
+                    .then(reg => console.log('Service Worker registered'))
+                    .catch(err => console.log('Service Worker registration failed:', err));
+            }
         });
 
         // ===== Google Apps Script Setup Instructions =====
@@ -2440,7 +2461,3 @@ Check Google Sheets to see how many entries were actually created.
         10. Test the form!
         */
 
-        // ===== Expose functions to global scope for inline onclick handlers =====
-        window.toggleCard = toggleCard;
-        window.togglePillarDetail = togglePillarDetail;
-        window.refreshStatistics = refreshStatistics;
