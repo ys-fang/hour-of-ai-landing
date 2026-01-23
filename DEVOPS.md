@@ -105,7 +105,9 @@ Google Apps Script 的 `validateOrigin` 函數需要設定允許的來源：
 const allowedOrigins = [
   'https://www.junyiacademy.org',
   'https://junyiacademy.org',
-  // Firebase Hosting
+  // 正式網域
+  'https://hoa.junyiacademy.org',
+  // Firebase Hosting (測試/開發)
   'https://hour-of-ai-landing-junyi.web.app',
   'https://hour-of-ai-landing-junyi.firebaseapp.com'
 ];
@@ -242,7 +244,7 @@ firebase deploy --only hosting
 ## 9. 未來規劃
 
 - [x] ~~設定 GitHub Action，main branch merge 後自動部署到 Firebase~~ ✅ 已完成 (2026-01-23)
-- [ ] 設定 hoa.junyiacademy.org 網域指向 Firebase Hosting
+- [ ] 設定 hoa.junyiacademy.org 網域指向 Firebase Hosting（程式碼已準備好，等待 DNS 設定）
 - [ ] 考慮是否需要 Staging 環境（介於 Preview 和 Production 之間）
 - [ ] 加入 OG meta tags（社群媒體分享預覽）
 - [ ] 加入 Apple Touch Icon
@@ -262,4 +264,4 @@ firebase deploy --only hosting
 ---
 
 *建立日期：2026-01-23*
-*最後更新：2026-01-23 - 新增 GitHub Actions 自動部署*
+*最後更新：2026-01-23 - 新增 hoa.junyiacademy.org 支援*
