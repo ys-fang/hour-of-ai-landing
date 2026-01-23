@@ -241,18 +241,48 @@ firebase deploy --only hosting
 
 ---
 
-## 9. 未來規劃
+## 9. SEO 與社群分享
+
+### 9.1 Open Graph / Twitter Card
+
+已設定社群媒體分享預覽：
+- Open Graph tags（Facebook、LINE 等）
+- Twitter Card（summary_large_image）
+- 預覽圖片：均一首頁最新消息Hour-of-AI＿25Q3＿V1.jpg
+
+**驗證工具**:
+- [Facebook Sharing Debugger](https://developers.facebook.com/tools/debug/)
+- [Twitter Card Validator](https://cards-dev.twitter.com/validator)
+
+### 9.2 SEO 檔案
+
+| 檔案 | 路徑 | 用途 |
+|------|------|------|
+| sitemap.xml | /sitemap.xml | 網站地圖，協助搜尋引擎索引 |
+| robots.txt | /robots.txt | 搜尋引擎爬蟲指引 |
+
+### 9.3 效能優化
+
+- **圖片 Lazy Loading**: 非首屏圖片使用 `loading="lazy"`
+- **Theme Color**: 設定為 `#003D82`（均一深藍色）
+- **Preconnect**: 已對 Google Fonts 等外部資源設定 preconnect
+
+---
+
+## 10. 未來規劃
 
 - [x] ~~設定 GitHub Action，main branch merge 後自動部署到 Firebase~~ ✅ 已完成 (2026-01-23)
+- [x] ~~加入 OG meta tags（社群媒體分享預覽）~~ ✅ 已完成 (2026-01-23)
+- [x] ~~加入 sitemap.xml 和 robots.txt~~ ✅ 已完成 (2026-01-23)
+- [x] ~~Lighthouse 優化（lazy loading、theme-color）~~ ✅ 已完成 (2026-01-23)
 - [ ] 設定 hoa.junyiacademy.org 網域指向 Firebase Hosting（程式碼已準備好，等待 DNS 設定）
 - [ ] 考慮是否需要 Staging 環境（介於 Preview 和 Production 之間）
-- [ ] 加入 OG meta tags（社群媒體分享預覽）
 - [ ] 加入 Apple Touch Icon
 - [ ] PWA 支援
 
 ---
 
-## 10. 文件維護指引
+## 11. 文件維護指引
 
 > **給 AI 助手的指引**: 當進行以下變更時，請同步更新此文件：
 > - 新增或修改部署環境
@@ -264,4 +294,4 @@ firebase deploy --only hosting
 ---
 
 *建立日期：2026-01-23*
-*最後更新：2026-01-23 - 新增 hoa.junyiacademy.org 支援*
+*最後更新：2026-01-23 - 新增 SEO 優化（OG tags, sitemap, robots.txt, lazy loading）*
