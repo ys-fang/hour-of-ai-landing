@@ -133,22 +133,34 @@ const allowedOrigins = [
                                                                        │
                                                                        ▼
 ┌──────────────┐     ┌──────────────┐     ┌──────────────┐     ┌──────────────┐
-│   完成！     │ ◀── │  firebase    │ ◀── │ Merge to     │ ◀── │  確認 OK？   │
-│              │     │   deploy     │     │    main      │     │              │
+│   完成！     │ ◀── │ GitHub Action │ ◀── │ Merge to     │ ◀── │  確認 OK？   │
+│              │     │  自動部署     │     │    main      │     │              │
 └──────────────┘     └──────────────┘     └──────────────┘     └──────────────┘
 ```
 
-### 5.2 部署指令
+### 5.2 自動部署（GitHub Actions）
+
+當 push 到 `main` branch 時，GitHub Actions 會自動部署到 Firebase Hosting。
+
+**Workflow 檔案**: `.github/workflows/firebase-deploy.yml`
+
+**相關設定**:
+- Service Account: `github-actions-deploy@hour-of-ai-landing-junyi.iam.gserviceaccount.com`
+- GitHub Secret: `FIREBASE_SERVICE_ACCOUNT`
+- 權限: Firebase Hosting Admin
+
+**查看部署狀態**: [GitHub Actions](https://github.com/ys-fang/hour-of-ai-landing/actions)
+
+### 5.3 手動部署（備用）
+
+如需手動部署，可使用：
 
 ```bash
 # 部署到 Firebase Production
 firebase deploy --only hosting
-
-# 僅部署特定檔案（如果有設定）
-firebase deploy --only hosting:hour-of-ai-landing-junyi
 ```
 
-### 5.3 Vercel Preview 注意事項
+### 5.4 Vercel Preview 注意事項
 
 - **自動產生**: 所有 repo collaborators 的 PR 都會自動產生 preview
 - **Fork PR**: 預設不會自動產生（安全考量）
@@ -229,9 +241,12 @@ firebase deploy --only hosting:hour-of-ai-landing-junyi
 
 ## 9. 未來規劃
 
-- [ ] 設定 GitHub Action，main branch merge 後自動部署到 Firebase
+- [x] ~~設定 GitHub Action，main branch merge 後自動部署到 Firebase~~ ✅ 已完成 (2026-01-23)
 - [ ] 設定 hoa.junyiacademy.org 網域指向 Firebase Hosting
 - [ ] 考慮是否需要 Staging 環境（介於 Preview 和 Production 之間）
+- [ ] 加入 OG meta tags（社群媒體分享預覽）
+- [ ] 加入 Apple Touch Icon
+- [ ] PWA 支援
 
 ---
 
@@ -247,4 +262,4 @@ firebase deploy --only hosting:hour-of-ai-landing-junyi
 ---
 
 *建立日期：2026-01-23*
-*最後更新：2026-01-23*
+*最後更新：2026-01-23 - 新增 GitHub Actions 自動部署*
