@@ -163,12 +163,41 @@ firebase deploy --only hosting:hour-of-ai-landing-junyi
 | **GitHub Repo** | https://github.com/ys-fang/hour-of-ai-landing |
 | **Firebase Console** | https://console.firebase.google.com/project/hour-of-ai-landing-junyi |
 | **Production URL** | https://hour-of-ai-landing-junyi.web.app |
+| **Google Analytics** | https://analytics.google.com/ （帳戶：jutor-a8ad8） |
 | **Google Apps Script** | （需從 Google Drive 存取） |
 | **Google Sheets** | （需從 Google Drive 存取） |
 
 ---
 
-## 7. 常見問題排除
+## 7. Analytics 追蹤
+
+### 7.1 Google Analytics 4 設定
+
+| 項目 | 值 |
+|------|-----|
+| **Measurement ID** | `G-Q3BND056JE` |
+| **Property 名稱** | Hour of AI Landing |
+| **資料串流** | Web - hoa.junyiacademy.org |
+
+### 7.2 追蹤事件
+
+目前已設定的自動追蹤事件：
+
+| 事件名稱 | 觸發時機 | 參數 |
+|----------|----------|------|
+| `page_view` | 頁面載入 | 自動 |
+| `form_submission` | 表單成功提交 | `event_category`, `event_label` |
+
+### 7.3 查看報表
+
+1. 前往 [Google Analytics](https://analytics.google.com/)
+2. 選擇帳戶 `jutor-a8ad8` → 資源 `Hour of AI Landing`
+3. 報表 → 即時：查看當前訪客
+4. 報表 → 參與 → 事件：查看表單提交等事件
+
+---
+
+## 8. 常見問題排除
 
 ### Q: 表單提交後 Google Sheets 沒有新資料？
 
@@ -189,9 +218,16 @@ firebase deploy --only hosting:hour-of-ai-landing-junyi
 1. 在 Google Apps Script 白名單加入 `*.vercel.app`（有安全風險）
 2. 或在 URL 加上 `?apiUrl=YOUR_SCRIPT_URL` 參數
 
+### Q: GA 沒有收到資料？
+
+1. 開啟 Browser Console，搜尋 `gtag` 相關錯誤
+2. 確認 Measurement ID 正確（`G-Q3BND056JE`）
+3. 使用 GA 即時報表確認是否有收到事件
+4. 注意：GA 報表有時會延遲數小時
+
 ---
 
-## 8. 未來規劃
+## 9. 未來規劃
 
 - [ ] 設定 GitHub Action，main branch merge 後自動部署到 Firebase
 - [ ] 設定 hoa.junyiacademy.org 網域指向 Firebase Hosting
@@ -199,7 +235,7 @@ firebase deploy --only hosting:hour-of-ai-landing-junyi
 
 ---
 
-## 9. 文件維護指引
+## 10. 文件維護指引
 
 > **給 AI 助手的指引**: 當進行以下變更時，請同步更新此文件：
 > - 新增或修改部署環境
