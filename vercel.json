@@ -1,10 +1,4 @@
 {
-  "rewrites": [
-    {
-      "source": "/",
-      "destination": "/src/hour-of-ai-2025.html"
-    }
-  ],
   "headers": [
     {
       "source": "/(.*)",
