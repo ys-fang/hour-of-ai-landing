@@ -10,6 +10,9 @@
     "lint": "eslint src/",
     "lint:fix": "eslint src/ --fix",
     "format": "prettier --write src/",
+    "test": "vitest run",
+    "test:watch": "vitest",
+    "test:coverage": "vitest run --coverage",
     "gas:push": "cd backend/gas && clasp push",
     "gas:pull": "cd backend/gas && clasp pull",
     "gas:deploy": "cd backend/gas && clasp push && clasp deploy",
@@ -17,11 +20,14 @@
     "gas:logs": "cd backend/gas && clasp tail-logs"
   },
   "devDependencies": {
+    "@vitest/coverage-v8": "^4.0.18",
     "eslint": "^9.39.2",
     "eslint-config-prettier": "^10.1.8",
     "eslint-plugin-prettier": "^5.5.5",
+    "jsdom": "^27.4.0",
     "prettier": "^3.8.1",
-    "vite": "^5.4.0"
+    "vite": "^5.4.0",
+    "vitest": "^4.0.18"
   },
   "keywords": [
     "hour-of-ai",
