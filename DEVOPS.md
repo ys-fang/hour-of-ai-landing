@@ -276,50 +276,57 @@ gh secret set CLASP_CREDENTIALS < ~/.clasprc.json
 
 ## 8. Taiwan Rank Tracker（排名追蹤器）
 
-獨立的 Google Apps Script，每日自動追蹤台灣在 Hour of AI 全球活動註冊中的排名，並發送通知至 Slack。
+**已整合到主 GAS 專案** (2026-01-29)
+
+每日自動追蹤台灣在 Hour of AI 全球活動註冊中的排名，並發送通知至 Slack。
 
 ### 8.1 架構
 
 ```
-Google Sheets (CSforAll 公開資料)
+CSforAll 公開 Google Sheets
     ↓ UrlFetchApp.fetch (CSV export)
-Taiwan Rank Tracker (GAS)
-    ↓ MailApp.sendEmail
-Slack Channel (via Email Integration)
+主 GAS 專案 (Code.js)
+    ↓ sendToSlack() via Webhook
+Slack Channel (#hour-of-ai)
 ```
 
 ### 8.2 配置
 
-| 項目 | 值 |
-|------|-----|
-| **平台** | Google Apps Script |
-| **GAS 專案 URL** | （需從 Google Drive 存取，TODO: 補上連結） |
-| **觸發方式** | Time-driven trigger（每日執行） |
-| **資料來源** | CSforAll Hour of AI 全球統計 Google Sheets |
-| **通知目標** | `2026sap2_ai-lit-...@junyiacademy.slack.com` |
+相關設定已整合到 `CONFIG` 物件：
+
+```javascript
+// backend/gas/Code.js
+CONFIG = {
+  // ...其他設定...
+  ENABLE_RANK_TRACKER: true,
+  RANK_TRACKER_DATA_URL: 'https://docs.google.com/spreadsheets/d/1QDTmNNP3i6Nfhg6y7qp5V_cSL6ciNsMyF3bEjyKXTsY/export?format=csv',
+  RANK_TRACKER_TARGET_COUNTRY: 'Taiwan',
+}
+```
 
 ### 8.3 功能
 
 - 抓取各國 Hour of AI 活動註冊數量
 - 計算台灣排名、百分位、前後名次國家
-- 發送格式化純文字 email 至 Slack channel
-- （可選）將歷史資料記錄到 Google Sheets
+- 發送格式化通知到 Slack（使用 Webhook）
 
-### 8.4 專案內相關檔案
+### 8.4 觸發器設定
 
-| 檔案 | 說明 |
-|------|------|
-| `backend/taiwan-rank-tracker.js` | 主程式（GAS 腳本） |
-| `docs/TAIWAN_RANK_INTEGRATION_GUIDE.md` | 整合指南與 API 使用範例 |
+需要在 GAS 編輯器中設定 Time-driven trigger：
+1. 開啟 GAS 編輯器：`npm run gas:open`
+2. 點選「觸發器」圖示（時鐘）
+3. 新增觸發器：
+   - 函數：`trackTaiwanRank`
+   - 事件來源：時間驅動
+   - 類型：每日定時器
+   - 時間：選擇適合的時段
 
-### 8.5 部署與更新
+### 8.5 測試
 
-1. 修改 `backend/taiwan-rank-tracker.js`
-2. 複製內容到 Google Apps Script 編輯器
-3. Deploy → New deployment（或 Manage deployments → 更新版本）
-4. 確認 Time-driven trigger 仍在運作
-
-> **注意**: 此腳本與 Landing Page 的 GAS backend 是**獨立的專案**，各自有自己的 deployment。
+```bash
+# 在 GAS 編輯器中執行
+testTaiwanRankTracker()
+```
 
 ---
 
