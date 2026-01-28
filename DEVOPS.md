@@ -191,11 +191,94 @@ firebase deploy --only hosting
 
 ---
 
-## 7. Taiwan Rank Tracker（排名追蹤器）
+## 7. Google Apps Script CLI 部署 (clasp)
+
+### 7.1 概述
+
+使用 [clasp](https://github.com/google/clasp) 透過命令列管理和部署 Google Apps Script，取代手動在 GAS 編輯器中複製貼上程式碼。
+
+### 7.2 目錄結構
+
+```
+backend/
+├── gas/                              # clasp 管理的 GAS 專案
+│   ├── .clasp.json                   # clasp 設定（Script ID）
+│   ├── appsscript.json               # GAS manifest
+│   └── Code.js                       # 主要程式碼
+├── google-apps-script-stats-api-updated.js  # 備份/參考
+└── taiwan-rank-tracker.js            # 獨立的排名追蹤器
+```
+
+### 7.3 初始設定
+
+```bash
+# 1. 安裝 clasp（全域）
+npm install -g @google/clasp
+
+# 2. 登入 Google 帳號（需要瀏覽器授權）
+clasp login
+
+# 3. 確認登入成功
+clasp login --status
+```
+
+### 7.4 使用方式
+
+| 指令 | 說明 |
+|------|------|
+| `npm run gas:push` | 將本地程式碼推送到 GAS |
+| `npm run gas:pull` | 從 GAS 拉取最新程式碼 |
+| `npm run gas:deploy` | 推送並建立新版本部署 |
+| `npm run gas:open` | 在瀏覽器開啟 GAS 編輯器 |
+| `npm run gas:logs` | 查看 GAS 執行日誌 |
+
+### 7.5 開發流程
+
+```
+1. 修改 backend/gas/Code.js
+2. 執行 npm run gas:push（推送到 GAS）
+3. 在 GAS 編輯器中測試（npm run gas:open）
+4. 確認無誤後部署：npm run gas:deploy
+5. 提交變更到 Git
+```
+
+### 7.6 GitHub Actions 自動部署
+
+當 `backend/gas/**` 檔案變更並 push 到 `main` branch 時，會自動觸發 GAS 部署。
+
+**Workflow 檔案**: `.github/workflows/gas-deploy.yml`
+
+**相關設定**:
+- GitHub Secret: `CLASP_CREDENTIALS`（clasp 認證 JSON）
+- 觸發條件: `backend/gas/**` 檔案變更
+- 也支援手動觸發（workflow_dispatch）
+
+**查看部署狀態**: [GitHub Actions](https://github.com/ys-fang/hour-of-ai-landing/actions)
+
+**更新認證（Token 過期時）**:
+```bash
+# 1. 重新登入
+clasp login
+
+# 2. 更新 GitHub Secret
+gh secret set CLASP_CREDENTIALS < ~/.clasprc.json
+```
+
+### 7.7 注意事項
+
+- `.clasprc.json`（認證檔案）已加入 `.gitignore`，不會被提交
+- 每個開發者需要自己執行 `clasp login` 取得認證
+- 部署新版本時，Web App URL 不會改變（除非建立新的 deployment）
+- 如果要更新 Web App URL，需要在 GAS 編輯器中「Deploy > Manage deployments」
+- GitHub Actions 使用的是 `CLASP_CREDENTIALS` secret 中的認證
+
+---
+
+## 8. Taiwan Rank Tracker（排名追蹤器）
 
 獨立的 Google Apps Script，每日自動追蹤台灣在 Hour of AI 全球活動註冊中的排名，並發送通知至 Slack。
 
-### 7.1 架構
+### 8.1 架構
 
 ```
 Google Sheets (CSforAll 公開資料)
@@ -205,7 +288,7 @@ Taiwan Rank Tracker (GAS)
 Slack Channel (via Email Integration)
 ```
 
-### 7.2 配置
+### 8.2 配置
 
 | 項目 | 值 |
 |------|-----|
@@ -215,21 +298,21 @@ Slack Channel (via Email Integration)
 | **資料來源** | CSforAll Hour of AI 全球統計 Google Sheets |
 | **通知目標** | `2026sap2_ai-lit-...@junyiacademy.slack.com` |
 
-### 7.3 功能
+### 8.3 功能
 
 - 抓取各國 Hour of AI 活動註冊數量
 - 計算台灣排名、百分位、前後名次國家
 - 發送格式化純文字 email 至 Slack channel
 - （可選）將歷史資料記錄到 Google Sheets
 
-### 7.4 專案內相關檔案
+### 8.4 專案內相關檔案
 
 | 檔案 | 說明 |
 |------|------|
 | `backend/taiwan-rank-tracker.js` | 主程式（GAS 腳本） |
 | `docs/TAIWAN_RANK_INTEGRATION_GUIDE.md` | 整合指南與 API 使用範例 |
 
-### 7.5 部署與更新
+### 8.5 部署與更新
 
 1. 修改 `backend/taiwan-rank-tracker.js`
 2. 複製內容到 Google Apps Script 編輯器
@@ -240,9 +323,9 @@ Slack Channel (via Email Integration)
 
 ---
 
-## 8. Analytics 追蹤
+## 9. Analytics 追蹤
 
-### 8.1 Google Analytics 4 設定
+### 9.1 Google Analytics 4 設定
 
 | 項目 | 值 |
 |------|-----|
@@ -250,7 +333,7 @@ Slack Channel (via Email Integration)
 | **Property 名稱** | Hour of AI Landing |
 | **資料串流** | Web - hoa.junyiacademy.org |
 
-### 8.2 追蹤事件
+### 9.2 追蹤事件
 
 目前已設定的自動追蹤事件：
 
@@ -259,7 +342,7 @@ Slack Channel (via Email Integration)
 | `page_view` | 頁面載入 | 自動 |
 | `form_submission` | 表單成功提交 | `event_category`, `event_label` |
 
-### 8.3 查看報表
+### 9.3 查看報表
 
 1. 前往 [Google Analytics](https://analytics.google.com/)
 2. 選擇帳戶 `jutor-a8ad8` → 資源 `Hour of AI Landing`
@@ -268,7 +351,7 @@ Slack Channel (via Email Integration)
 
 ---
 
-## 9. 常見問題排除
+## 10. 常見問題排除
 
 ### Q: 表單提交後 Google Sheets 沒有新資料？
 
@@ -298,9 +381,9 @@ Slack Channel (via Email Integration)
 
 ---
 
-## 10. SEO 與社群分享
+## 11. SEO 與社群分享
 
-### 10.1 Open Graph / Twitter Card
+### 11.1 Open Graph / Twitter Card
 
 已設定社群媒體分享預覽：
 - Open Graph tags（Facebook、LINE 等）
@@ -311,20 +394,20 @@ Slack Channel (via Email Integration)
 - [Facebook Sharing Debugger](https://developers.facebook.com/tools/debug/)
 - [Twitter Card Validator](https://cards-dev.twitter.com/validator)
 
-### 10.2 SEO 檔案
+### 11.2 SEO 檔案
 
 | 檔案 | 路徑 | 用途 |
 |------|------|------|
 | sitemap.xml | /sitemap.xml | 網站地圖，協助搜尋引擎索引 |
 | robots.txt | /robots.txt | 搜尋引擎爬蟲指引 |
 
-### 10.3 效能優化
+### 11.3 效能優化
 
 - **圖片 Lazy Loading**: 非首屏圖片使用 `loading="lazy"`
 - **Theme Color**: 設定為 `#003D82`（均一深藍色）
 - **Preconnect**: 已對 Google Fonts 等外部資源設定 preconnect
 
-### 10.4 AI 爬蟲優化
+### 11.4 AI 爬蟲優化
 
 | 檔案 | 路徑 | 用途 |
 |------|------|------|
@@ -333,9 +416,9 @@ Slack Channel (via Email Integration)
 
 ---
 
-## 11. 專案結構
+## 12. 專案結構
 
-### 11.1 目錄架構
+### 12.1 目錄架構
 
 ```
 hour-of-ai-landing/
@@ -357,14 +440,14 @@ hour-of-ai-landing/
 └── .github/workflows/      # GitHub Actions
 ```
 
-### 11.2 建置工具
+### 12.2 建置工具
 
 | 工具 | 版本 | 用途 |
 |------|------|------|
 | Vite | ^5.4.0 | 現代化前端建置工具 |
 | Node.js | 20.x | 執行環境 |
 
-### 11.3 npm 指令
+### 12.3 npm 指令
 
 | 指令 | 說明 |
 |------|------|
@@ -374,8 +457,10 @@ hour-of-ai-landing/
 | `npm run lint` | 檢查程式碼品質 |
 | `npm run lint:fix` | 自動修復 lint 問題 |
 | `npm run format` | 格式化程式碼 |
+| `npm run gas:push` | 推送 GAS 程式碼 |
+| `npm run gas:deploy` | 部署 GAS 新版本 |
 
-### 11.4 PWA 支援
+### 12.4 PWA 支援
 
 | 檔案 | 說明 |
 |------|------|
@@ -389,7 +474,7 @@ PWA 功能：
 
 ---
 
-## 12. 未來規劃
+## 13. 未來規劃
 
 - [x] ~~設定 GitHub Action，main branch merge 後自動部署到 Firebase~~ ✅ 已完成 (2026-01-23)
 - [x] ~~加入 OG meta tags（社群媒體分享預覽）~~ ✅ 已完成 (2026-01-23)
@@ -405,6 +490,9 @@ PWA 功能：
 - [x] ~~安全性 Headers（Referrer-Policy, Permissions-Policy）~~ ✅ 已完成 (2026-01-23)
 - [x] ~~Preload 關鍵資源~~ ✅ 已完成 (2026-01-23)
 - [x] ~~設定 hoa.junyiacademy.org 網域指向 Firebase Hosting~~ ✅ 已完成 (DNS CNAME → hour-of-ai-landing-junyi.web.app)
+- [x] ~~clasp 設定（GAS CLI 部署）~~ ✅ 已完成 (2026-01-29)
+- [x] ~~GAS 自動部署 GitHub Actions（Phase 1）~~ ✅ 已完成 (2026-01-29)
+- [ ] Cloud Functions 處理唯讀操作（Phase 2）
 - [ ] 考慮是否需要 Staging 環境（介於 Preview 和 Production 之間）
 - [ ] 正式 Apple Touch Icon（需 180x180 PNG）
 - [ ] HTML 元件進一步拆分（header, footer, sections）
@@ -412,7 +500,7 @@ PWA 功能：
 
 ---
 
-## 13. 文件維護指引
+## 14. 文件維護指引
 
 > **給 AI 助手的指引**: 當進行以下變更時，請同步更新此文件：
 > - 新增或修改部署環境
@@ -424,4 +512,4 @@ PWA 功能：
 ---
 
 *建立日期：2026-01-23*
-*最後更新：2026-01-23 - 全面優化（PWA、404頁面、ESLint/Prettier、安全性Headers）*
+*最後更新：2026-01-29 - 新增 clasp 設定（GAS CLI 部署）*

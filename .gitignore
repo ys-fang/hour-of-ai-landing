@@ -56,3 +56,7 @@ dist/
 
 # Firebase cache
 .firebase/
+
+# Clasp (Google Apps Script CLI)
+.clasprc.json
+**/.clasprc.json

@@ -9,7 +9,12 @@
     "preview": "vite preview",
     "lint": "eslint src/",
     "lint:fix": "eslint src/ --fix",
-    "format": "prettier --write src/"
+    "format": "prettier --write src/",
+    "gas:push": "cd backend/gas && clasp push",
+    "gas:pull": "cd backend/gas && clasp pull",
+    "gas:deploy": "cd backend/gas && clasp push && clasp deploy",
+    "gas:open": "cd backend/gas && clasp open-script",
+    "gas:logs": "cd backend/gas && clasp tail-logs"
   },
   "devDependencies": {
     "eslint": "^9.39.2",

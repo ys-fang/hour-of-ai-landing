@@ -1,0 +1,43 @@
+# Google Apps Script 自動部署
+# 當 backend/gas/ 檔案變更並 push 到 main branch 時自動部署
+
+name: Deploy Google Apps Script
+
+on:
+  push:
+    branches:
+      - main
+    paths:
+      - 'backend/gas/**'
+
+  # 允許手動觸發
+  workflow_dispatch:
+
+jobs:
+  deploy-gas:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: '20'
+
+      - name: Install clasp
+        run: npm install -g @google/clasp
+
+      - name: Create clasp credentials
+        run: |
+          echo '${{ secrets.CLASP_CREDENTIALS }}' > ~/.clasprc.json
+
+      - name: Push to Google Apps Script
+        working-directory: backend/gas
+        run: clasp push --force
+
+      - name: Deployment complete
+        run: |
+          echo "✅ GAS deployment complete!"
+          echo "Script ID: 1AOpG14WSXbD7sbVRAz1iIyttFVLXlIcnQqf467OYZaqKpsWJJmkltRl_"
