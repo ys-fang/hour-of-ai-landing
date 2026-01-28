@@ -264,7 +264,51 @@ clasp login
 gh secret set CLASP_CREDENTIALS < ~/.clasprc.json
 ```
 
-### 7.7 注意事項
+### 7.7 clasp run（CLI 執行 GAS 函數）
+
+`clasp run` 允許從命令列直接執行 GAS 函數，無需開啟瀏覽器。
+
+#### 前置需求
+
+1. **GCP 專案已連結到 Apps Script**
+   - GCP Project Number: `293501829424`
+   - 在 GAS 編輯器 → 專案設定 → 變更 Google Cloud Platform 專案
+
+2. **OAuth 同意畫面已設定**
+   - 在 GCP Console → Google Auth Platform → 總覽
+   - 類型：內部（Internal）
+
+3. **Desktop OAuth 憑證**
+   - 在 GCP Console → Google Auth Platform → 用戶端 → 建立用戶端
+   - 選擇「電腦版應用程式」
+   - 下載 JSON 並存為 `backend/gas/creds.json`
+
+4. **使用憑證登入**
+   ```bash
+   cd backend/gas
+   clasp login --creds creds.json
+   ```
+
+#### 使用方式
+
+```bash
+# 執行指定函數
+clasp run testTaiwanRankTracker
+clasp run trackTaiwanRank
+clasp run sendWeeklyReport
+
+# 執行帶參數的函數（JSON 格式）
+clasp run myFunction --params '[1, "hello", true]'
+```
+
+#### 注意事項
+
+- `creds.json` 已加入 `.gitignore`，不會被提交（包含 OAuth 密鑰）
+- 每個開發者需要下載自己的憑證檔案
+- 執行結果為 "No response." 表示函數成功執行但沒有回傳值
+- 可在 GAS 編輯器的「執行項目」頁面查看執行記錄
+
+### 7.8 注意事項
 
 - `.clasprc.json`（認證檔案）已加入 `.gitignore`，不會被提交
 - 每個開發者需要自己執行 `clasp login` 取得認證
@@ -324,9 +368,22 @@ CONFIG = {
 ### 8.5 測試
 
 ```bash
-# 在 GAS 編輯器中執行
-testTaiwanRankTracker()
+# 方法 1: 透過 CLI 執行（推薦）
+clasp run testTaiwanRankTracker
+
+# 方法 2: 在 GAS 編輯器中執行
+# 開啟編輯器後手動執行 testTaiwanRankTracker()
+npm run gas:open
 ```
+
+### 8.6 觸發器狀態
+
+目前已設定的觸發器：
+
+| 函數 | 類型 | 排程 | 說明 |
+|------|------|------|------|
+| `sendWeeklyReport` | 時間驅動 | 每週 | 週報通知 |
+| `trackTaiwanRank` | 時間驅動 | 每日 8-9 AM | 排名追蹤 |
 
 ---
 
@@ -499,6 +556,7 @@ PWA 功能：
 - [x] ~~設定 hoa.junyiacademy.org 網域指向 Firebase Hosting~~ ✅ 已完成 (DNS CNAME → hour-of-ai-landing-junyi.web.app)
 - [x] ~~clasp 設定（GAS CLI 部署）~~ ✅ 已完成 (2026-01-29)
 - [x] ~~GAS 自動部署 GitHub Actions（Phase 1）~~ ✅ 已完成 (2026-01-29)
+- [x] ~~clasp run CLI 執行（GCP 專案連結 + OAuth 憑證）~~ ✅ 已完成 (2026-01-29)
 - [ ] Cloud Functions 處理唯讀操作（Phase 2）
 - [ ] 考慮是否需要 Staging 環境（介於 Preview 和 Production 之間）
 - [ ] 正式 Apple Touch Icon（需 180x180 PNG）
@@ -519,4 +577,4 @@ PWA 功能：
 ---
 
 *建立日期：2026-01-23*
-*最後更新：2026-01-29 - 新增 clasp 設定（GAS CLI 部署）*
+*最後更新：2026-01-29 - 新增 clasp run CLI 執行設定*
