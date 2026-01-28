@@ -60,3 +60,6 @@ dist/
 # Clasp (Google Apps Script CLI)
 .clasprc.json
 **/.clasprc.json
+
+# GAS OAuth credentials
+backend/gas/creds.json
