@@ -14,8 +14,8 @@
                                 │
                                 ▼
 ┌─────────────────────────────────────────────────────────────────┐
-│   Production: hoa.junyiacademy.org (未來)                       │
-│   目前: hour-of-ai-landing-junyi.web.app                        │
+│   Production: hoa.junyiacademy.org                              │
+│   Firebase 預設: hour-of-ai-landing-junyi.web.app               │
 │   ─────────────────────────────────────────                     │
 │   Firebase Hosting                                              │
 │   - 靜態檔案託管                                                 │
@@ -52,8 +52,8 @@
 | 項目 | 值 |
 |------|-----|
 | **Hosting** | Firebase Hosting |
-| **URL（目前）** | https://hour-of-ai-landing-junyi.web.app |
-| **URL（未來）** | https://hoa.junyiacademy.org |
+| **URL（正式）** | https://hoa.junyiacademy.org |
+| **URL（Firebase 預設）** | https://hour-of-ai-landing-junyi.web.app |
 | **Branch** | `main` |
 | **部署方式** | 手動 `firebase deploy --only hosting` |
 
@@ -191,9 +191,58 @@ firebase deploy --only hosting
 
 ---
 
-## 7. Analytics 追蹤
+## 7. Taiwan Rank Tracker（排名追蹤器）
 
-### 7.1 Google Analytics 4 設定
+獨立的 Google Apps Script，每日自動追蹤台灣在 Hour of AI 全球活動註冊中的排名，並發送通知至 Slack。
+
+### 7.1 架構
+
+```
+Google Sheets (CSforAll 公開資料)
+    ↓ UrlFetchApp.fetch (CSV export)
+Taiwan Rank Tracker (GAS)
+    ↓ MailApp.sendEmail
+Slack Channel (via Email Integration)
+```
+
+### 7.2 配置
+
+| 項目 | 值 |
+|------|-----|
+| **平台** | Google Apps Script |
+| **GAS 專案 URL** | （需從 Google Drive 存取，TODO: 補上連結） |
+| **觸發方式** | Time-driven trigger（每日執行） |
+| **資料來源** | CSforAll Hour of AI 全球統計 Google Sheets |
+| **通知目標** | `2026sap2_ai-lit-...@junyiacademy.slack.com` |
+
+### 7.3 功能
+
+- 抓取各國 Hour of AI 活動註冊數量
+- 計算台灣排名、百分位、前後名次國家
+- 發送格式化純文字 email 至 Slack channel
+- （可選）將歷史資料記錄到 Google Sheets
+
+### 7.4 專案內相關檔案
+
+| 檔案 | 說明 |
+|------|------|
+| `backend/taiwan-rank-tracker.js` | 主程式（GAS 腳本） |
+| `docs/TAIWAN_RANK_INTEGRATION_GUIDE.md` | 整合指南與 API 使用範例 |
+
+### 7.5 部署與更新
+
+1. 修改 `backend/taiwan-rank-tracker.js`
+2. 複製內容到 Google Apps Script 編輯器
+3. Deploy → New deployment（或 Manage deployments → 更新版本）
+4. 確認 Time-driven trigger 仍在運作
+
+> **注意**: 此腳本與 Landing Page 的 GAS backend 是**獨立的專案**，各自有自己的 deployment。
+
+---
+
+## 8. Analytics 追蹤
+
+### 8.1 Google Analytics 4 設定
 
 | 項目 | 值 |
 |------|-----|
@@ -201,7 +250,7 @@ firebase deploy --only hosting
 | **Property 名稱** | Hour of AI Landing |
 | **資料串流** | Web - hoa.junyiacademy.org |
 
-### 7.2 追蹤事件
+### 8.2 追蹤事件
 
 目前已設定的自動追蹤事件：
 
@@ -210,7 +259,7 @@ firebase deploy --only hosting
 | `page_view` | 頁面載入 | 自動 |
 | `form_submission` | 表單成功提交 | `event_category`, `event_label` |
 
-### 7.3 查看報表
+### 8.3 查看報表
 
 1. 前往 [Google Analytics](https://analytics.google.com/)
 2. 選擇帳戶 `jutor-a8ad8` → 資源 `Hour of AI Landing`
@@ -219,7 +268,7 @@ firebase deploy --only hosting
 
 ---
 
-## 8. 常見問題排除
+## 9. 常見問題排除
 
 ### Q: 表單提交後 Google Sheets 沒有新資料？
 
@@ -249,9 +298,9 @@ firebase deploy --only hosting
 
 ---
 
-## 9. SEO 與社群分享
+## 10. SEO 與社群分享
 
-### 9.1 Open Graph / Twitter Card
+### 10.1 Open Graph / Twitter Card
 
 已設定社群媒體分享預覽：
 - Open Graph tags（Facebook、LINE 等）
@@ -262,20 +311,20 @@ firebase deploy --only hosting
 - [Facebook Sharing Debugger](https://developers.facebook.com/tools/debug/)
 - [Twitter Card Validator](https://cards-dev.twitter.com/validator)
 
-### 9.2 SEO 檔案
+### 10.2 SEO 檔案
 
 | 檔案 | 路徑 | 用途 |
 |------|------|------|
 | sitemap.xml | /sitemap.xml | 網站地圖，協助搜尋引擎索引 |
 | robots.txt | /robots.txt | 搜尋引擎爬蟲指引 |
 
-### 9.3 效能優化
+### 10.3 效能優化
 
 - **圖片 Lazy Loading**: 非首屏圖片使用 `loading="lazy"`
 - **Theme Color**: 設定為 `#003D82`（均一深藍色）
 - **Preconnect**: 已對 Google Fonts 等外部資源設定 preconnect
 
-### 9.4 AI 爬蟲優化
+### 10.4 AI 爬蟲優化
 
 | 檔案 | 路徑 | 用途 |
 |------|------|------|
@@ -284,9 +333,9 @@ firebase deploy --only hosting
 
 ---
 
-## 10. 專案結構
+## 11. 專案結構
 
-### 10.1 目錄架構
+### 11.1 目錄架構
 
 ```
 hour-of-ai-landing/
@@ -308,14 +357,14 @@ hour-of-ai-landing/
 └── .github/workflows/      # GitHub Actions
 ```
 
-### 10.2 建置工具
+### 11.2 建置工具
 
 | 工具 | 版本 | 用途 |
 |------|------|------|
 | Vite | ^5.4.0 | 現代化前端建置工具 |
 | Node.js | 20.x | 執行環境 |
 
-### 10.3 npm 指令
+### 11.3 npm 指令
 
 | 指令 | 說明 |
 |------|------|
@@ -326,7 +375,7 @@ hour-of-ai-landing/
 | `npm run lint:fix` | 自動修復 lint 問題 |
 | `npm run format` | 格式化程式碼 |
 
-### 10.4 PWA 支援
+### 11.4 PWA 支援
 
 | 檔案 | 說明 |
 |------|------|
@@ -340,7 +389,7 @@ PWA 功能：
 
 ---
 
-## 11. 未來規劃
+## 12. 未來規劃
 
 - [x] ~~設定 GitHub Action，main branch merge 後自動部署到 Firebase~~ ✅ 已完成 (2026-01-23)
 - [x] ~~加入 OG meta tags（社群媒體分享預覽）~~ ✅ 已完成 (2026-01-23)
@@ -355,7 +404,7 @@ PWA 功能：
 - [x] ~~ESLint + Prettier 設定~~ ✅ 已完成 (2026-01-23)
 - [x] ~~安全性 Headers（Referrer-Policy, Permissions-Policy）~~ ✅ 已完成 (2026-01-23)
 - [x] ~~Preload 關鍵資源~~ ✅ 已完成 (2026-01-23)
-- [ ] 設定 hoa.junyiacademy.org 網域指向 Firebase Hosting（程式碼已準備好，等待 DNS 設定）
+- [x] ~~設定 hoa.junyiacademy.org 網域指向 Firebase Hosting~~ ✅ 已完成 (DNS CNAME → hour-of-ai-landing-junyi.web.app)
 - [ ] 考慮是否需要 Staging 環境（介於 Preview 和 Production 之間）
 - [ ] 正式 Apple Touch Icon（需 180x180 PNG）
 - [ ] HTML 元件進一步拆分（header, footer, sections）
@@ -363,7 +412,7 @@ PWA 功能：
 
 ---
 
-## 12. 文件維護指引
+## 13. 文件維護指引
 
 > **給 AI 助手的指引**: 當進行以下變更時，請同步更新此文件：
 > - 新增或修改部署環境

@@ -50,7 +50,7 @@ const CONFIG = {
   // ===== GA4 設定 =====
   ENABLE_GA_REPORT: true,
   GA4_PROPERTY_ID: '266069252',  // GA4 Property ID
-  PAGE_PATH_FILTER: '/event/2025-hour-of-ai/',  // 要追蹤的頁面路徑
+  PAGE_PATH_FILTER: '/',  // Firebase Hosting 根路徑（舊值 '/event/2025-hour-of-ai/' 為 WordPress 路徑）
 };
 
 // ===== UTILITY FUNCTIONS =====
@@ -419,7 +419,9 @@ function validateOrigin(e, data) {
   const allowedOrigins = [
     'https://www.junyiacademy.org',
     'https://junyiacademy.org',
-    // Firebase Hosting (測試/開發環境)
+    // 正式網域
+    'https://hoa.junyiacademy.org',
+    // Firebase Hosting
     'https://hour-of-ai-landing-junyi.web.app',
     'https://hour-of-ai-landing-junyi.firebaseapp.com'
   ];
