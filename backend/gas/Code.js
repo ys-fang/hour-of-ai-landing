@@ -56,6 +56,9 @@ const CONFIG = {
   ENABLE_RANK_TRACKER: true,
   RANK_TRACKER_DATA_URL: 'https://docs.google.com/spreadsheets/d/1QDTmNNP3i6Nfhg6y7qp5V_cSL6ciNsMyF3bEjyKXTsY/export?format=csv',
   RANK_TRACKER_TARGET_COUNTRY: 'Taiwan',
+
+  // ===== Google Sheets 設定 =====
+  SPREADSHEET_ID: '1am2e_RU_fkx--338b7F76NjjP8CM5O1wnKYJmDRubhM',  // HOA 報名資料試算表
 };
 
 // ===== UTILITY FUNCTIONS =====
@@ -174,7 +177,7 @@ function doGet(e) {
  */
 function getStatistics() {
   try {
-    const sheet = SpreadsheetApp.getActiveSpreadsheet().getActiveSheet();
+    const sheet = SpreadsheetApp.openById(CONFIG.SPREADSHEET_ID).getActiveSheet();
     const data = sheet.getDataRange().getValues();
     const headers = data[0];
 
@@ -342,7 +345,7 @@ function doPost(e) {
     validateRateLimit(data, e);
     validateCSRFToken(data);
 
-    const sheet = SpreadsheetApp.getActiveSpreadsheet().getActiveSheet();
+    const sheet = SpreadsheetApp.openById(CONFIG.SPREADSHEET_ID).getActiveSheet();
 
     // ===== 雙 timestamp 處理 =====
     // 1. 保留原始 Unix timestamp (數字)
@@ -705,7 +708,7 @@ function sendInstantNotification(data, timestamp_unified) {
     return;
   }
 
-  const sheet = SpreadsheetApp.getActiveSpreadsheet();
+  const sheet = SpreadsheetApp.openById(CONFIG.SPREADSHEET_ID);
   const sheetUrl = sheet.getUrl();
   const totalRegistrations = sheet.getActiveSheet().getLastRow() - 1; // Exclude header
 
@@ -785,7 +788,7 @@ function sendWeeklyReport() {
  * Calculate weekly statistics
  */
 function calculateWeeklyStats() {
-  const sheet = SpreadsheetApp.getActiveSpreadsheet().getActiveSheet();
+  const sheet = SpreadsheetApp.openById(CONFIG.SPREADSHEET_ID).getActiveSheet();
   const data = sheet.getDataRange().getValues();
   const headers = data[0];
   const registrations = data.slice(1);
@@ -1006,7 +1009,7 @@ ${stats.thisWeek.codeOrg > 0 ? `🤝 Code.org 合作意願率：${stats.codeOrgR
 
 ${highlightSection ? `━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━\n${highlightSection}\n` : ''}
 ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
-📊 查看完整資料：${SpreadsheetApp.getActiveSpreadsheet().getUrl()}
+📊 查看完整資料：${SpreadsheetApp.openById(CONFIG.SPREADSHEET_ID).getUrl()}
   `.trim();
 
   return message;

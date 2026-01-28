@@ -154,7 +154,7 @@
             // 3a. Hour of AI 專屬子網域 (正式環境)
             if (hostname === 'hoa.junyiacademy.org') {
                 console.log('🎯 Detected hoa.junyiacademy.org - using production API');
-                return 'https://script.google.com/macros/s/AKfycbwZ1VRm8MxtqLms24V3Q4sJ5Jklu9o9V14q-B9QHTlw1e45Q2GcrzGA6E1RrxbMybRTFw/exec';
+                return 'https://script.google.com/macros/s/AKfycbyM_JnJwmOTysT5Z65RylyLMnS4n3t8c1DbQfbF9Xk8kX1_J2MZum1kV39eEEiB340hpw/exec';
             }
 
             // 3b. 其他 junyiacademy.org 子網域 (WordPress 環境)
@@ -168,7 +168,7 @@
             if (hostname.includes('hour-of-ai-landing-junyi.web.app') ||
                 hostname.includes('hour-of-ai-landing-junyi.firebaseapp.com')) {
                 console.log('🔥 Detected Firebase Hosting - using production API');
-                return 'https://script.google.com/macros/s/AKfycbwZ1VRm8MxtqLms24V3Q4sJ5Jklu9o9V14q-B9QHTlw1e45Q2GcrzGA6E1RrxbMybRTFw/exec';
+                return 'https://script.google.com/macros/s/AKfycbyM_JnJwmOTysT5Z65RylyLMnS4n3t8c1DbQfbF9Xk8kX1_J2MZum1kV39eEEiB340hpw/exec';
             }
 
             // 5. GitHub Pages 或本地測試環境
