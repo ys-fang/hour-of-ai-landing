@@ -51,6 +51,11 @@ const CONFIG = {
   ENABLE_GA_REPORT: true,
   GA4_PROPERTY_ID: '266069252',  // GA4 Property ID
   PAGE_PATH_FILTER: '/',  // Firebase Hosting 根路徑（舊值 '/event/2025-hour-of-ai/' 為 WordPress 路徑）
+
+  // ===== Taiwan Rank Tracker 設定 =====
+  ENABLE_RANK_TRACKER: true,
+  RANK_TRACKER_DATA_URL: 'https://docs.google.com/spreadsheets/d/1QDTmNNP3i6Nfhg6y7qp5V_cSL6ciNsMyF3bEjyKXTsY/export?format=csv',
+  RANK_TRACKER_TARGET_COUNTRY: 'Taiwan',
 };
 
 // ===== UTILITY FUNCTIONS =====
@@ -1231,4 +1236,147 @@ function getGA4WeeklyStats() {
     Logger.log('Error fetching GA4 data: ' + error.toString());
     return null;
   }
+}
+
+// ===== TAIWAN RANK TRACKER =====
+// 每日追蹤台灣在 Hour of AI 全球活動的排名
+// 設定 Time-driven trigger: 每日執行 trackTaiwanRank
+
+/**
+ * 主函數 - 每日執行追蹤台灣排名
+ * Setup: Apps Script Editor > Triggers > Add Trigger
+ * - Function: trackTaiwanRank
+ * - Event source: Time-driven
+ * - Type: Day timer
+ * - Time: 選擇適合的時間
+ */
+function trackTaiwanRank() {
+  if (!CONFIG.ENABLE_RANK_TRACKER) {
+    Logger.log('Taiwan Rank Tracker is disabled');
+    return;
+  }
+
+  try {
+    const data = fetchGlobalRankData();
+    const taiwanData = analyzeTaiwanRank(data);
+    sendRankNotification(taiwanData);
+    Logger.log('✅ Successfully tracked Taiwan rank: #' + taiwanData.rank);
+  } catch (error) {
+    Logger.log('❌ Error tracking Taiwan rank: ' + error.toString());
+    sendToSlack(`⚠️ Taiwan Rank Tracker 錯誤：${error.toString()}`);
+  }
+}
+
+/**
+ * 抓取全球 Hour of AI 排名資料
+ */
+function fetchGlobalRankData() {
+  const response = UrlFetchApp.fetch(CONFIG.RANK_TRACKER_DATA_URL);
+  const csvText = response.getContentText();
+  const lines = csvText.split('\n');
+
+  const data = [];
+  // Skip header row
+  for (let i = 1; i < lines.length; i++) {
+    const line = lines[i].trim();
+    if (!line) continue;
+
+    const [country, count] = line.split(',');
+    if (country && count) {
+      data.push({
+        country: country.trim().replace(/^"|"$/g, ''),
+        count: parseInt(count.trim())
+      });
+    }
+  }
+
+  return data;
+}
+
+/**
+ * 分析台灣排名及前後國家
+ */
+function analyzeTaiwanRank(data) {
+  const sorted = data
+    .filter(item => item.count > 0)
+    .sort((a, b) => b.count - a.count);
+
+  const taiwanIndex = sorted.findIndex(item => item.country === CONFIG.RANK_TRACKER_TARGET_COUNTRY);
+
+  if (taiwanIndex === -1) {
+    throw new Error('Taiwan not found in data');
+  }
+
+  const taiwan = sorted[taiwanIndex];
+  const rank = taiwanIndex + 1;
+  const totalCountries = sorted.length;
+
+  return {
+    rank: rank,
+    count: taiwan.count,
+    totalCountries: totalCountries,
+    percentile: ((totalCountries - rank + 1) / totalCountries * 100).toFixed(1),
+    context: {
+      above: sorted.slice(Math.max(0, taiwanIndex - 2), taiwanIndex),
+      below: sorted.slice(taiwanIndex + 1, taiwanIndex + 3)
+    },
+    topCountry: sorted[0],
+    timestamp: new Date()
+  };
+}
+
+/**
+ * 發送排名通知到 Slack
+ */
+function sendRankNotification(data) {
+  const timestamp = formatDateTW(data.timestamp, 'yyyy-MM-dd HH:mm:ss');
+
+  // 建立前後國家文字
+  let aboveText = '';
+  data.context.above.forEach((country, idx) => {
+    const r = data.rank - data.context.above.length + idx;
+    aboveText += `   #${r} ${country.country} - ${country.count} 場\n`;
+  });
+
+  let belowText = '';
+  data.context.below.forEach((country, idx) => {
+    const r = data.rank + idx + 1;
+    belowText += `   #${r} ${country.country} - ${country.count} 場\n`;
+  });
+
+  const message = `
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+🇹🇼 *Taiwan Hour of AI 排名追蹤*
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+📅 更新時間：${timestamp}
+
+🏅 *台灣排名：第 ${data.rank} 名* / ${data.totalCountries} 國
+📈 活動數量：*${data.count}* 場
+⭐ 全球前 *${data.percentile}%*
+
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+🌍 *前後排名*
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+▲ 領先台灣：
+${aboveText || '   (無)'}
+➡️  *#${data.rank} 台灣 - ${data.count} 場* ⬅️
+
+▼ 落後台灣：
+${belowText || '   (無)'}
+
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+🏆 *全球第一*：${data.topCountry.country} (${data.topCountry.count} 場)
+
+📌 資料來源：https://csforall.org/en-US/hour-of-ai/how-to/global
+  `.trim();
+
+  sendToSlack(message);
+}
+
+/**
+ * 測試 Taiwan Rank Tracker
+ */
+function testTaiwanRankTracker() {
+  trackTaiwanRank();
 }
