@@ -960,22 +960,132 @@ Check Google Sheets to see how many entries were actually created.
 
         // ===== Upcoming Events Carousel =====
 
-        // Event data (Phase 2: will be replaced with Google Sheets data)
+        // Events API URL configuration
+        function getEventsApiUrl() {
+            if (CONFIG.IS_DEMO_MODE()) {
+                return 'DEMO_MODE';
+            } else if (!CONFIG.isWordPressConfigValid()) {
+                return 'WORDPRESS_CONFIG_NEEDED';
+            } else {
+                return CONFIG.FORM_SUBMIT_URL.replace('/exec', '/exec?action=getUpcomingEvents');
+            }
+        }
+
+        // Event configuration with dynamic data support
         const upcomingEventsConfig = {
             AUTOPLAY_INTERVAL: 5000, // 5 seconds
-            events: [
+            CACHE_KEY: 'hourOfAI_events_cache',
+            CACHE_TIMESTAMP_KEY: 'hourOfAI_events_timestamp',
+            CACHE_DURATION: 30 * 60 * 1000, // 30 minutes
+            events: [], // Will be populated by fetchUpcomingEvents
+            // Fallback data when API is unavailable
+            fallbackEvents: [
                 {
+                    id: 'fallback-1',
                     title: 'AI 素養起步走｜學生體驗場',
-                    description: '1/22（四）由均一老師全程線上帶領，讓孩子在學期最後一週趣味體驗 AI',
-                    url: 'https://link.junyiacademy.org/8k8ckh'
+                    description: '由均一老師全程線上帶領，讓孩子趣味體驗 AI',
+                    url: 'https://link.junyiacademy.org/8k8ckh',
+                    startDate: '2026-01-22',
+                    isActive: true,
+                    sortOrder: 1
                 },
                 {
+                    id: 'fallback-2',
                     title: 'AI 素養起步走｜教師增能場',
-                    description: '1/27（二）陪老師一起學習如何在課堂中引導孩子培養 AI 素養，線上免費參加',
-                    url: 'https://link.junyiacademy.org/8k8ckh'
+                    description: '陪老師一起學習如何在課堂中引導孩子培養 AI 素養',
+                    url: 'https://link.junyiacademy.org/8k8ckh',
+                    startDate: '2026-01-27',
+                    isActive: true,
+                    sortOrder: 2
                 }
             ]
         };
+
+        /**
+         * Fetch upcoming events from API with caching
+         */
+        async function fetchUpcomingEvents(forceRefresh = false) {
+            const apiUrl = getEventsApiUrl();
+
+            // Check cache first
+            if (!forceRefresh) {
+                try {
+                    const cached = localStorage.getItem(upcomingEventsConfig.CACHE_KEY);
+                    const timestamp = localStorage.getItem(upcomingEventsConfig.CACHE_TIMESTAMP_KEY);
+                    if (cached && timestamp) {
+                        const age = Date.now() - parseInt(timestamp, 10);
+                        if (age < upcomingEventsConfig.CACHE_DURATION) {
+                            console.log('📋 Events: Using cached data');
+                            return JSON.parse(cached);
+                        }
+                    }
+                } catch (e) {
+                    console.warn('Cache read error:', e);
+                }
+            }
+
+            // Handle special modes
+            if (apiUrl === 'DEMO_MODE' || apiUrl === 'WORDPRESS_CONFIG_NEEDED') {
+                console.log('📋 Events: Using fallback data (demo mode)');
+                return processEventsData(upcomingEventsConfig.fallbackEvents);
+            }
+
+            try {
+                console.log('📋 Events: Fetching from API');
+                const response = await fetch(apiUrl, {
+                    method: 'GET',
+                    headers: { 'Accept': 'application/json' }
+                });
+
+                if (!response.ok) {
+                    throw new Error('HTTP ' + response.status);
+                }
+
+                const data = await response.json();
+                const events = processEventsData(data.events || data);
+
+                // Cache the results
+                try {
+                    localStorage.setItem(upcomingEventsConfig.CACHE_KEY, JSON.stringify(events));
+                    localStorage.setItem(upcomingEventsConfig.CACHE_TIMESTAMP_KEY, Date.now().toString());
+                } catch (e) {
+                    console.warn('Cache write error:', e);
+                }
+
+                return events;
+            } catch (error) {
+                console.warn('⚠️ Events API fetch failed, using fallback:', error.message);
+                return processEventsData(upcomingEventsConfig.fallbackEvents);
+            }
+        }
+
+        /**
+         * Process events: filter active, filter expired, sort
+         */
+        function processEventsData(rawData) {
+            if (!rawData || !Array.isArray(rawData)) return [];
+
+            const today = new Date();
+            today.setHours(0, 0, 0, 0);
+
+            return rawData
+                // Filter active events
+                .filter(event => event.isActive === true || event.isActive === 'true' || event.isActive === 'TRUE')
+                // Filter non-expired events
+                .filter(event => {
+                    if (!event.endDate) return true;
+                    const endDate = new Date(event.endDate);
+                    endDate.setHours(23, 59, 59, 999);
+                    return endDate >= today;
+                })
+                // Sort by sortOrder then startDate
+                .sort((a, b) => {
+                    const orderA = typeof a.sortOrder === 'number' ? a.sortOrder : Infinity;
+                    const orderB = typeof b.sortOrder === 'number' ? b.sortOrder : Infinity;
+                    if (orderA !== orderB) return orderA - orderB;
+                    return new Date(a.startDate) - new Date(b.startDate);
+                });
+        }
 
         // Carousel state
         let carouselAutoplayTimer = null;
@@ -1135,14 +1245,18 @@ Check Google Sheets to see how many entries were actually created.
         }
 
         /**
-         * Initialize events carousel
+         * Initialize events carousel with dynamic data
          */
-        function initEventsCarousel() {
+        async function initEventsCarousel() {
             const carousel = document.getElementById('eventsCarousel');
             const prevBtn = document.getElementById('carouselPrev');
             const nextBtn = document.getElementById('carouselNext');
 
             if (!carousel) return;
+
+            // Fetch events from API (with caching)
+            const events = await fetchUpcomingEvents();
+            upcomingEventsConfig.events = events;
 
             // Render cards and dots
             renderEventCards(upcomingEventsConfig.events);

@@ -59,6 +59,11 @@ const CONFIG = {
 
   // ===== Google Sheets 設定 =====
   SPREADSHEET_ID: '1am2e_RU_fkx--338b7F76NjjP8CM5O1wnKYJmDRubhM',  // HOA 報名資料試算表
+
+  // ===== Upcoming Events 設定 =====
+  UPCOMING_EVENTS_SHEET_NAME: 'UpcomingEvents',  // 活動資料工作表名稱
+  UPCOMING_EVENTS_CACHE_DURATION: 5 * 60,        // 快取時間（秒）
+  UPCOMING_EVENTS_CACHE_KEY: 'upcoming_events_cache',
 };
 
 // ===== UTILITY FUNCTIONS =====
@@ -159,8 +164,12 @@ function doGet(e) {
       return getStatistics();
     }
 
+    if (action === 'getUpcomingEvents') {
+      return getUpcomingEvents();
+    }
+
     // Default response
-    return ContentService.createTextOutput('Hour of AI Statistics API v3.1')
+    return ContentService.createTextOutput('Hour of AI Statistics API v3.2')
       .setMimeType(ContentService.MimeType.TEXT);
 
   } catch (error) {
@@ -1382,4 +1391,196 @@ ${belowText || '   (無)'}
  */
 function testTaiwanRankTracker() {
   trackTaiwanRank();
+}
+
+// ===== UPCOMING EVENTS API =====
+
+/**
+ * Get upcoming events from the UpcomingEvents sheet
+ * API endpoint: ?action=getUpcomingEvents
+ *
+ * Sheet structure (UpcomingEvents):
+ * id | title | description | url | startDate | endDate | isActive | sortOrder
+ */
+function getUpcomingEvents() {
+  try {
+    // Try to get from cache first
+    const cache = CacheService.getScriptCache();
+    const cached = cache.get(CONFIG.UPCOMING_EVENTS_CACHE_KEY);
+
+    if (cached) {
+      Logger.log('Returning cached upcoming events');
+      return ContentService.createTextOutput(cached)
+        .setMimeType(ContentService.MimeType.JSON);
+    }
+
+    // Get the UpcomingEvents sheet
+    const spreadsheet = SpreadsheetApp.openById(CONFIG.SPREADSHEET_ID);
+    const sheet = spreadsheet.getSheetByName(CONFIG.UPCOMING_EVENTS_SHEET_NAME);
+
+    if (!sheet) {
+      Logger.log('UpcomingEvents sheet not found, returning empty array');
+      return createEventsResponse([]);
+    }
+
+    const data = sheet.getDataRange().getValues();
+
+    if (data.length <= 1) {
+      // Only headers or empty
+      return createEventsResponse([]);
+    }
+
+    const headers = data[0];
+    const rows = data.slice(1);
+
+    // Map column indices
+    const columns = {
+      id: headers.indexOf('id'),
+      title: headers.indexOf('title'),
+      description: headers.indexOf('description'),
+      url: headers.indexOf('url'),
+      startDate: headers.indexOf('startDate'),
+      endDate: headers.indexOf('endDate'),
+      isActive: headers.indexOf('isActive'),
+      sortOrder: headers.indexOf('sortOrder'),
+    };
+
+    // Validate required columns exist
+    const requiredColumns = ['id', 'title', 'description', 'url', 'startDate', 'isActive'];
+    for (const col of requiredColumns) {
+      if (columns[col] === -1) {
+        Logger.log('Missing required column: ' + col);
+        return createEventsResponse([], 'Missing required column: ' + col);
+      }
+    }
+
+    // Process rows into event objects
+    const events = rows
+      .map(function(row, index) {
+        try {
+          return {
+            id: String(row[columns.id] || ''),
+            title: String(row[columns.title] || ''),
+            description: String(row[columns.description] || ''),
+            url: String(row[columns.url] || ''),
+            startDate: formatEventDateValue(row[columns.startDate]),
+            endDate: columns.endDate !== -1 ? formatEventDateValue(row[columns.endDate]) : null,
+            isActive: parseEventBoolean(row[columns.isActive]),
+            sortOrder: columns.sortOrder !== -1 ? parseEventNumber(row[columns.sortOrder]) : index,
+          };
+        } catch (error) {
+          Logger.log('Error processing row ' + (index + 2) + ': ' + error.toString());
+          return null;
+        }
+      })
+      .filter(function(event) { return event !== null; });
+
+    Logger.log('Found ' + events.length + ' events in sheet');
+
+    // Create response and cache it
+    const response = createEventsResponse(events);
+    cache.put(
+      CONFIG.UPCOMING_EVENTS_CACHE_KEY,
+      response.getContent(),
+      CONFIG.UPCOMING_EVENTS_CACHE_DURATION
+    );
+
+    return response;
+
+  } catch (error) {
+    Logger.log('Error in getUpcomingEvents: ' + error.toString());
+    return ContentService.createTextOutput(JSON.stringify({
+      status: 'error',
+      message: error.toString(),
+      events: []
+    })).setMimeType(ContentService.MimeType.JSON);
+  }
+}
+
+/**
+ * Create standardized events response
+ */
+function createEventsResponse(events, warning) {
+  var response = {
+    status: 'success',
+    events: events,
+    count: events.length,
+    timestamp: new Date().toISOString()
+  };
+
+  if (warning) {
+    response.warning = warning;
+  }
+
+  return ContentService.createTextOutput(JSON.stringify(response))
+    .setMimeType(ContentService.MimeType.JSON);
+}
+
+/**
+ * Format date value from Google Sheets for events
+ */
+function formatEventDateValue(value) {
+  if (!value) return null;
+
+  if (value instanceof Date) {
+    return Utilities.formatDate(value, 'Asia/Taipei', 'yyyy-MM-dd');
+  }
+
+  if (typeof value === 'string') {
+    var date = new Date(value);
+    if (!isNaN(date.getTime())) {
+      return Utilities.formatDate(date, 'Asia/Taipei', 'yyyy-MM-dd');
+    }
+    return value;
+  }
+
+  if (typeof value === 'number') {
+    // Google Sheets serial date
+    var date = new Date((value - 25569) * 86400 * 1000);
+    return Utilities.formatDate(date, 'Asia/Taipei', 'yyyy-MM-dd');
+  }
+
+  return null;
+}
+
+/**
+ * Parse boolean from various formats for events
+ */
+function parseEventBoolean(value) {
+  if (typeof value === 'boolean') return value;
+  if (typeof value === 'string') {
+    var lower = value.toLowerCase().trim();
+    return lower === 'true' || lower === 'yes' || lower === '是' || lower === '1';
+  }
+  if (typeof value === 'number') return value !== 0;
+  return false;
+}
+
+/**
+ * Parse number from various formats for events
+ */
+function parseEventNumber(value) {
+  if (typeof value === 'number') return value;
+  if (typeof value === 'string') {
+    var num = parseInt(value, 10);
+    return isNaN(num) ? null : num;
+  }
+  return null;
+}
+
+/**
+ * Clear the events cache
+ */
+function clearEventsCache() {
+  var cache = CacheService.getScriptCache();
+  cache.remove(CONFIG.UPCOMING_EVENTS_CACHE_KEY);
+  Logger.log('Events cache cleared');
+}
+
+/**
+ * Test function for upcoming events
+ */
+function testGetUpcomingEvents() {
+  var result = getUpcomingEvents();
+  Logger.log('Result: ' + result.getContent());
 }
