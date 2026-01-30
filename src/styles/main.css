@@ -637,6 +637,84 @@
             display: none;
         }
 
+        /* Event Card Meta (Status Badge + Date) */
+        .event-card-meta {
+            position: absolute;
+            top: var(--spacing-md);
+            left: var(--spacing-md);
+            right: var(--spacing-md);
+            display: flex;
+            align-items: center;
+            gap: var(--spacing-sm);
+            z-index: 2;
+            flex-wrap: wrap;
+        }
+
+        .event-status-badge {
+            display: inline-flex;
+            align-items: center;
+            gap: 4px;
+            padding: 4px 12px;
+            border-radius: var(--border-radius-full);
+            font-size: var(--font-size-xs);
+            font-weight: var(--font-weight-semibold);
+            backdrop-filter: blur(4px);
+        }
+
+        .event-status-badge .material-icons {
+            font-size: 14px;
+        }
+
+        /* Status Badge - Past (Grey) */
+        .event-status-past {
+            background: rgba(100, 100, 100, 0.8);
+            color: var(--color-white);
+        }
+
+        /* Status Badge - Ongoing (Orange/Red) */
+        .event-status-ongoing {
+            background: rgba(255, 107, 107, 0.9);
+            color: var(--color-white);
+            animation: pulse-badge 2s ease-in-out infinite;
+        }
+
+        @keyframes pulse-badge {
+            0%, 100% { transform: scale(1); }
+            50% { transform: scale(1.05); }
+        }
+
+        /* Status Badge - Upcoming (Teal/Blue) */
+        .event-status-upcoming {
+            background: rgba(77, 191, 163, 0.9);
+            color: var(--color-white);
+        }
+
+        /* Event Date */
+        .event-date {
+            display: inline-flex;
+            align-items: center;
+            gap: 4px;
+            padding: 4px 10px;
+            background: rgba(255, 255, 255, 0.2);
+            border-radius: var(--border-radius-full);
+            font-size: var(--font-size-xs);
+            color: var(--color-white);
+            backdrop-filter: blur(4px);
+        }
+
+        .event-date .material-icons {
+            font-size: 14px;
+        }
+
+        /* Past Event Card - Slightly desaturated */
+        .event-card-past {
+            filter: saturate(0.7);
+        }
+
+        .event-card-past:hover {
+            filter: saturate(0.85);
+        }
+
         /* Carousel Navigation */
         /* 統一使用手機端樣式：所有裝置都使用較小的按鈕 */
         .carousel-nav {

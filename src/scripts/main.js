@@ -1060,36 +1060,125 @@ Check Google Sheets to see how many entries were actually created.
         }
 
         /**
-         * Process events: filter active, filter expired, sort
+         * Get event status based on dates
+         * @param {Object} event - Event object with startDate and endDate
+         * @returns {'past'|'ongoing'|'upcoming'} Event status
+         */
+        function getEventStatus(event) {
+            const today = new Date();
+            today.setHours(0, 0, 0, 0);
+
+            const startDate = event.startDate ? new Date(event.startDate) : null;
+            const endDate = event.endDate ? new Date(event.endDate) : startDate;
+
+            if (startDate) startDate.setHours(0, 0, 0, 0);
+            if (endDate) endDate.setHours(23, 59, 59, 999);
+
+            if (!startDate) return 'upcoming'; // No date = assume upcoming
+
+            if (endDate && endDate < today) return 'past';
+            if (startDate <= today && (!endDate || endDate >= today)) return 'ongoing';
+            return 'upcoming';
+        }
+
+        /**
+         * Format date for display (e.g., "2026/01/22" or "2026/01/22 - 01/27")
+         * @param {Object} event - Event object with startDate and endDate
+         * @returns {string} Formatted date string
+         */
+        function formatEventDate(event) {
+            if (!event.startDate) return '';
+
+            const start = new Date(event.startDate);
+            const startStr = `${start.getFullYear()}/${String(start.getMonth() + 1).padStart(2, '0')}/${String(start.getDate()).padStart(2, '0')}`;
+
+            if (!event.endDate || event.startDate === event.endDate) {
+                return startStr;
+            }
+
+            const end = new Date(event.endDate);
+            // If same year, show shorter format for end date
+            if (start.getFullYear() === end.getFullYear()) {
+                return `${startStr} - ${String(end.getMonth() + 1).padStart(2, '0')}/${String(end.getDate()).padStart(2, '0')}`;
+            }
+            return `${startStr} - ${end.getFullYear()}/${String(end.getMonth() + 1).padStart(2, '0')}/${String(end.getDate()).padStart(2, '0')}`;
+        }
+
+        /**
+         * Process events: filter active, show future + ongoing + recent past events
+         * New logic: All future + ongoing events, plus up to 3 most recent past events
          */
         function processEventsData(rawData) {
             if (!rawData || !Array.isArray(rawData)) return [];
 
-            const today = new Date();
-            today.setHours(0, 0, 0, 0);
+            const MAX_PAST_EVENTS = 3;
 
-            return rawData
-                // Filter active events
-                .filter(event => event.isActive === true || event.isActive === 'true' || event.isActive === 'TRUE')
-                // Filter non-expired events
-                .filter(event => {
-                    if (!event.endDate) return true;
-                    const endDate = new Date(event.endDate);
-                    endDate.setHours(23, 59, 59, 999);
-                    return endDate >= today;
-                })
-                // Sort by sortOrder then startDate
-                .sort((a, b) => {
-                    const orderA = typeof a.sortOrder === 'number' ? a.sortOrder : Infinity;
-                    const orderB = typeof b.sortOrder === 'number' ? b.sortOrder : Infinity;
-                    if (orderA !== orderB) return orderA - orderB;
-                    return new Date(a.startDate) - new Date(b.startDate);
-                });
+            // Filter active events only
+            const activeEvents = rawData.filter(event =>
+                event.isActive === true || event.isActive === 'true' || event.isActive === 'TRUE'
+            );
+
+            // Categorize events by status
+            const futureAndOngoing = [];
+            const pastEvents = [];
+
+            activeEvents.forEach(event => {
+                const status = getEventStatus(event);
+                if (status === 'past') {
+                    pastEvents.push({ ...event, _status: status });
+                } else {
+                    futureAndOngoing.push({ ...event, _status: status });
+                }
+            });
+
+            // Sort future/ongoing: ongoing first, then upcoming by date ascending
+            futureAndOngoing.sort((a, b) => {
+                // Ongoing events come first
+                if (a._status === 'ongoing' && b._status !== 'ongoing') return -1;
+                if (b._status === 'ongoing' && a._status !== 'ongoing') return 1;
+
+                // Then sort by sortOrder
+                const orderA = typeof a.sortOrder === 'number' ? a.sortOrder : Infinity;
+                const orderB = typeof b.sortOrder === 'number' ? b.sortOrder : Infinity;
+                if (orderA !== orderB) return orderA - orderB;
+
+                // Then by startDate ascending
+                return new Date(a.startDate) - new Date(b.startDate);
+            });
+
+            // Sort past events by endDate descending (most recent first)
+            pastEvents.sort((a, b) => {
+                const endA = a.endDate ? new Date(a.endDate) : new Date(a.startDate);
+                const endB = b.endDate ? new Date(b.endDate) : new Date(b.startDate);
+                return endB - endA; // Descending
+            });
+
+            // Take only the most recent past events
+            const recentPast = pastEvents.slice(0, MAX_PAST_EVENTS);
+
+            // Combine: future/ongoing first, then recent past
+            return [...futureAndOngoing, ...recentPast];
         }
 
         // Carousel state
         let carouselAutoplayTimer = null;
         let carouselCurrentIndex = 0;
+
+        /**
+         * Get status badge HTML
+         */
+        function getStatusBadgeHTML(status) {
+            const statusMap = {
+                past: { label: '已舉行', icon: 'event_available' },
+                ongoing: { label: '進行中', icon: 'event' },
+                upcoming: { label: '即將舉行', icon: 'event_upcoming' }
+            };
+            const { label, icon } = statusMap[status] || statusMap.upcoming;
+            return `<span class="event-status-badge event-status-${status}">
+                <span class="material-icons">${icon}</span>
+                ${label}
+            </span>`;
+        }
 
         /**
          * Render event cards in the carousel
@@ -1098,14 +1187,22 @@ Check Google Sheets to see how many entries were actually created.
             const carousel = document.getElementById('eventsCarousel');
             if (!carousel || !events || events.length === 0) return;
 
-            carousel.innerHTML = events.map((event, index) => `
+            carousel.innerHTML = events.map((event, index) => {
+                const status = event._status || getEventStatus(event);
+                const dateStr = formatEventDate(event);
+
+                return `
                 <a href="${event.url}"
-                   class="event-card fade-in"
+                   class="event-card fade-in event-card-${status}"
                    target="_blank"
                    rel="noopener noreferrer"
                    data-event-index="${index}">
                     <div class="event-card-arrow">
                         <span class="material-icons">arrow_forward</span>
+                    </div>
+                    <div class="event-card-meta">
+                        ${getStatusBadgeHTML(status)}
+                        ${dateStr ? `<span class="event-date"><span class="material-icons">calendar_today</span>${dateStr}</span>` : ''}
                     </div>
                     <div class="event-card-content">
                         <h3 class="event-card-title">${event.title}</h3>
@@ -1116,7 +1213,7 @@ Check Google Sheets to see how many entries were actually created.
                         </span>
                     </div>
                 </a>
-            `).join('');
+            `}).join('');
 
             // Trigger fade-in animation
             setTimeout(() => {
