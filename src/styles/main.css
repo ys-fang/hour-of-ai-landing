@@ -2062,6 +2062,7 @@
 
         .pillar-detail-insight .insight-icon {
             font-size: var(--font-size-xl);
+            color: var(--color-yellow);
         }
 
         .pillar-detail-insight p {
@@ -2135,6 +2136,7 @@
 
         .pillar-level-icon {
             font-size: var(--font-size-2xl);
+            color: var(--color-primary-teal);
         }
 
         .pillar-level-title {
@@ -2410,6 +2412,7 @@
 
         .pillar-modal-content .pillar-detail-insight .insight-icon {
             font-size: var(--font-size-xl);
+            color: var(--color-yellow);
         }
 
         .pillar-modal-content .pillar-detail-insight p {
@@ -2474,6 +2477,7 @@
 
         .pillar-modal-content .pillar-level-icon {
             font-size: var(--font-size-2xl);
+            color: var(--color-primary-teal);
         }
 
         .pillar-modal-content .pillar-level-title {
