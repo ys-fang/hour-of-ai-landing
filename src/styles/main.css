@@ -4792,7 +4792,8 @@
 
             /* 平板/大型手機活動卡片調整 */
             .event-card {
-                padding: var(--spacing-xl) var(--spacing-lg);
+                aspect-ratio: 3 / 2;
+                padding: var(--spacing-lg);
             }
 
             .event-card-meta {
@@ -4803,6 +4804,10 @@
 
             .event-card-title {
                 font-size: var(--font-size-lg);
+            }
+
+            .event-card-description {
+                font-size: var(--font-size-xs);
             }
         }
 
@@ -4826,8 +4831,9 @@
 
             /* 修正手機版活動卡片文字重疊問題 */
             .event-card {
-                padding: var(--spacing-lg) var(--spacing-md);
-                justify-content: flex-start;
+                aspect-ratio: 4 / 3;
+                padding: var(--spacing-md);
+                justify-content: space-between;
             }
 
             .event-card-meta {
@@ -4835,7 +4841,7 @@
                 top: 0;
                 left: 0;
                 right: 0;
-                margin-bottom: var(--spacing-sm);
+                margin-bottom: var(--spacing-xs);
             }
 
             .event-card-content {
@@ -4843,16 +4849,24 @@
                 justify-content: flex-end;
                 display: flex;
                 flex-direction: column;
+                gap: var(--spacing-xs);
             }
 
             .event-card-title {
-                font-size: var(--font-size-lg);
+                font-size: var(--font-size-base);
+                line-height: 1.3;
             }
 
             .event-card-description {
                 font-size: var(--font-size-xs);
                 line-clamp: 2;
                 -webkit-line-clamp: 2;
+            }
+
+            .event-card-btn {
+                margin-top: var(--spacing-xs);
+                padding: 6px 12px;
+                font-size: 0.7rem;
             }
 
             .event-badge,
@@ -4864,5 +4878,9 @@
             .event-badge .material-icons,
             .event-date .material-icons {
                 font-size: 12px;
+            }
+
+            .event-card-btn .material-icons {
+                font-size: 14px;
             }
         }
