@@ -4789,6 +4789,21 @@
                 font-size: var(--font-size-sm);
                 padding: var(--spacing-sm) var(--spacing-lg);
             }
+
+            /* 平板/大型手機活動卡片調整 */
+            .event-card {
+                padding: var(--spacing-xl) var(--spacing-lg);
+            }
+
+            .event-card-meta {
+                top: var(--spacing-sm);
+                left: var(--spacing-lg);
+                right: var(--spacing-lg);
+            }
+
+            .event-card-title {
+                font-size: var(--font-size-lg);
+            }
         }
 
         @media (max-width: 480px) {
@@ -4807,5 +4822,47 @@
 
             .form-container {
                 padding: var(--spacing-md);
+            }
+
+            /* 修正手機版活動卡片文字重疊問題 */
+            .event-card {
+                padding: var(--spacing-lg) var(--spacing-md);
+                justify-content: flex-start;
+            }
+
+            .event-card-meta {
+                position: relative;
+                top: 0;
+                left: 0;
+                right: 0;
+                margin-bottom: var(--spacing-sm);
+            }
+
+            .event-card-content {
+                flex: 1;
+                justify-content: flex-end;
+                display: flex;
+                flex-direction: column;
+            }
+
+            .event-card-title {
+                font-size: var(--font-size-lg);
+            }
+
+            .event-card-description {
+                font-size: var(--font-size-xs);
+                line-clamp: 2;
+                -webkit-line-clamp: 2;
+            }
+
+            .event-badge,
+            .event-date {
+                padding: 3px 8px;
+                font-size: 0.65rem;
+            }
+
+            .event-badge .material-icons,
+            .event-date .material-icons {
+                font-size: 12px;
             }
         }
