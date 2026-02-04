@@ -533,15 +533,16 @@
             display: none;
         }
 
-        /* Event Card - 16:9 ratio */
-        /* 使用 max-width 限制最大寬度：手機端 100%，桌面/平板限制最大 600px */
+        /* Event Card - 統一流體佈局（無 aspect-ratio 切換）*/
         .event-card {
             flex: 0 0 100%;
-            min-width: 0; /* 允許 flex item 縮小 */
+            min-width: 0;
             width: 100%;
             max-width: 600px;
             scroll-snap-align: start;
-            aspect-ratio: 16 / 9;
+            /* 使用 min-height + padding 取代 aspect-ratio */
+            min-height: clamp(180px, 40vw, 280px);
+            padding: clamp(1rem, 4vw, 2rem);
             background: linear-gradient(135deg, var(--color-primary-blue), var(--color-primary-teal));
             border-radius: var(--border-radius-lg);
             box-shadow: none;
@@ -550,17 +551,18 @@
             transition: all var(--transition-base);
             text-decoration: none;
             color: var(--color-white);
+            /* Flexbox 流式佈局：內容自動分散 */
             display: flex;
             flex-direction: column;
-            justify-content: flex-end;
-            padding: var(--spacing-2xl) var(--spacing-3xl);
+            justify-content: space-between;
+            gap: clamp(0.5rem, 2vw, 1rem);
             position: relative;
         }
-        
-        /* 在較大螢幕上，調整 flex-basis 確保只顯示單一卡片 */
+
+        /* 桌面端固定寬度確保單卡顯示 */
         @media (min-width: 641px) {
             .event-card {
-                flex: 0 0 600px; /* 固定寬度，確保只顯示一張 */
+                flex: 0 0 600px;
             }
         }
 
@@ -578,36 +580,39 @@
             color: var(--color-white); /* 永遠維持白色 */
         }
 
-        /* Hover 時稍微放大文字，但不改變顏色 */
-        .event-card:hover .event-card-title {
-            font-size: calc(var(--font-size-xl) * 1.04);
-        }
-
+        /* Hover 時使用 scale 效果，避免 font-size 計算問題 */
+        .event-card:hover .event-card-title,
         .event-card:hover .event-card-description {
-            font-size: calc(var(--font-size-sm) * 1.03);
+            transform: scale(1.02);
+            transform-origin: left center;
         }
 
         .event-card-content {
             position: relative;
             z-index: 1;
             text-align: left;
+            /* flex: 1 讓內容區填滿剩餘空間 */
+            flex: 1;
             display: flex;
             flex-direction: column;
             align-items: flex-start;
-            gap: var(--spacing-xs);
+            justify-content: flex-end;
+            gap: clamp(0.25rem, 1vw, 0.5rem);
         }
 
         .event-card-title {
-            font-size: var(--font-size-xl);
+            /* 流體字體：小螢幕 1rem，大螢幕 1.5rem */
+            font-size: clamp(1rem, 2.5vw + 0.5rem, 1.5rem);
             font-weight: var(--font-weight-bold);
-            line-height: var(--line-height-tight);
+            line-height: 1.3;
             transition: font-size var(--transition-base);
         }
 
         .event-card-description {
-            font-size: var(--font-size-sm);
+            /* 流體字體：小螢幕 0.875rem，大螢幕 1rem */
+            font-size: clamp(0.875rem, 1.5vw + 0.5rem, 1rem);
             opacity: 0.9;
-            line-height: var(--line-height-normal);
+            line-height: 1.5;
             display: -webkit-box;
             line-clamp: 2;
             -webkit-line-clamp: 2;
@@ -619,12 +624,12 @@
         .event-card-btn {
             display: inline-flex;
             align-items: center;
-            gap: var(--spacing-xs);
-            margin-top: var(--spacing-sm);
-            padding: var(--spacing-xs) var(--spacing-md);
+            gap: 0.5rem;
+            margin-top: clamp(0.25rem, 1vw, 0.5rem);
+            padding: clamp(0.375rem, 1vw, 0.5rem) clamp(0.75rem, 2vw, 1rem);
             background: rgba(255, 255, 255, 0.2);
             border-radius: var(--border-radius-full);
-            font-size: var(--font-size-xs);
+            font-size: clamp(0.7rem, 1.5vw + 0.25rem, 0.875rem);
             font-weight: var(--font-weight-semibold);
             transition: all var(--transition-base);
         }
@@ -637,15 +642,13 @@
             display: none;
         }
 
-        /* Event Card Meta (Status Badge + Date) */
+        /* Event Card Meta (Status Badge + Date) - 統一 relative 定位 */
         .event-card-meta {
-            position: absolute;
-            top: var(--spacing-md);
-            left: var(--spacing-md);
-            right: var(--spacing-md);
+            /* 不再使用 absolute，改為 relative 流式佈局 */
+            position: relative;
             display: flex;
             align-items: center;
-            gap: var(--spacing-sm);
+            gap: clamp(0.5rem, 2vw, 1rem);
             z-index: 2;
             flex-wrap: wrap;
         }
@@ -654,15 +657,15 @@
             display: inline-flex;
             align-items: center;
             gap: 4px;
-            padding: 4px 12px;
+            padding: clamp(3px, 0.8vw, 6px) clamp(8px, 2vw, 12px);
             border-radius: var(--border-radius-full);
-            font-size: var(--font-size-xs);
+            font-size: clamp(0.65rem, 1.2vw + 0.3rem, 0.875rem);
             font-weight: var(--font-weight-semibold);
             backdrop-filter: blur(4px);
         }
 
         .event-status-badge .material-icons {
-            font-size: 14px;
+            font-size: clamp(12px, 1.5vw + 6px, 16px);
         }
 
         /* Status Badge - Past (Grey) */
@@ -694,16 +697,16 @@
             display: inline-flex;
             align-items: center;
             gap: 4px;
-            padding: 4px 10px;
+            padding: clamp(3px, 0.8vw, 6px) clamp(8px, 2vw, 12px);
             background: rgba(255, 255, 255, 0.2);
             border-radius: var(--border-radius-full);
-            font-size: var(--font-size-xs);
+            font-size: clamp(0.65rem, 1.2vw + 0.3rem, 0.875rem);
             color: var(--color-white);
             backdrop-filter: blur(4px);
         }
 
         .event-date .material-icons {
-            font-size: 14px;
+            font-size: clamp(12px, 1.5vw + 6px, 16px);
         }
 
         /* Past Event Card - Slightly desaturated */
@@ -4790,25 +4793,7 @@
                 padding: var(--spacing-sm) var(--spacing-lg);
             }
 
-            /* 平板/大型手機活動卡片調整 */
-            .event-card {
-                aspect-ratio: 3 / 2;
-                padding: var(--spacing-lg);
-            }
-
-            .event-card-meta {
-                top: var(--spacing-sm);
-                left: var(--spacing-lg);
-                right: var(--spacing-lg);
-            }
-
-            .event-card-title {
-                font-size: var(--font-size-lg);
-            }
-
-            .event-card-description {
-                font-size: var(--font-size-xs);
-            }
+            /* event-card 已改用流體佈局，無需覆蓋 */
         }
 
         @media (max-width: 480px) {
@@ -4829,58 +4814,5 @@
                 padding: var(--spacing-md);
             }
 
-            /* 修正手機版活動卡片文字重疊問題 */
-            .event-card {
-                aspect-ratio: 4 / 3;
-                padding: var(--spacing-md);
-                justify-content: space-between;
-            }
-
-            .event-card-meta {
-                position: relative;
-                top: 0;
-                left: 0;
-                right: 0;
-                margin-bottom: var(--spacing-xs);
-            }
-
-            .event-card-content {
-                flex: 1;
-                justify-content: flex-end;
-                display: flex;
-                flex-direction: column;
-                gap: var(--spacing-xs);
-            }
-
-            .event-card-title {
-                font-size: var(--font-size-base);
-                line-height: 1.3;
-            }
-
-            .event-card-description {
-                font-size: var(--font-size-xs);
-                line-clamp: 2;
-                -webkit-line-clamp: 2;
-            }
-
-            .event-card-btn {
-                margin-top: var(--spacing-xs);
-                padding: 6px 12px;
-                font-size: 0.7rem;
-            }
-
-            .event-badge,
-            .event-date {
-                padding: 3px 8px;
-                font-size: 0.65rem;
-            }
-
-            .event-badge .material-icons,
-            .event-date .material-icons {
-                font-size: 12px;
-            }
-
-            .event-card-btn .material-icons {
-                font-size: 14px;
-            }
+            /* event-card 已改用流體佈局 (clamp)，無需覆蓋 */
         }
