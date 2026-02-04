@@ -917,11 +917,21 @@ function calculateWeeklyStats() {
   // 取得 GA4 數據
   stats.ga = getGA4WeeklyStats();
 
+  // 取得 GA4 點擊數據
+  stats.clicks = getGA4ClickStats();
+
   // 計算轉換率（如果有 GA 數據）
   if (stats.ga && stats.ga.thisWeek.users > 0) {
     stats.conversionRate = ((stats.thisWeek.events / stats.ga.thisWeek.users) * 100).toFixed(1);
   } else {
     stats.conversionRate = null;
+  }
+
+  // 計算 CTA 點擊轉換率（點擊數 / 頁面瀏覽數）
+  if (stats.clicks && stats.ga && stats.ga.thisWeek.pageviews > 0) {
+    stats.clickConversionRate = ((stats.clicks.thisWeek.total / stats.ga.thisWeek.pageviews) * 100).toFixed(2);
+  } else {
+    stats.clickConversionRate = null;
   }
 
   return stats;
@@ -975,6 +985,26 @@ function formatWeeklyReport(stats) {
 📈 訪客轉報名率：*${stats.conversionRate}%* (${stats.thisWeek.events}/${stats.ga.thisWeek.users})`;
   }
 
+  // Build click tracking section
+  let clickSection = '';
+  if (stats.clicks && stats.clicks.thisWeek) {
+    const clicks = stats.clicks;
+    clickSection = `
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+🔗 *活動連結點擊追蹤*
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+📱 數據世界 (Active AI)：*${clicks.thisWeek.activeAi}* 次 ${getGrowthIcon(clicks.growth.activeAi)} (${clicks.growth.activeAi}% vs 上週)
+🎮 半導體冒險 (AI Square)：*${clicks.thisWeek.aiSquare}* 次 ${getGrowthIcon(clicks.growth.aiSquare)} (${clicks.growth.aiSquare}% vs 上週)
+📊 總點擊數：*${clicks.thisWeek.total}* 次 ${getGrowthIcon(clicks.growth.total)} (${clicks.growth.total}% vs 上週)${stats.clickConversionRate !== null ? `
+🎯 點擊轉換率：*${stats.clickConversionRate}%* (${clicks.thisWeek.total} clicks / ${stats.ga.thisWeek.pageviews} pageviews)` : ''}`;
+  } else if (CONFIG.ENABLE_GA_REPORT) {
+    clickSection = `
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+🔗 *活動連結點擊追蹤*
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+⚠️ 點擊數據尚無資料（新功能部署中）`;
+  }
+
   // Build highlight section
   let highlightSection = '';
   if (stats.thisWeek.events === 0) {
@@ -995,6 +1025,7 @@ function formatWeeklyReport(stats) {
 👥 本週新增參與：*${stats.thisWeek.participants.toLocaleString()}* 人 ${getGrowthIcon(stats.growth.participants)} (${stats.growth.participants}% vs 上週)
 🎓 累計總參與：*${stats.total.participants.toLocaleString()}* 人
 ${gaSection}
+${clickSection}
 ${conversionSection}
 
 ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
@@ -1247,6 +1278,123 @@ function getGA4WeeklyStats() {
   } catch (error) {
     Logger.log('Error fetching GA4 data: ' + error.toString());
     return null;
+  }
+}
+
+// ===== GA4 CLICK TRACKING =====
+
+/**
+ * 取得 GA4 活動 CTA 點擊數據
+ * 追蹤 'activity_cta_click' 事件，用於計算轉換率
+ *
+ * @returns {Object|null} 點擊統計數據或 null（如果 GA4 報告已停用）
+ */
+function getGA4ClickStats() {
+  if (!CONFIG.ENABLE_GA_REPORT) {
+    return null;
+  }
+
+  const propertyId = CONFIG.GA4_PROPERTY_ID;
+
+  try {
+    const today = new Date();
+    const oneWeekAgo = new Date(today.getTime() - 7 * 24 * 60 * 60 * 1000);
+    const twoWeeksAgo = new Date(today.getTime() - 14 * 24 * 60 * 60 * 1000);
+
+    /**
+     * 執行 GA4 事件查詢
+     * @param {string} startDate - 開始日期 (YYYY-MM-DD)
+     * @param {string} endDate - 結束日期 (YYYY-MM-DD)
+     * @returns {Object} 點擊數據 { total, activeAi, aiSquare }
+     */
+    const runClickReport = (startDate, endDate) => {
+      const request = {
+        dateRanges: [{ startDate: startDate, endDate: endDate }],
+        dimensions: [
+          { name: 'eventName' },
+          { name: 'customEvent:event_label' }  // 活動類型標籤
+        ],
+        metrics: [
+          { name: 'eventCount' }
+        ],
+        dimensionFilter: {
+          filter: {
+            fieldName: 'eventName',
+            stringFilter: {
+              matchType: 'EXACT',
+              value: 'activity_cta_click'
+            }
+          }
+        },
+        limit: 100
+      };
+
+      const response = AnalyticsData.Properties.runReport(
+        request,
+        'properties/' + propertyId
+      );
+
+      // 初始化計數
+      let totalClicks = 0;
+      let activeAiClicks = 0;
+      let aiSquareClicks = 0;
+
+      if (response.rows && response.rows.length > 0) {
+        response.rows.forEach(row => {
+          const eventLabel = row.dimensionValues[1]?.value || '';
+          const clickCount = parseInt(row.metricValues[0].value) || 0;
+
+          totalClicks += clickCount;
+
+          if (eventLabel === 'active_ai') {
+            activeAiClicks += clickCount;
+          } else if (eventLabel === 'ai_square') {
+            aiSquareClicks += clickCount;
+          }
+        });
+      }
+
+      return {
+        total: totalClicks,
+        activeAi: activeAiClicks,
+        aiSquare: aiSquareClicks
+      };
+    };
+
+    // 取得本週和上週數據
+    const thisWeek = runClickReport(formatDateTW(oneWeekAgo, 'yyyy-MM-dd'), formatDateTW(today, 'yyyy-MM-dd'));
+    const lastWeek = runClickReport(formatDateTW(twoWeeksAgo, 'yyyy-MM-dd'), formatDateTW(oneWeekAgo, 'yyyy-MM-dd'));
+
+    return {
+      thisWeek: thisWeek,
+      lastWeek: lastWeek,
+      growth: {
+        total: calculateGrowthRate(thisWeek.total, lastWeek.total),
+        activeAi: calculateGrowthRate(thisWeek.activeAi, lastWeek.activeAi),
+        aiSquare: calculateGrowthRate(thisWeek.aiSquare, lastWeek.aiSquare)
+      }
+    };
+
+  } catch (error) {
+    Logger.log('Error fetching GA4 click data: ' + error.toString());
+    return null;
+  }
+}
+
+/**
+ * 測試 GA4 點擊追蹤數據
+ */
+function testGA4ClickStats() {
+  const stats = getGA4ClickStats();
+  if (stats) {
+    Logger.log('✅ GA4 Click Stats:');
+    Logger.log('本週總點擊: ' + stats.thisWeek.total);
+    Logger.log('  - Active AI: ' + stats.thisWeek.activeAi);
+    Logger.log('  - AI Square: ' + stats.thisWeek.aiSquare);
+    Logger.log('上週總點擊: ' + stats.lastWeek.total);
+    Logger.log('成長率: ' + stats.growth.total + '%');
+  } else {
+    Logger.log('❌ 無法取得 GA4 點擊數據');
   }
 }
 
