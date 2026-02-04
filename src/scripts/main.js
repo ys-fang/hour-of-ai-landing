@@ -1,3 +1,6 @@
+        // ===== Imports =====
+        import { initClickTracking } from './clickTracking.js';
+
         // ===== 統一的 Flash-Card 系統 =====
         function toggleCard(button, event) {
             event.stopPropagation();
@@ -128,6 +131,10 @@
                     }
                 });
             });
+
+            // ===== Initialize Activity CTA Click Tracking =====
+            // Tracks clicks on "開始學習" buttons for conversion rate analysis
+            initClickTracking();
         });
 
         // ===== Smart Configuration System =====
