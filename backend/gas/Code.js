@@ -58,6 +58,10 @@ const CONFIG = {
   RANK_TRACKER_TARGET_COUNTRY: 'Taiwan',
   GLOBAL_TOP10_SHEET_NAME: 'GlobalTop10History',  // 全球 Top 10 歷史資料工作表
 
+  // ===== Click Tracking 設定 =====
+  ENABLE_CLICK_TRACKER: true,
+  CLICK_HISTORY_SHEET_NAME: 'ClickHistory',  // 點擊歷史資料工作表
+
   // ===== Google Sheets 設定 =====
   SPREADSHEET_ID: '1am2e_RU_fkx--338b7F76NjjP8CM5O1wnKYJmDRubhM',  // HOA 報名資料試算表
 
@@ -1412,6 +1416,245 @@ function testGA4ClickStats() {
   } else {
     Logger.log('❌ 無法取得 GA4 點擊數據');
   }
+}
+
+// ===== DAILY CLICK TRACKING TO SHEET =====
+
+/**
+ * 記錄每日點擊數據到試算表
+ * 類似 Taiwan Rank Tracker 的 logGlobalTop10ToSheet()
+ *
+ * @param {Object} clickData - 點擊數據 { total, activeAi, aiSquare }
+ * @param {string} date - 日期字串 (YYYY-MM-DD)
+ */
+function logDailyClicksToSheet(clickData, date) {
+  const spreadsheet = SpreadsheetApp.openById(CONFIG.SPREADSHEET_ID);
+  let sheet = spreadsheet.getSheetByName(CONFIG.CLICK_HISTORY_SHEET_NAME);
+
+  // 自動建立工作表（如不存在）
+  if (!sheet) {
+    sheet = spreadsheet.insertSheet(CONFIG.CLICK_HISTORY_SHEET_NAME);
+    sheet.appendRow(['date', 'total_clicks', 'active_ai_clicks', 'ai_square_clicks', 'notes']);
+    sheet.setFrozenRows(1);
+    Logger.log(`✅ Created new sheet: ${CONFIG.CLICK_HISTORY_SHEET_NAME}`);
+  }
+
+  // 檢查今天是否已經記錄過（避免重複）
+  const data = sheet.getDataRange().getValues();
+  const existingRow = data.findIndex(row => row[0] === date);
+
+  if (existingRow > 0) {
+    // 更新現有記錄
+    sheet.getRange(existingRow + 1, 2, 1, 3).setValues([[
+      clickData.total,
+      clickData.activeAi,
+      clickData.aiSquare
+    ]]);
+    Logger.log(`✅ Updated existing record for ${date}`);
+  } else {
+    // 新增記錄
+    sheet.appendRow([
+      date,
+      clickData.total,
+      clickData.activeAi,
+      clickData.aiSquare,
+      'Auto-logged'
+    ]);
+    Logger.log(`✅ Logged click data to ${CONFIG.CLICK_HISTORY_SHEET_NAME} for ${date}`);
+  }
+}
+
+/**
+ * 主函數 - 每日執行點擊數據記錄
+ * Setup: Apps Script Editor > Triggers > Add Trigger
+ * - Function: trackDailyClicks
+ * - Event source: Time-driven
+ * - Type: Day timer
+ * - Time: 選擇適合的時間（建議晚上，確保當天數據完整）
+ */
+function trackDailyClicks() {
+  if (!CONFIG.ENABLE_CLICK_TRACKER) {
+    Logger.log('Daily Click Tracker is disabled');
+    return;
+  }
+
+  try {
+    // 取得昨天的日期（因為 GA4 有延遲，記錄前一天的完整數據比較準確）
+    const yesterday = new Date();
+    yesterday.setDate(yesterday.getDate() - 1);
+    const dateStr = formatDateTW(yesterday, 'yyyy-MM-dd');
+
+    // 取得昨天的點擊數據
+    const startDate = dateStr;
+    const endDate = dateStr;
+
+    const request = {
+      dateRanges: [{ startDate: startDate, endDate: endDate }],
+      dimensions: [
+        { name: 'eventName' }
+      ],
+      metrics: [
+        { name: 'eventCount' }
+      ],
+      dimensionFilter: {
+        orGroup: {
+          expressions: [
+            {
+              filter: {
+                fieldName: 'eventName',
+                stringFilter: {
+                  matchType: 'EXACT',
+                  value: 'active_ai_click'
+                }
+              }
+            },
+            {
+              filter: {
+                fieldName: 'eventName',
+                stringFilter: {
+                  matchType: 'EXACT',
+                  value: 'ai_square_click'
+                }
+              }
+            }
+          ]
+        }
+      },
+      limit: 100
+    };
+
+    const response = AnalyticsData.Properties.runReport(
+      request,
+      'properties/' + CONFIG.GA4_PROPERTY_ID
+    );
+
+    // 計算點擊數
+    let totalClicks = 0;
+    let activeAiClicks = 0;
+    let aiSquareClicks = 0;
+
+    if (response.rows && response.rows.length > 0) {
+      response.rows.forEach(row => {
+        const eventName = row.dimensionValues[0]?.value || '';
+        const clickCount = parseInt(row.metricValues[0].value) || 0;
+
+        totalClicks += clickCount;
+
+        if (eventName === 'active_ai_click') {
+          activeAiClicks += clickCount;
+        } else if (eventName === 'ai_square_click') {
+          aiSquareClicks += clickCount;
+        }
+      });
+    }
+
+    const clickData = {
+      total: totalClicks,
+      activeAi: activeAiClicks,
+      aiSquare: aiSquareClicks
+    };
+
+    // 記錄到試算表
+    logDailyClicksToSheet(clickData, dateStr);
+
+    Logger.log(`✅ Successfully tracked daily clicks for ${dateStr}: Total=${totalClicks}, ActiveAI=${activeAiClicks}, AISquare=${aiSquareClicks}`);
+
+  } catch (error) {
+    Logger.log('❌ Error tracking daily clicks: ' + error.toString());
+  }
+}
+
+/**
+ * 測試每日點擊追蹤
+ */
+function testDailyClickTracker() {
+  trackDailyClicks();
+}
+
+/**
+ * 設定每日點擊追蹤的時間觸發器
+ * 執行一次即可自動建立 trigger
+ * 建議時間：每天上午 9-10 點（讓 GA4 有時間處理前一天的數據）
+ */
+function setupDailyClickTrigger() {
+  // 檢查是否已存在相同的 trigger
+  const triggers = ScriptApp.getProjectTriggers();
+  const existingTrigger = triggers.find(trigger =>
+    trigger.getHandlerFunction() === 'trackDailyClicks'
+  );
+
+  if (existingTrigger) {
+    Logger.log('⚠️ Trigger already exists for trackDailyClicks');
+    Logger.log('Trigger ID: ' + existingTrigger.getUniqueId());
+    Logger.log('如要重新設定，請先執行 removeDailyClickTrigger()');
+    return;
+  }
+
+  // 建立新的每日觸發器：每天上午 9-10 點執行
+  ScriptApp.newTrigger('trackDailyClicks')
+    .timeBased()
+    .everyDays(1)
+    .atHour(9)
+    .create();
+
+  Logger.log('✅ Daily click tracking trigger created successfully!');
+  Logger.log('Function: trackDailyClicks');
+  Logger.log('Schedule: Every day at 9-10am');
+  Logger.log('');
+  Logger.log('📊 The trigger will:');
+  Logger.log('  1. Run daily at 9-10am');
+  Logger.log('  2. Query GA4 for yesterday\'s click data');
+  Logger.log('  3. Log summary to ClickHistory sheet');
+  Logger.log('');
+  Logger.log('🔍 View triggers: Apps Script Editor > Triggers (clock icon)');
+}
+
+/**
+ * 移除每日點擊追蹤的時間觸發器
+ * 如需重新設定 trigger，先執行此函數
+ */
+function removeDailyClickTrigger() {
+  const triggers = ScriptApp.getProjectTriggers();
+  let removed = false;
+
+  triggers.forEach(trigger => {
+    if (trigger.getHandlerFunction() === 'trackDailyClicks') {
+      ScriptApp.deleteTrigger(trigger);
+      Logger.log('✅ Removed trigger: ' + trigger.getUniqueId());
+      removed = true;
+    }
+  });
+
+  if (!removed) {
+    Logger.log('ℹ️ No trigger found for trackDailyClicks');
+  }
+}
+
+/**
+ * 列出所有現有的 triggers
+ */
+function listAllTriggers() {
+  const triggers = ScriptApp.getProjectTriggers();
+
+  if (triggers.length === 0) {
+    Logger.log('ℹ️ No triggers found');
+    return;
+  }
+
+  Logger.log('📋 Current triggers:');
+  Logger.log('');
+
+  triggers.forEach((trigger, index) => {
+    Logger.log(`${index + 1}. ${trigger.getHandlerFunction()}`);
+    Logger.log(`   Trigger ID: ${trigger.getUniqueId()}`);
+    Logger.log(`   Event Type: ${trigger.getEventType()}`);
+
+    if (trigger.getEventType() === ScriptApp.EventType.CLOCK) {
+      Logger.log(`   Source: Time-driven`);
+    }
+
+    Logger.log('');
+  });
 }
 
 // ===== TAIWAN RANK TRACKER =====
