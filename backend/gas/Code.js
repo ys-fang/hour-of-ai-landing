@@ -56,6 +56,7 @@ const CONFIG = {
   ENABLE_RANK_TRACKER: true,
   RANK_TRACKER_DATA_URL: 'https://docs.google.com/spreadsheets/d/1QDTmNNP3i6Nfhg6y7qp5V_cSL6ciNsMyF3bEjyKXTsY/export?format=csv',
   RANK_TRACKER_TARGET_COUNTRY: 'Taiwan',
+  GLOBAL_TOP10_SHEET_NAME: 'GlobalTop10History',  // 全球 Top 10 歷史資料工作表
 
   // ===== Google Sheets 設定 =====
   SPREADSHEET_ID: '1am2e_RU_fkx--338b7F76NjjP8CM5O1wnKYJmDRubhM',  // HOA 報名資料試算表
@@ -1403,6 +1404,33 @@ function testGA4ClickStats() {
 // 設定 Time-driven trigger: 每日執行 trackTaiwanRank
 
 /**
+ * 記錄全球 Top 10 國家到試算表
+ * @param {Array} sortedData - 已依活動數排序的國家資料
+ */
+function logGlobalTop10ToSheet(sortedData) {
+  const spreadsheet = SpreadsheetApp.openById(CONFIG.SPREADSHEET_ID);
+  let sheet = spreadsheet.getSheetByName(CONFIG.GLOBAL_TOP10_SHEET_NAME);
+
+  // 自動建立工作表（如不存在）
+  if (!sheet) {
+    sheet = spreadsheet.insertSheet(CONFIG.GLOBAL_TOP10_SHEET_NAME);
+    sheet.appendRow(['date', 'rank', 'country', 'count']);
+    sheet.setFrozenRows(1);
+    Logger.log(`✅ Created new sheet: ${CONFIG.GLOBAL_TOP10_SHEET_NAME}`);
+  }
+
+  const today = formatDateTW(new Date(), 'yyyy-MM-dd');
+  const top10 = sortedData.slice(0, 10);
+
+  // 寫入 Top 10 資料
+  top10.forEach((item, index) => {
+    sheet.appendRow([today, index + 1, item.country, item.count]);
+  });
+
+  Logger.log(`✅ Logged ${top10.length} countries to ${CONFIG.GLOBAL_TOP10_SHEET_NAME} for ${today}`);
+}
+
+/**
  * 主函數 - 每日執行追蹤台灣排名
  * Setup: Apps Script Editor > Triggers > Add Trigger
  * - Function: trackTaiwanRank
@@ -1418,8 +1446,21 @@ function trackTaiwanRank() {
 
   try {
     const data = fetchGlobalRankData();
-    const taiwanData = analyzeTaiwanRank(data);
+
+    // 排序資料（用於 Top 10 和台灣排名分析）
+    const sorted = data
+      .filter(item => item.count > 0)
+      .sort((a, b) => b.count - a.count);
+
+    // 記錄 Top 10 到試算表
+    logGlobalTop10ToSheet(sorted);
+
+    // 分析台灣排名（使用已排序資料）
+    const taiwanData = analyzeTaiwanRankFromSorted(sorted);
+
+    // 發送通知（包含試算表連結）
     sendRankNotification(taiwanData);
+
     Logger.log('✅ Successfully tracked Taiwan rank: #' + taiwanData.rank);
   } catch (error) {
     Logger.log('❌ Error tracking Taiwan rank: ' + error.toString());
@@ -1454,13 +1495,10 @@ function fetchGlobalRankData() {
 }
 
 /**
- * 分析台灣排名及前後國家
+ * 分析台灣排名及前後國家（從已排序資料）
+ * @param {Array} sorted - 已排序的國家資料陣列
  */
-function analyzeTaiwanRank(data) {
-  const sorted = data
-    .filter(item => item.count > 0)
-    .sort((a, b) => b.count - a.count);
-
+function analyzeTaiwanRankFromSorted(sorted) {
   const taiwanIndex = sorted.findIndex(item => item.country === CONFIG.RANK_TRACKER_TARGET_COUNTRY);
 
   if (taiwanIndex === -1) {
@@ -1486,6 +1524,17 @@ function analyzeTaiwanRank(data) {
 }
 
 /**
+ * 分析台灣排名及前後國家（原始版本，供向後相容）
+ */
+function analyzeTaiwanRank(data) {
+  const sorted = data
+    .filter(item => item.count > 0)
+    .sort((a, b) => b.count - a.count);
+
+  return analyzeTaiwanRankFromSorted(sorted);
+}
+
+/**
  * 發送排名通知到 Slack
  */
 function sendRankNotification(data) {
@@ -1503,6 +1552,13 @@ function sendRankNotification(data) {
     const r = data.rank + idx + 1;
     belowText += `   #${r} ${country.country} - ${country.count} 場\n`;
   });
+
+  // 取得試算表 URL
+  const spreadsheet = SpreadsheetApp.openById(CONFIG.SPREADSHEET_ID);
+  const spreadsheetUrl = spreadsheet.getUrl();
+  const top10Sheet = spreadsheet.getSheetByName(CONFIG.GLOBAL_TOP10_SHEET_NAME);
+  const sheetGid = top10Sheet ? top10Sheet.getSheetId() : '';
+  const historyUrl = sheetGid ? `${spreadsheetUrl}#gid=${sheetGid}` : spreadsheetUrl;
 
   const message = `
 ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
@@ -1529,6 +1585,7 @@ ${belowText || '   (無)'}
 🏆 *全球第一*：${data.topCountry.country} (${data.topCountry.count} 場)
 
 📌 資料來源：https://csforall.org/en-US/hour-of-ai/how-to/global
+📊 歷史資料：${historyUrl}
   `.trim();
 
   sendToSlack(message);
@@ -1539,6 +1596,21 @@ ${belowText || '   (無)'}
  */
 function testTaiwanRankTracker() {
   trackTaiwanRank();
+}
+
+/**
+ * 測試 Global Top 10 寫入功能
+ */
+function testGlobalTop10Logging() {
+  const data = fetchGlobalRankData();
+  const sorted = data
+    .filter(item => item.count > 0)
+    .sort((a, b) => b.count - a.count);
+
+  logGlobalTop10ToSheet(sorted);
+
+  Logger.log('✅ Test completed - check GlobalTop10History sheet');
+  Logger.log(`Top 3: ${sorted.slice(0, 3).map(c => c.country).join(', ')}`);
 }
 
 // ===== UPCOMING EVENTS API =====
