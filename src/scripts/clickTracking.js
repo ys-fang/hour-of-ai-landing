@@ -42,8 +42,15 @@ const ACTIVITY_METADATA = {
 };
 
 /**
- * GA4 Event name for click tracking
+ * GA4 Event names for click tracking
+ * 使用不同的事件名稱來區分活動類型，避免需要 GA4 自訂維度
  */
+export const GA4_EVENT_NAMES = {
+    ACTIVE_AI: 'active_ai_click',
+    AI_SQUARE: 'ai_square_click',
+};
+
+// 向後相容：保留舊的常數
 export const GA4_EVENT_NAME = 'activity_cta_click';
 
 // ===== Utility Functions =====
@@ -116,6 +123,7 @@ export function createClickEventPayload(activityId) {
 
 /**
  * Track an activity CTA click via GA4
+ * 使用活動專屬的事件名稱，便於 GA4 分析時區分
  *
  * @param {string} activityId - The activity identifier ('active_ai' or 'ai_square')
  * @returns {boolean} True if tracking was successful
@@ -128,9 +136,19 @@ export function trackActivityClick(activityId) {
 
     const payload = createClickEventPayload(activityId);
 
+    // 根據活動類型選擇事件名稱
+    let eventName;
+    if (activityId === ACTIVITY_TYPES.ACTIVE_AI) {
+        eventName = GA4_EVENT_NAMES.ACTIVE_AI;
+    } else if (activityId === ACTIVITY_TYPES.AI_SQUARE) {
+        eventName = GA4_EVENT_NAMES.AI_SQUARE;
+    } else {
+        eventName = GA4_EVENT_NAME; // 未知活動使用通用事件名稱
+    }
+
     try {
-        window.gtag('event', GA4_EVENT_NAME, payload);
-        console.log(`[Click Tracking] Tracked: ${activityId}`, payload);
+        window.gtag('event', eventName, payload);
+        console.log(`[Click Tracking] Tracked: ${activityId} (event: ${eventName})`, payload);
         return true;
     } catch (error) {
         console.error('[Click Tracking] Error tracking click:', error);

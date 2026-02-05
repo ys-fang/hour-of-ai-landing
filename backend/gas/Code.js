@@ -1309,22 +1309,37 @@ function getGA4ClickStats() {
      * @returns {Object} 點擊數據 { total, activeAi, aiSquare }
      */
     const runClickReport = (startDate, endDate) => {
+      // 查詢兩個不同的事件名稱：active_ai_click 和 ai_square_click
       const request = {
         dateRanges: [{ startDate: startDate, endDate: endDate }],
         dimensions: [
-          { name: 'eventName' },
-          { name: 'customEvent:event_label' }  // 活動類型標籤
+          { name: 'eventName' }
         ],
         metrics: [
           { name: 'eventCount' }
         ],
         dimensionFilter: {
-          filter: {
-            fieldName: 'eventName',
-            stringFilter: {
-              matchType: 'EXACT',
-              value: 'activity_cta_click'
-            }
+          orGroup: {
+            expressions: [
+              {
+                filter: {
+                  fieldName: 'eventName',
+                  stringFilter: {
+                    matchType: 'EXACT',
+                    value: 'active_ai_click'
+                  }
+                }
+              },
+              {
+                filter: {
+                  fieldName: 'eventName',
+                  stringFilter: {
+                    matchType: 'EXACT',
+                    value: 'ai_square_click'
+                  }
+                }
+              }
+            ]
           }
         },
         limit: 100
@@ -1342,14 +1357,14 @@ function getGA4ClickStats() {
 
       if (response.rows && response.rows.length > 0) {
         response.rows.forEach(row => {
-          const eventLabel = row.dimensionValues[1]?.value || '';
+          const eventName = row.dimensionValues[0]?.value || '';
           const clickCount = parseInt(row.metricValues[0].value) || 0;
 
           totalClicks += clickCount;
 
-          if (eventLabel === 'active_ai') {
+          if (eventName === 'active_ai_click') {
             activeAiClicks += clickCount;
-          } else if (eventLabel === 'ai_square') {
+          } else if (eventName === 'ai_square_click') {
             aiSquareClicks += clickCount;
           }
         });
