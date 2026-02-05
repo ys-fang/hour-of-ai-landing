@@ -1,5 +1,37 @@
 # Hour of AI Landing Page - 專案說明
 
+## ⚠️ 上次進度
+**更新時間**：2026-02-05 12:30
+
+**本次完成項目**：
+1. ✅ 修復 Taiwan Rank Tracker 部署問題（Code.js 未 clasp push）
+2. ✅ 部署 PR #8 Click Tracking 功能到 Firebase
+3. ✅ 修復 GA4 API 維度錯誤（customEvent:event_label → 使用不同事件名稱）
+4. ✅ 實作活動類型區分（active_ai_click vs ai_square_click）
+5. ✅ 新增每日點擊數據記錄到 Google Sheet（ClickHistory）
+6. ✅ 建立 trigger 自動設定函數（setupDailyClickTrigger）
+7. ✅ 驗證所有 3 個自動化 triggers 正常運作
+
+**系統狀態**：
+- 所有自動化任務已部署且正常運作
+- 前端點擊追蹤已上線（等待 GA4 數據累積 24-48h）
+- 所有程式碼已 commit 並 push 到 GitHub
+- CI/CD 自動部署正常
+
+**下次待辦**：
+- 明天查看自動化 triggers 執行結果
+- 驗證 ClickHistory sheet 是否有新數據
+- （可選）檢查 Slack 通知是否包含點擊數據
+
+**技術文件**：
+- CLICK-TRACKING-VERIFICATION.md
+- GA4-CLICK-TRACKING-FIX.md
+- CLICK-TRACKING-ACTIVITY-SPLIT.md
+- DAILY-CLICK-TRACKER-SETUP.md
+- DEPLOYMENT-CHECKLIST.md
+
+---
+
 ## 已完成項目 ✅
 
 - [x] **Taiwan Rank Tracker 部署修復**（2026-02-05）
