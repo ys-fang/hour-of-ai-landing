@@ -699,7 +699,7 @@ Check Google Sheets to see how many entries were actually created.
                 page.classList.remove('active');
             });
 
-            const targetPage = document.querySelector(`[data-page="${pageNumber}"]`);
+            const targetPage = document.querySelector(`.form-page[data-page="${pageNumber}"]`);
             if (targetPage) {
                 targetPage.classList.add('active');
             }
@@ -725,7 +725,7 @@ Check Google Sheets to see how many entries were actually created.
 
         // Validate current page
         function validatePage(pageNumber) {
-            const currentPageEl = document.querySelector(`[data-page="${pageNumber}"]`);
+            const currentPageEl = document.querySelector(`.form-page[data-page="${pageNumber}"]`);
             const inputs = currentPageEl.querySelectorAll('input[required], select[required], textarea[required]');
             let isValid = true;
 
@@ -815,6 +815,7 @@ Check Google Sheets to see how many entries were actually created.
                     schoolFields.classList.add('hidden');
                     schoolFields.querySelectorAll('input').forEach(input => {
                         input.removeAttribute('required');
+                        input.checked = false;
                         input.value = '';
                     });
                 }
@@ -932,7 +933,7 @@ Check Google Sheets to see how many entries were actually created.
                 submitBtn.classList.add('hidden');
 
                 formPages.forEach(page => page.classList.remove('active'));
-                document.querySelector('[data-page="success"]').classList.add('active');
+                document.querySelector('.form-page[data-page="success"]').classList.add('active');
 
                 // Track conversion
                 if (CONFIG.ENABLE_ANALYTICS && typeof gtag !== 'undefined') {
@@ -2391,6 +2392,15 @@ Check Google Sheets to see how many entries were actually created.
                 document.querySelectorAll('.form-group.error').forEach(group => {
                     group.classList.remove('error');
                 });
+
+                // Reset conditional fields to hidden state
+                schoolFields.classList.add('hidden');
+                schoolFields.querySelectorAll('input').forEach(input => {
+                    input.removeAttribute('required');
+                    input.checked = false;
+                    input.value = '';
+                });
+                onlineRegistrationField.classList.add('hidden');
 
                 // Go back to page 1
                 currentPage = 1;
