@@ -110,6 +110,17 @@ function calculateGrowthRate(current, previous) {
 }
 
 /**
+ * 標準化縣市名稱（臺→台）
+ * 解決使用者輸入「臺北市」vs「台北市」導致覆蓋率計算錯誤的問題
+ * @param {string} county - 原始縣市名稱
+ * @returns {string} 標準化後的縣市名稱
+ */
+function normalizeCountyName(county) {
+  if (!county || typeof county !== 'string') return '未知';
+  return county.trim().replace(/臺/g, '台');
+}
+
+/**
  * 將秒數轉換為 分:秒 格式
  * @param {number} seconds - 秒數
  * @returns {string} 格式化後的時間字串 (例如 '4:05')
@@ -229,7 +240,7 @@ function getStatistics() {
 
     // Process each registration
     registrations.forEach((row, index) => {
-      const county = row[COLUMN_COUNTY] || '未知';
+      const county = normalizeCountyName(row[COLUMN_COUNTY]);
       const participants = parseInt(row[COLUMN_PARTICIPANTS]) || 0;
       const institutionType = row[COLUMN_INSTITUTION] || '其他';
 
@@ -841,7 +852,7 @@ function calculateWeeklyStats() {
   registrations.forEach(row => {
     const timestamp = row[COLUMN_TIMESTAMP_UNIFIED] || row[COLUMN_TIMESTAMP];
     const date = new Date(timestamp);
-    const county = row[COLUMN_COUNTY] || '未知';
+    const county = normalizeCountyName(row[COLUMN_COUNTY]);
     const participants = parseInt(row[COLUMN_PARTICIPANTS]) || 0;
     const institution = row[COLUMN_INSTITUTION] || '其他';
     const delivery = row[COLUMN_DELIVERY] || '未知';
