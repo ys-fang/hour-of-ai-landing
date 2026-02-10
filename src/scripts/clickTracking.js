@@ -159,8 +159,24 @@ export function trackActivityClick(activityId) {
 // ===== DOM Integration =====
 
 /**
+ * Navigate to URL after a short delay to ensure GA4 event is sent
+ * This fixes the race condition where the page navigates before the event is transmitted
+ *
+ * @param {string} url - The URL to navigate to
+ * @param {number} delay - Delay in milliseconds (default: 150ms)
+ */
+function delayedNavigation(url, delay = 150) {
+    setTimeout(() => {
+        window.location.href = url;
+    }, delay);
+}
+
+/**
  * Initialize click tracking on all overlay-cta links
  * Call this function after DOM is ready
+ *
+ * Note: We delay navigation slightly to ensure GA4 events are sent before
+ * the page unloads. This is necessary for outbound links.
  */
 export function initClickTracking() {
     const ctaLinks = document.querySelectorAll('.overlay-cta');
@@ -168,8 +184,17 @@ export function initClickTracking() {
     ctaLinks.forEach((link) => {
         link.addEventListener('click', (event) => {
             const activityId = getActivityIdFromElement(link);
+            const href = link.getAttribute('href');
+
+            // Track the click
             trackActivityClick(activityId);
-            // Don't prevent default - let the link navigate
+
+            // For outbound links, delay navigation to ensure event is sent
+            if (href && href.startsWith('http')) {
+                event.preventDefault();
+                delayedNavigation(href);
+            }
+            // For same-origin links, let the default behavior happen
         });
     });
 
