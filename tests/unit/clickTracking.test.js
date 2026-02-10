@@ -147,7 +147,7 @@ describe('Click Tracking Service', () => {
             trackActivityClick('active_ai');
 
             expect(gtagMock).toHaveBeenCalledTimes(1);
-            expect(gtagMock).toHaveBeenCalledWith('event', 'activity_cta_click', {
+            expect(gtagMock).toHaveBeenCalledWith('event', 'active_ai_click', {
                 event_category: 'activity_engagement',
                 event_label: 'active_ai',
                 activity_name: '數據世界：AI 原來如此',
@@ -159,7 +159,7 @@ describe('Click Tracking Service', () => {
             trackActivityClick('ai_square');
 
             expect(gtagMock).toHaveBeenCalledTimes(1);
-            expect(gtagMock).toHaveBeenCalledWith('event', 'activity_cta_click', {
+            expect(gtagMock).toHaveBeenCalledWith('event', 'ai_square_click', {
                 event_category: 'activity_engagement',
                 event_label: 'ai_square',
                 activity_name: '我的半導體冒險',
@@ -224,7 +224,7 @@ describe('Click Tracking Integration', () => {
         const activityId = getActivityIdFromElement(link);
         trackActivityClick(activityId);
 
-        expect(gtagMock).toHaveBeenCalledWith('event', 'activity_cta_click', expect.objectContaining({
+        expect(gtagMock).toHaveBeenCalledWith('event', 'active_ai_click', expect.objectContaining({
             event_label: 'active_ai',
         }));
     });
