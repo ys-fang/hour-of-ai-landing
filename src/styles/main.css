@@ -2843,6 +2843,38 @@
             opacity: 0.9;
         }
 
+        .activity-card-actions {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: var(--spacing-sm);
+            margin-top: var(--spacing-md);
+            position: relative;
+            z-index: 100;
+            pointer-events: auto;
+        }
+
+        .activity-start-cta {
+            display: inline-flex;
+            align-items: center;
+            gap: var(--spacing-sm);
+            background: var(--color-yellow);
+            color: var(--color-navy);
+            padding: var(--spacing-md) var(--spacing-xl);
+            border-radius: var(--border-radius-full);
+            font-weight: var(--font-weight-bold);
+            text-decoration: none;
+            transition: all var(--transition-base);
+            box-shadow: var(--shadow-lg);
+            font-size: var(--font-size-base);
+        }
+
+        .activity-start-cta:hover {
+            background: var(--color-white);
+            transform: translateY(-2px);
+            box-shadow: var(--shadow-xl);
+        }
+
         .activity-details-button {
             display: flex;
             align-items: center;
@@ -2850,7 +2882,6 @@
             gap: var(--spacing-xs);
             font-size: var(--font-size-sm);
             font-weight: var(--font-weight-semibold);
-            margin-top: var(--spacing-md);
             padding: var(--spacing-md) var(--spacing-xl);
             border: 2px solid rgba(255, 255, 255, 0.4);
             border-radius: var(--border-radius-full);
