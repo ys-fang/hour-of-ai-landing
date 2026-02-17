@@ -2772,6 +2772,8 @@
             display: flex;
             flex-direction: column;
             justify-content: center;
+            align-items: center;
+            text-align: center;
         }
 
         .platform-showcase-badge {
@@ -2809,6 +2811,7 @@
             display: flex;
             flex-direction: column;
             gap: var(--spacing-sm);
+            text-align: left;
         }
 
         .platform-showcase-highlights li {
@@ -2854,6 +2857,7 @@
             font-size: var(--font-size-sm);
             color: var(--color-text-light);
             line-height: var(--line-height-relaxed);
+            text-align: left;
         }
 
         .platform-showcase-hint .material-icons {
@@ -4624,7 +4628,30 @@
             }
 
             .pillars-grid {
-                grid-template-columns: 1fr;
+                grid-template-columns: 1fr 1fr;
+                gap: var(--spacing-sm);
+            }
+
+            .pillar-card {
+                padding: var(--spacing-md);
+            }
+
+            .pillar-card .pillar-brief,
+            .pillar-card .pillar-details-button {
+                display: none;
+            }
+
+            .pillar-card .pillar-icon {
+                font-size: var(--font-size-xl);
+                margin-bottom: var(--spacing-xs);
+            }
+
+            .pillar-card .pillar-subtitle {
+                font-size: var(--font-size-xs);
+            }
+
+            .pillar-card .pillar-english {
+                font-size: var(--font-size-xs);
             }
 
             /* pillar-detail mobile styles moved to modal section */
