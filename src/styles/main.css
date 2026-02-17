@@ -2741,258 +2741,228 @@
             font-weight: var(--font-weight-bold);
         }
 
-        /* Activity Cards Layout */
-        .activity-cards-container {
+        /* ===== Platform Showcase (Primary: Active AI) ===== */
+        .platform-showcase {
             display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(450px, 1fr));
-            gap: var(--spacing-xl);
+            grid-template-columns: 1fr 1fr;
+            gap: var(--spacing-2xl);
             margin-top: var(--spacing-2xl);
-        }
-
-        .activity-card {
-            position: relative;
-            display: flex;
-            flex-direction: column;
-            justify-content: center;
-            align-items: center;
-            padding: var(--spacing-3xl) var(--spacing-xl);
             background: var(--color-white);
             border-radius: var(--border-radius-lg);
             box-shadow: var(--shadow-lg);
-            transition: all var(--transition-base);
             overflow: hidden;
-            cursor: pointer;
-            min-height: 400px;
         }
 
-        @media (hover: hover) {
-            .activity-card:hover {
-                transform: translateY(-4px);
-                box-shadow: var(--shadow-xl);
-            }
-        }
-
-        .activity-card:first-child {
-            background: linear-gradient(135deg, var(--color-primary-blue), var(--color-primary-teal));
-            color: var(--color-white);
-        }
-
-        .activity-card:last-child {
-            background: linear-gradient(135deg, var(--color-primary-blue), var(--color-primary-teal));
-            color: var(--color-white);
-        }
-
-        .activity-card-content {
-            text-align: center;
-            z-index: 2;
+        .platform-showcase-image {
             position: relative;
-            transition: opacity var(--transition-slow);
-            display: flex;
-            flex-direction: column;
-            align-items: center;
-            justify-content: center;
-            width: 100%;
+            min-height: 320px;
         }
 
-        .activity-card .activity-icon {
-            margin-bottom: var(--spacing-lg);
-            width: 100%;
-            display: flex;
-            justify-content: center;
-            align-items: center;
-            background: none !important;
-            border: none !important;
-            border-radius: 0 !important;
-        }
-
-        .activity-card .activity-icon .material-icons {
-            font-size: var(--font-size-3xl);
-            opacity: 0.9;
-            background: none !important;
-            border: none !important;
-            box-shadow: none !important;
-            border-radius: 0 !important;
-            outline: none !important;
-        }
-
-        /* 首張卡片（半導體）icon為白色 */
-        .activity-card:first-child .activity-icon .material-icons {
-            color: var(--color-white) !important;
-            background: transparent !important;
-        }
-
-        /* 第二張卡片（數據）icon統一為白色 */
-        .activity-card:last-child .activity-icon .material-icons {
-            color: var(--color-white) !important;
-            background: transparent !important;
-        }
-
-        .activity-card-title {
-            font-size: var(--font-size-3xl);
-            font-weight: var(--font-weight-bold);
-            margin-bottom: var(--spacing-lg);
-            line-height: 1.1;
-        }
-
-        .activity-meta {
-            display: flex;
-            flex-direction: column;
-            align-items: center;
-            gap: var(--spacing-sm);
-            margin-bottom: var(--spacing-lg);
-            opacity: 0.9;
-        }
-
-        .activity-card-actions {
-            display: flex;
-            flex-direction: column;
-            align-items: center;
-            gap: var(--spacing-sm);
-            margin-top: var(--spacing-md);
-            position: relative;
-            z-index: 100;
-            pointer-events: auto;
-        }
-
-        .activity-start-cta {
-            display: inline-flex;
-            align-items: center;
-            gap: var(--spacing-sm);
-            background: var(--color-yellow);
-            color: var(--color-navy);
-            padding: var(--spacing-md) var(--spacing-xl);
-            border-radius: var(--border-radius-full);
-            font-weight: var(--font-weight-bold);
-            text-decoration: none;
-            transition: all var(--transition-base);
-            box-shadow: var(--shadow-lg);
-            font-size: var(--font-size-base);
-        }
-
-        .activity-start-cta:hover {
-            background: var(--color-white);
-            transform: translateY(-2px);
-            box-shadow: var(--shadow-xl);
-        }
-
-        .activity-details-button {
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            gap: var(--spacing-xs);
-            font-size: var(--font-size-sm);
-            font-weight: var(--font-weight-semibold);
-            padding: var(--spacing-md) var(--spacing-xl);
-            border: 2px solid rgba(255, 255, 255, 0.4);
-            border-radius: var(--border-radius-full);
-            backdrop-filter: blur(6px);
-            background: rgba(255, 255, 255, 0.15);
-            color: inherit;
-            cursor: pointer;
-            transition: all var(--transition-base);
-            animation: pulse-gentle 2s infinite;
-            position: relative;
-            z-index: 100;
-            pointer-events: auto;
-        }
-
-        .activity-details-button:hover {
-            background: rgba(255, 255, 255, 0.25);
-            border-color: rgba(255, 255, 255, 0.6);
-            transform: translateY(-2px);
-            animation: none;
-        }
-
-        @keyframes pulse-gentle {
-            0%, 100% { transform: scale(1); opacity: 0.9; }
-            50% { transform: scale(1.05); opacity: 1; }
-        }
-
-        .activity-card:first-child .activity-details-button {
-            color: rgba(255, 255, 255, 0.8);
-        }
-
-        .activity-card:last-child .activity-details-button {
-            color: rgba(255, 255, 255, 0.8);
-        }
-
-        .activity-info,
-        .activity-provider {
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            gap: var(--spacing-xs);
-            font-size: var(--font-size-sm);
-            font-weight: var(--font-weight-semibold);
-        }
-
-        .overlay-actions {
-            display: flex;
-            gap: var(--spacing-md);
-            margin-top: var(--spacing-lg);
-            justify-content: center;
-            flex-wrap: wrap;
-        }
-
-        .overlay-cta {
-            display: inline-flex;
-            align-items: center;
-            gap: var(--spacing-sm);
-            background: var(--color-yellow);
-            color: var(--color-navy);
-            padding: var(--spacing-md) var(--spacing-xl);
-            border-radius: var(--border-radius-full);
-            font-weight: var(--font-weight-bold);
-            text-decoration: none;
-            transition: all var(--transition-base);
-            box-shadow: var(--shadow-lg);
-        }
-
-        .overlay-cta:hover {
-            background: var(--color-white);
-            transform: translateY(-2px);
-            box-shadow: var(--shadow-xl);
-        }
-
-        .overlay-close {
-            display: none !important;
-            align-items: center;
-            gap: var(--spacing-xs);
-            background: rgba(255, 255, 255, 0.2);
-            color: var(--color-white);
-            border: 2px solid rgba(255, 255, 255, 0.3);
-            padding: var(--spacing-sm) var(--spacing-lg);
-            border-radius: var(--border-radius-full);
-            font-weight: var(--font-weight-semibold);
-            cursor: pointer;
-            transition: all var(--transition-base);
-            backdrop-filter: blur(1px);
-            font-size: var(--font-size-sm);
-        }
-
-        .overlay-close:hover {
-            background: rgba(255, 255, 255, 0.3);
-            transform: translateY(-2px);
-        }
-
-        .activity-card-image {
+        .platform-showcase-image img {
             position: absolute;
             top: 0;
             left: 0;
-            right: 0;
-            bottom: 0;
-            overflow: hidden;
-            opacity: 0;
-            transition: all var(--transition-slow);
-            z-index: 3;
-            pointer-events: none; /* 初始狀態不可點擊 */
-        }
-
-        .activity-card-image img {
             width: 100%;
             height: 100%;
             object-fit: cover;
-            object-position: center;
+        }
+
+        .platform-showcase-content {
+            padding: var(--spacing-2xl);
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+        }
+
+        .platform-showcase-badge {
+            display: inline-flex;
+            align-items: center;
+            gap: var(--spacing-xs);
+            background: linear-gradient(135deg, var(--color-primary-blue), var(--color-primary-teal));
+            color: var(--color-white);
+            padding: var(--spacing-xs) var(--spacing-md);
+            border-radius: var(--border-radius-full);
+            font-size: var(--font-size-sm);
+            font-weight: var(--font-weight-bold);
+            width: fit-content;
+            margin-bottom: var(--spacing-md);
+        }
+
+        .platform-showcase-title {
+            font-size: var(--font-size-2xl);
+            font-weight: var(--font-weight-bold);
+            color: var(--color-navy);
+            margin-bottom: var(--spacing-sm);
+            line-height: var(--line-height-tight);
+        }
+
+        .platform-showcase-desc {
+            color: var(--color-text-secondary);
+            margin-bottom: var(--spacing-lg);
+            line-height: var(--line-height-relaxed);
+        }
+
+        .platform-showcase-highlights {
+            list-style: none;
+            padding: 0;
+            margin-bottom: var(--spacing-xl);
+            display: flex;
+            flex-direction: column;
+            gap: var(--spacing-sm);
+        }
+
+        .platform-showcase-highlights li {
+            display: flex;
+            align-items: center;
+            gap: var(--spacing-sm);
+            font-size: var(--font-size-sm);
+            color: var(--color-text-primary);
+        }
+
+        .platform-showcase-highlights li .material-icons {
+            color: var(--color-primary-teal);
+            font-size: 1.1rem;
+        }
+
+        .platform-showcase-cta {
+            display: inline-flex;
+            align-items: center;
+            gap: var(--spacing-sm);
+            background: var(--color-yellow);
+            color: var(--color-navy);
+            padding: var(--spacing-lg) var(--spacing-2xl);
+            border-radius: var(--border-radius-full);
+            font-weight: var(--font-weight-bold);
+            font-size: var(--font-size-lg);
+            text-decoration: none;
+            transition: all var(--transition-base);
+            box-shadow: var(--shadow-lg);
+            width: fit-content;
+        }
+
+        .platform-showcase-cta:hover {
+            background: #f5c400;
+            transform: translateY(-2px);
+            box-shadow: var(--shadow-xl);
+        }
+
+        .platform-showcase-hint {
+            display: flex;
+            align-items: flex-start;
+            gap: var(--spacing-xs);
+            margin-top: var(--spacing-md);
+            font-size: var(--font-size-sm);
+            color: var(--color-text-light);
+            line-height: var(--line-height-relaxed);
+        }
+
+        .platform-showcase-hint .material-icons {
+            color: var(--color-primary-teal);
+            flex-shrink: 0;
+            margin-top: 2px;
+        }
+
+        @media (max-width: 768px) {
+            .platform-showcase {
+                grid-template-columns: 1fr;
+            }
+
+            .platform-showcase-image {
+                min-height: 200px;
+            }
+
+            .platform-showcase-content {
+                padding: var(--spacing-xl);
+            }
+        }
+
+        /* ===== Supplemental Platform (AI Square) ===== */
+        .platform-supplemental {
+            display: flex;
+            align-items: center;
+            gap: var(--spacing-lg);
+            margin-top: var(--spacing-xl);
+            padding: var(--spacing-lg) var(--spacing-xl);
+            background: var(--color-bg-light);
+            border-radius: var(--border-radius-lg);
+            border: 1px solid var(--color-border);
+        }
+
+        .platform-supplemental-icon {
+            flex-shrink: 0;
+            width: 48px;
+            height: 48px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            background: linear-gradient(135deg, var(--color-primary-blue), var(--color-primary-teal));
+            border-radius: var(--border-radius-md);
+            color: var(--color-white);
+        }
+
+        .platform-supplemental-info {
+            flex: 1;
+        }
+
+        .platform-supplemental-info h4 {
+            font-size: var(--font-size-base);
+            font-weight: var(--font-weight-bold);
+            color: var(--color-navy);
+            margin-bottom: var(--spacing-xs);
+        }
+
+        .platform-supplemental-info p {
+            font-size: var(--font-size-sm);
+            color: var(--color-text-secondary);
+            margin: 0;
+        }
+
+        .platform-supplemental-link {
+            flex-shrink: 0;
+            display: inline-flex;
+            align-items: center;
+            gap: var(--spacing-xs);
+            color: var(--color-primary-blue);
+            font-weight: var(--font-weight-semibold);
+            font-size: var(--font-size-sm);
+            text-decoration: none;
+            padding: var(--spacing-sm) var(--spacing-lg);
+            border: 2px solid var(--color-primary-blue);
+            border-radius: var(--border-radius-full);
+            transition: all var(--transition-base);
+            background: transparent;
+            box-shadow: none;
+        }
+
+        .platform-supplemental-link:hover {
+            background: var(--color-primary-blue);
+            color: var(--color-white);
+            transform: translateY(-1px);
+        }
+
+        @media (max-width: 768px) {
+            .platform-supplemental {
+                flex-direction: column;
+                text-align: center;
+            }
+        }
+
+        /* ===== Bridge to Registration ===== */
+        .activity-bridge {
+            text-align: center;
+            margin-top: var(--spacing-2xl);
+            padding: var(--spacing-xl);
+        }
+
+        .activity-bridge p {
+            font-size: var(--font-size-lg);
+            color: var(--color-text-secondary);
+            margin-bottom: var(--spacing-lg);
+        }
+
+        /* ===== Shared: overlay-cta tracking class ===== */
+        .overlay-cta {
+            text-decoration: none;
         }
 
         .split-hero-image img {
@@ -3001,95 +2971,7 @@
             object-fit: cover;
         }
 
-        .image-overlay {
-            position: absolute;
-            top: 0;
-            left: 0;
-            right: 0;
-            bottom: 0;
-            background: linear-gradient(to top, rgba(0, 0, 0, 0.9), rgba(0, 0, 0, 0.3));
-            display: flex;
-            align-items: flex-end;
-            padding: var(--spacing-xl);
-            opacity: 0;
-            transition: opacity var(--transition-base);
-        }
-
-        .overlay-content {
-            color: var(--color-white);
-            width: 100%;
-        }
-
-        .overlay-content h4 {
-            font-size: var(--font-size-xl);
-            font-weight: var(--font-weight-bold);
-            line-height: var(--line-height-normal);
-            margin-bottom: var(--spacing-sm);
-        }
-
-        .overlay-content ul {
-            list-style: none;
-            padding: 0;
-        }
-
-        .overlay-content li {
-            font-size: var(--font-size-sm);
-            margin-bottom: var(--spacing-xs);
-            padding-left: var(--spacing-md);
-            position: relative;
-        }
-
-        .overlay-content li::before {
-            content: "✓";
-            position: absolute;
-            left: 0;
-            color: var(--color-yellow);
-            font-weight: var(--font-weight-semibold);
-        }
-
-        /* 統一的 Flash-Card 翻轉效果 */
-        .activity-card {
-            transform-style: preserve-3d;
-            transition: transform var(--transition-base);
-        }
-
-        .activity-card-content {
-            transition: opacity var(--transition-base), transform var(--transition-base);
-        }
-
-        .activity-card.flipped .activity-card-content {
-            opacity: 0;
-            transform: rotateY(15deg) scale(0.95);
-            pointer-events: none;
-        }
-
-        .activity-card.flipped .activity-card-image {
-            opacity: 1;
-            transform: scale(1);
-            pointer-events: auto; /* 翻轉後可點擊 */
-        }
-
-        .activity-card.flipped .image-overlay {
-            opacity: 1;
-            backdrop-filter: blur(2px);
-        }
-
-        .activity-card.flipped .overlay-close {
-            display: inline-flex !important;
-        }
-
-
-        /* 群體1: 圖片區域 - 預設完全隱藏 */
-        .activity-image-section {
-            display: none;
-            width: 100%;
-        }
-
-        /* 展開時才顯示圖片 */
-        .activity-card.expanded .activity-image-section {
-            display: block;
-        }
-
+        /* Legacy: kept for potential future use */
         .activity-image {
             width: 100%;
             height: 0;
