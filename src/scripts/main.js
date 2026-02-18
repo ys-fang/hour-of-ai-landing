@@ -481,7 +481,7 @@ Check Google Sheets to see how many entries were actually created.
                 if (target) {
                     const navHeight = nav.offsetHeight;
                     window.scrollTo({
-                        top: target.offsetTop - navHeight,
+                        top: target.offsetTop - navHeight - 8,
                         behavior: 'smooth'
                     });
                 }
@@ -2322,12 +2322,15 @@ Check Google Sheets to see how many entries were actually created.
         // ===== Smooth Scrolling for Anchor Links =====
         document.querySelectorAll('a[href^="#"]').forEach(anchor => {
             anchor.addEventListener('click', function (e) {
+                // Skip if already handled by section-nav
+                if (this.classList.contains('section-nav-item')) return;
                 e.preventDefault();
                 const target = document.querySelector(this.getAttribute('href'));
                 if (target) {
-                    target.scrollIntoView({
-                        behavior: 'smooth',
-                        block: 'start'
+                    const navHeight = nav.offsetHeight;
+                    window.scrollTo({
+                        top: target.offsetTop - navHeight - 8,
+                        behavior: 'smooth'
                     });
                 }
             });
