@@ -3041,26 +3041,42 @@
             }
         }
 
-        /* ===== Supplemental Platform (AI Square) ===== */
-        .platform-supplemental-note {
-            text-align: center;
-            margin-top: var(--spacing-lg);
-            font-size: var(--font-size-sm);
-            color: var(--color-text-light);
+        /* ===== Secondary Platform Card (AI Square - de-emphasized) ===== */
+        .platform-showcase--secondary {
+            box-shadow: var(--shadow-sm);
+            opacity: 0.85;
+            border: 1px solid var(--color-border);
         }
 
-        .platform-supplemental-link {
-            color: var(--color-primary-blue);
-            text-decoration: underline;
-            text-underline-offset: 2px;
-            font-weight: var(--font-weight-semibold);
-            transition: color var(--transition-base);
-            background: none;
-            box-shadow: none;
+        .platform-showcase--secondary .platform-showcase-image {
+            min-height: 240px;
         }
 
-        .platform-supplemental-link:hover {
-            color: var(--color-primary-teal);
+        .platform-showcase--secondary .platform-showcase-title {
+            font-size: var(--font-size-xl);
+        }
+
+        .platform-showcase-badge--secondary {
+            background: linear-gradient(135deg, #7b8fa3, #9bb0c4) !important;
+        }
+
+        .platform-showcase-cta--secondary {
+            background: var(--color-bg-light) !important;
+            color: var(--color-primary-blue) !important;
+            box-shadow: var(--shadow-sm) !important;
+            font-size: var(--font-size-base) !important;
+            padding: var(--spacing-md) var(--spacing-xl) !important;
+        }
+
+        .platform-showcase-cta--secondary:hover {
+            background: var(--color-border) !important;
+            transform: translateY(-1px);
+        }
+
+        @media (max-width: 768px) {
+            .platform-showcase--secondary .platform-showcase-image {
+                min-height: 160px;
+            }
         }
 
         /* ===== Bridge to Registration ===== */
