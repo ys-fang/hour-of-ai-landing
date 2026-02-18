@@ -447,33 +447,6 @@ Check Google Sheets to see how many entries were actually created.
             lastScroll = currentScroll;
         });
 
-        // ===== Sticky Section Titles =====
-        // Set --nav-height CSS variable for sticky title offset
-        function updateNavHeight() {
-            const navHeight = nav.offsetHeight;
-            document.documentElement.style.setProperty('--nav-height', navHeight + 'px');
-        }
-        updateNavHeight();
-        window.addEventListener('resize', updateNavHeight);
-
-        // Detect stuck state with IntersectionObserver
-        const stickyTitles = document.querySelectorAll('.sticky-section-title');
-        stickyTitles.forEach(title => {
-            // Create a sentinel element above each sticky title
-            const sentinel = document.createElement('div');
-            sentinel.className = 'sticky-sentinel';
-            sentinel.style.cssText = 'height: 0; width: 100%; pointer-events: none;';
-            title.parentNode.insertBefore(sentinel, title);
-
-            const stickyObserver = new IntersectionObserver(
-                ([entry]) => {
-                    title.classList.toggle('is-stuck', !entry.isIntersecting);
-                },
-                { threshold: [0], rootMargin: `-${nav.offsetHeight + 1}px 0px 0px 0px` }
-            );
-            stickyObserver.observe(sentinel);
-        });
-
         // ===== Section Nav (mobile wayfinding) =====
         const sectionNavItems = document.querySelectorAll('.section-nav-item');
         const sectionIds = ['hero', 'activities', 'register', 'about'];

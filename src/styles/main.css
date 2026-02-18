@@ -422,7 +422,7 @@
             position: relative;
             background: linear-gradient(135deg, var(--color-bg-light) 0%, var(--color-white) 100%);
             padding: var(--spacing-3xl) 0;
-            overflow: clip;
+            overflow: hidden;
         }
 
         .hero::before {
@@ -446,21 +446,13 @@
             z-index: 1;
         }
 
-        .hero-sticky-title {
+        .hero-text h1 {
             font-size: var(--font-size-3xl);
             font-weight: var(--font-weight-bold);
+            line-height: var(--line-height-tight);
+            color: var(--color-navy);
+            margin-bottom: var(--spacing-md);
             line-height: 1.2;
-            color: var(--color-navy);
-            margin-bottom: var(--spacing-md);
-            text-align: center;
-        }
-
-        .hero-tagline {
-            font-size: var(--font-size-2xl);
-            font-weight: var(--font-weight-bold);
-            color: var(--color-navy);
-            margin-bottom: var(--spacing-md);
-            line-height: 1.3;
         }
 
         .hero-text .highlight {
@@ -1805,57 +1797,6 @@
             color: var(--color-navy);
             margin-bottom: var(--spacing-md);
             text-align: center;
-        }
-
-        /* ===== Sticky Section Titles ===== */
-        .sticky-section-title {
-            position: sticky;
-            top: var(--nav-height, 90px);
-            z-index: 50;
-            padding-top: var(--spacing-md);
-            padding-bottom: var(--spacing-md);
-            margin-left: calc(-1 * var(--spacing-md));
-            margin-right: calc(-1 * var(--spacing-md));
-            padding-left: var(--spacing-md);
-            padding-right: var(--spacing-md);
-            transition: box-shadow 0.2s ease;
-        }
-
-        /* Default background for white sections */
-        .sticky-section-title {
-            background: rgba(255, 255, 255, 0.95);
-            backdrop-filter: blur(8px);
-            -webkit-backdrop-filter: blur(8px);
-        }
-
-        /* Background variants for colored sections */
-        .hero .sticky-section-title {
-            background: linear-gradient(135deg, rgba(245, 245, 245, 0.95) 0%, rgba(255, 255, 255, 0.95) 100%);
-            backdrop-filter: blur(8px);
-            -webkit-backdrop-filter: blur(8px);
-        }
-
-        .social-proof-section .sticky-section-title {
-            background: rgba(250, 250, 250, 0.95);
-            backdrop-filter: blur(8px);
-            -webkit-backdrop-filter: blur(8px);
-        }
-
-        #pillars .sticky-section-title {
-            background: rgba(245, 245, 245, 0.95);
-            backdrop-filter: blur(8px);
-            -webkit-backdrop-filter: blur(8px);
-        }
-
-        .registration-section .sticky-section-title {
-            background: linear-gradient(135deg, rgba(245, 245, 245, 0.95), rgba(255, 255, 255, 0.95));
-            backdrop-filter: blur(8px);
-            -webkit-backdrop-filter: blur(8px);
-        }
-
-        /* Stuck state shadow (toggled by JS) */
-        .sticky-section-title.is-stuck {
-            box-shadow: 0 2px 8px rgba(0, 0, 0, 0.08);
         }
 
         .section-subtitle {
@@ -4740,12 +4681,6 @@
 
             .form-container {
                 padding: var(--spacing-md);
-            }
-
-            /* Sticky section titles: smaller padding on small screens */
-            .sticky-section-title {
-                padding-top: var(--spacing-sm);
-                padding-bottom: var(--spacing-sm);
             }
 
             /* event-card 已改用流體佈局 (clamp)，無需覆蓋 */
