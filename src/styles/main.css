@@ -819,7 +819,7 @@
             align-items: center;
             gap: 4px;
             padding: clamp(3px, 0.8vw, 6px) clamp(8px, 2vw, 12px);
-            border-radius: var(--border-radius-full);
+            border-radius: var(--border-radius-sm);
             font-size: clamp(0.65rem, 1.2vw + 0.3rem, 0.875rem);
             font-weight: var(--font-weight-semibold);
             backdrop-filter: blur(4px);
@@ -860,7 +860,7 @@
             gap: 4px;
             padding: clamp(3px, 0.8vw, 6px) clamp(8px, 2vw, 12px);
             background: rgba(255, 255, 255, 0.2);
-            border-radius: var(--border-radius-full);
+            border-radius: var(--border-radius-sm);
             font-size: clamp(0.65rem, 1.2vw + 0.3rem, 0.875rem);
             color: var(--color-white);
             backdrop-filter: blur(4px);
@@ -1300,7 +1300,7 @@
             color: var(--color-primary-teal);
             background: rgba(77, 191, 163, 0.1);
             padding: var(--spacing-xs) var(--spacing-sm);
-            border-radius: var(--border-radius-full);
+            border-radius: var(--border-radius-sm);
         }
 
         .rank-percentile-large .material-icons {
@@ -2944,7 +2944,7 @@
             background: linear-gradient(135deg, var(--color-primary-blue), var(--color-primary-teal));
             color: var(--color-white);
             padding: var(--spacing-xs) var(--spacing-md);
-            border-radius: var(--border-radius-full);
+            border-radius: var(--border-radius-sm);
             font-size: var(--font-size-sm);
             font-weight: var(--font-weight-bold);
             width: fit-content;
@@ -3383,7 +3383,7 @@
             color: var(--color-white);
             font-size: var(--font-size-xs);
             padding: var(--spacing-xs) var(--spacing-sm);
-            border-radius: var(--border-radius-full);
+            border-radius: var(--border-radius-sm);
             font-weight: var(--font-weight-semibold);
             border: 1px solid rgba(255, 255, 255, 0.2);
             box-shadow: 0 2px 4px rgba(59, 130, 246, 0.2);
@@ -3615,7 +3615,7 @@
             font-weight: var(--font-weight-bold);
             font-size: var(--font-size-xs);
             padding: var(--spacing-xs) var(--spacing-md);
-            border-radius: var(--border-radius-full);
+            border-radius: var(--border-radius-sm);
             margin-bottom: var(--spacing-md);
         }
 
