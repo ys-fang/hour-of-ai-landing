@@ -450,29 +450,27 @@ Check Google Sheets to see how many entries were actually created.
         // ===== Section Nav (mobile wayfinding) =====
         const sectionNavItems = document.querySelectorAll('.section-nav-item');
         const sectionIds = ['hero', 'activities', 'register', 'about'];
-        let currentSection = 'hero';
 
-        // IntersectionObserver for section tracking
-        const sectionObserver = new IntersectionObserver((entries) => {
-            entries.forEach(entry => {
-                if (entry.isIntersecting) {
-                    currentSection = entry.target.id;
-                    sectionNavItems.forEach(item => item.classList.remove('active'));
-                    const activeItem = document.querySelector(
-                        `.section-nav-item[data-section="${entry.target.id}"]`
-                    );
-                    if (activeItem) activeItem.classList.add('active');
+        // Scroll-based section tracking (more reliable than IntersectionObserver)
+        function updateActiveSection() {
+            const navHeight = nav.offsetHeight;
+            const scrollY = window.pageYOffset + navHeight + 80; // offset for sticky nav + buffer
+
+            let activeId = 'hero'; // default
+            for (const id of sectionIds) {
+                const el = document.getElementById(id);
+                if (el && el.offsetTop <= scrollY) {
+                    activeId = id;
                 }
-            });
-        }, {
-            threshold: 0.15,
-            rootMargin: '-20% 0px -50% 0px'
-        });
+            }
 
-        sectionIds.forEach(id => {
-            const el = document.getElementById(id);
-            if (el) sectionObserver.observe(el);
-        });
+            sectionNavItems.forEach(item => {
+                item.classList.toggle('active', item.dataset.section === activeId);
+            });
+        }
+
+        window.addEventListener('scroll', updateActiveSection, { passive: true });
+        updateActiveSection(); // initial call
 
         // Smooth scroll click handlers
         sectionNavItems.forEach(item => {

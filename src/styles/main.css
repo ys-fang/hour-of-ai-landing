@@ -4686,15 +4686,9 @@
                 border-radius: var(--border-radius-md);
             }
 
+            /* Hide floating CTA on mobile — section nav replaces it */
             .floating-cta {
-                bottom: var(--spacing-md);
-                right: var(--spacing-md);
-                left: var(--spacing-md);
-            }
-
-            .floating-cta .btn {
-                width: 100%;
-                justify-content: center;
+                display: none !important;
             }
 
             .contact-info-card {
