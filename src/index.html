@@ -132,24 +132,18 @@
             <div class="nav-logo">
                 均一 x Hour of <span>AI</span>
             </div>
-            <button class="mobile-menu-toggle" id="mobileMenuToggle" aria-label="Toggle menu">
-                <span class="hamburger"></span>
-            </button>
-            <ul class="nav-links" id="navLinks">
-                <li><a href="#about">關於活動</a></li>
-                <li><a href="#pillars">AI 素養</a></li>
-                <li><a href="#activities">活動內容</a></li>
-                <li><a href="#register" class="nav-cta">舉辦活動</a></li>
-            </ul>
         </div>
-        <!-- Mobile Section Nav -->
-        <div class="section-nav" id="sectionNav">
-            <a href="#hero" class="section-nav-item active" data-section="hero">首頁</a>
-            <a href="#activities" class="section-nav-item" data-section="activities">體驗</a>
-            <a href="#register" class="section-nav-item" data-section="register">舉辦</a>
-            <a href="#about" class="section-nav-item" data-section="about">關於</a>
+        <!-- Tab Navigation -->
+        <div class="section-nav" id="tabNav" role="tablist">
+            <button role="tab" class="section-nav-item active" aria-selected="true" data-tab="home">首頁</button>
+            <button role="tab" class="section-nav-item" aria-selected="false" data-tab="experience">體驗</button>
+            <button role="tab" class="section-nav-item" aria-selected="false" data-tab="host">舉辦</button>
+            <button role="tab" class="section-nav-item" aria-selected="false" data-tab="about">關於</button>
         </div>
     </nav>
+
+    <!-- ==================== Tab 1: 首頁 (Awareness) ==================== -->
+    <div class="tab-panel active" id="panel-home" role="tabpanel">
 
     <!-- Hero Section -->
     <section class="hero" id="hero">
@@ -158,10 +152,10 @@
                 <div class="hero-text fade-in">
                     <h1>
                         <span class="highlight">AI 素養起步走</span><br>
-                        擁抱 AI,讓學習力再進化
+                        用一小時，讓每個孩子認識 AI
                     </h1>
                     <p>
-                        均一平台教育基金會提供免費 AI 教育資源與平台，邀請您成為台灣 AI 素養教育推手！在您的機構舉辦 Hour of AI，我們提供完整教材支援。
+                        均一平台教育基金會提供免費 AI 教育資源與平台，邀請您成為台灣 AI 素養教育推手！
                     </p>
                 </div>
                 <div class="hero-image fade-in">
@@ -172,27 +166,44 @@
         </div>
     </section>
 
-    <!-- Stats Bar + Social Proof (Hero zone) -->
-    <section class="stats-bar">
+    <!-- What is Hour of AI — concise bullet points -->
+    <section class="section about-highlights-section" id="about">
         <div class="container">
-            <div class="stats-container">
-                <div class="stat-item fade-in">
-                    <h2>AI 不是特權</h2>
-                    <p>是每位孩子的學習權利</p>
+            <h2 class="section-title fade-in">Hour of AI 是什麼？</h2>
+            <div class="about-highlights">
+                <div class="about-highlight-item fade-in">
+                    <span class="material-icons medium" style="color: var(--color-primary-blue);">language</span>
+                    <div>
+                        <strong>全球教育運動</strong>
+                        <p>靈感來自 Hour of Code，由 Code.org 發起，全球教育社群共同推動</p>
+                    </div>
                 </div>
-                <div class="stat-item fade-in">
-                    <h2>培養自學與思考力</h2>
-                    <p>孩子可以和 AI 共學</p>
+                <div class="about-highlight-item fade-in">
+                    <span class="material-icons medium" style="color: var(--color-primary-orange);">timer</span>
+                    <div>
+                        <strong>60 分鐘體驗 AI</strong>
+                        <p>透過免費教材與工具，讓學生在一小時內親身體驗、理解、善用 AI</p>
+                    </div>
                 </div>
-                <div class="stat-item fade-in">
-                    <h2>學會善用 AI</h2>
-                    <p>而不是被 AI 取代</p>
+                <div class="about-highlight-item fade-in">
+                    <span class="material-icons medium" style="color: var(--color-primary-teal);">school</span>
+                    <div>
+                        <strong>免費教材，適合教室與社區</strong>
+                        <p>主要場域為教室與社區，目標讓每位孩子都能接觸 AI 素養教育</p>
+                    </div>
+                </div>
+                <div class="about-highlight-item fade-in">
+                    <span class="material-icons medium" style="color: var(--color-coral);">volunteer_activism</span>
+                    <div>
+                        <strong>均一在台灣推動</strong>
+                        <p>均一平台教育基金會在台灣主辦，提供完整教材與平台支援</p>
+                    </div>
                 </div>
             </div>
         </div>
     </section>
 
-    <!-- Social Proof: Global Rank + Counters (funnel top) -->
+    <!-- Social Proof: Global Rank + Counters -->
     <section class="social-proof-section">
         <div class="container">
             <!-- Compact Global Ranking -->
@@ -279,7 +290,114 @@
         </div>
     </section>
 
-    <!-- Activities Section (funnel: Experience) -->
+    <!-- Live Statistics Dashboard -->
+    <section class="live-stats-section" id="live-stats">
+        <div class="container">
+            <div class="stats-header-wrapper">
+                <div class="stats-header-content">
+                    <h2 class="section-title fade-in">
+                        <span class="material-icons medium" style="color: var(--color-primary-teal);">trending_up</span>
+                        台灣活動舉辦狀況
+                        <span id="demoIndicator" class="demo-badge" style="display: none;">
+                            <span class="material-icons tiny">science</span>
+                            展示資料
+                        </span>
+                    </h2>
+                </div>
+                <p class="section-subtitle fade-in">
+                    全台教育單位正在熱烈響應！一起成為 AI 素養教育推手
+                </p>
+            </div>
+
+            <div class="stats-dashboard" id="statsDashboard">
+                <!-- Left Column: Map -->
+                <div class="stats-left">
+                    <div class="taiwan-map-container fade-in">
+                        <h3>
+                            <span class="material-icons medium" style="color: var(--color-navy);">map</span>
+                            台灣活動分布圖
+                        </h3>
+                        <div id="taiwanMap" class="taiwan-map"></div>
+                    </div>
+                </div>
+
+                <!-- Right Column: Rankings & Activity Feed -->
+                <div class="stats-right">
+                    <div class="ranking-card fade-in">
+                        <h3>
+                            <span class="material-icons medium" style="color: var(--color-yellow);">emoji_events</span>
+                            縣市排行榜
+                        </h3>
+                        <div class="ranking-list" id="rankingList">
+                            <div class="ranking-item">
+                                <div class="ranking-position top-1">1</div>
+                                <div class="ranking-info">
+                                    <div class="ranking-name">台北市</div>
+                                    <div class="ranking-bar">
+                                        <div class="ranking-bar-fill" style="width: 0%"></div>
+                                    </div>
+                                </div>
+                                <div class="ranking-count">0 場</div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="activity-feed-card fade-in">
+                        <h3>
+                            <span class="material-icons medium" style="color: var(--color-primary-blue);">campaign</span>
+                            最新活動規劃
+                        </h3>
+                        <div class="activity-feed" id="activityFeed">
+                            <div class="activity-item">
+                                <div class="activity-icon">
+                                    <span class="material-icons medium" style="color: var(--color-white);">auto_awesome</span>
+                                </div>
+                                <div class="activity-content">
+                                    <div class="activity-text">載入中...</div>
+                                    <div class="activity-time">即時更新</div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div id="demoNotice" class="demo-notice" style="display: none;">
+                <div class="demo-notice-content">
+                    <span class="material-icons small">info</span>
+                    <span>以上為展示資料，僅供介面預覽參考</span>
+                </div>
+            </div>
+
+            <div class="stats-controls-wrapper">
+                <div class="stats-controls">
+                    <div class="stats-meta">
+                        <span id="statsCacheIndicator" class="stats-update-time">載入中...</span>
+                        <button id="statsRefreshBtn" class="stats-refresh-btn" title="重新整理統計資料" aria-label="重新整理統計資料">
+                            <span class="material-icons">refresh</span>
+                        </button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Tab 1 CTA -->
+    <div class="tab-cta-section">
+        <div class="container">
+            <p class="tab-cta-hint">想看看 AI 教育長什麼樣子？</p>
+            <button class="btn btn-primary tab-cta-btn" data-goto-tab="experience">
+                <span>先體驗看看</span>
+                <span class="material-icons">arrow_forward</span>
+            </button>
+        </div>
+    </div>
+
+    </div><!-- /panel-home -->
+
+    <!-- ==================== Tab 2: 體驗 (Interest) ==================== -->
+    <div class="tab-panel" id="panel-experience" role="tabpanel">
+
     <section class="section" id="activities">
         <div class="container">
             <h2 class="section-title fade-in">先體驗，再決定</h2>
@@ -357,19 +475,25 @@
                 其他資源：<a href="https://link.junyiacademy.org/8c2s2q" class="platform-supplemental-link overlay-cta">我的半導體冒險</a>（AI Square，適合國中以上）
             </p>
 
-            <!-- Bridge to Registration -->
-            <div class="activity-bridge fade-in">
-                <p>體驗完了嗎？覺得適合帶進課堂？</p>
-                <a href="#register" class="btn btn-primary">
-                    <span class="material-icons small">event_note</span>
-                    <span>我要舉辦活動</span>
-                </a>
-            </div>
-
         </div>
     </section>
 
-    <!-- Registration Form Section -->
+    <!-- Tab 2 Sticky Bottom CTA Bar -->
+    <div class="sticky-bottom-bar" id="experienceBottomBar">
+        <div class="container sticky-bottom-bar-inner">
+            <span>體驗完了嗎？</span>
+            <button class="btn btn-primary" data-goto-tab="host">
+                <span>我要舉辦活動</span>
+                <span class="material-icons small">arrow_forward</span>
+            </button>
+        </div>
+    </div>
+
+    </div><!-- /panel-experience -->
+
+    <!-- ==================== Tab 3: 舉辦 (Conversion) ==================== -->
+    <div class="tab-panel" id="panel-host" role="tabpanel">
+
     <section class="registration-section section" id="register">
         <div class="container">
             <h2 class="section-title fade-in">
@@ -860,15 +984,10 @@
         </div>
     </section>
 
-    <!-- About Section (funnel: Learn More) -->
-    <section class="section" id="about">
-        <div class="container">
-            <h2 class="section-title fade-in">什麼是 Hour of AI?</h2>
-            <p class="section-subtitle fade-in">
-                Hour of AI，活動靈感來自全球最大公益學習運動 Hour of Code，由國際教育平台 Code.org 發起的年度活動，由全球教育社群推動，在每年指定時段，透過免費開放的教材與工具，讓學生、教師與社區成員在 60 分鐘內或延伸課程中學習 AI 素養，以推廣 AI 教育成為全民基礎能力。主要場域為教室與社區，目標讓每位孩子都能用一小時親身體驗 AI、理解 AI、善用 AI。
-            </p>
-        </div>
-    </section>
+    </div><!-- /panel-host -->
+
+    <!-- ==================== Tab 4: 關於 (Enrichment) ==================== -->
+    <div class="tab-panel" id="panel-about" role="tabpanel">
 
     <!-- AI Pillars Section -->
     <section class="section" id="pillars" style="background: var(--color-bg-light);">
@@ -1116,97 +1235,18 @@
         </div>
     </section>
 
-    <!-- Full Statistics Dashboard (deep dive for curious visitors) -->
-    <section class="live-stats-section" id="live-stats">
+    <!-- Tab 4 CTA -->
+    <div class="tab-cta-section">
         <div class="container">
-            <div class="stats-header-wrapper">
-                <div class="stats-header-content">
-                    <h2 class="section-title fade-in">
-                        <span class="material-icons medium" style="color: var(--color-primary-teal);">trending_up</span>
-                        台灣活動舉辦狀況
-                        <span id="demoIndicator" class="demo-badge" style="display: none;">
-                            <span class="material-icons tiny">science</span>
-                            展示資料
-                        </span>
-                    </h2>
-                </div>
-                <p class="section-subtitle fade-in">
-                    全台教育單位正在熱烈響應！一起成為 AI 素養教育推手
-                </p>
-            </div>
-
-            <div class="stats-dashboard" id="statsDashboard">
-                <!-- Left Column: Map -->
-                <div class="stats-left">
-                    <div class="taiwan-map-container fade-in">
-                        <h3>
-                            <span class="material-icons medium" style="color: var(--color-navy);">map</span>
-                            台灣活動分布圖
-                        </h3>
-                        <div id="taiwanMap" class="taiwan-map"></div>
-                    </div>
-                </div>
-
-                <!-- Right Column: Rankings & Activity Feed -->
-                <div class="stats-right">
-                    <div class="ranking-card fade-in">
-                        <h3>
-                            <span class="material-icons medium" style="color: var(--color-yellow);">emoji_events</span>
-                            縣市排行榜
-                        </h3>
-                        <div class="ranking-list" id="rankingList">
-                            <div class="ranking-item">
-                                <div class="ranking-position top-1">1</div>
-                                <div class="ranking-info">
-                                    <div class="ranking-name">台北市</div>
-                                    <div class="ranking-bar">
-                                        <div class="ranking-bar-fill" style="width: 0%"></div>
-                                    </div>
-                                </div>
-                                <div class="ranking-count">0 場</div>
-                            </div>
-                        </div>
-                    </div>
-
-                    <div class="activity-feed-card fade-in">
-                        <h3>
-                            <span class="material-icons medium" style="color: var(--color-primary-blue);">campaign</span>
-                            最新活動規劃
-                        </h3>
-                        <div class="activity-feed" id="activityFeed">
-                            <div class="activity-item">
-                                <div class="activity-icon">
-                                    <span class="material-icons medium" style="color: var(--color-white);">auto_awesome</span>
-                                </div>
-                                <div class="activity-content">
-                                    <div class="activity-text">載入中...</div>
-                                    <div class="activity-time">即時更新</div>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-            </div>
-
-            <div id="demoNotice" class="demo-notice" style="display: none;">
-                <div class="demo-notice-content">
-                    <span class="material-icons small">info</span>
-                    <span>以上為展示資料，僅供介面預覽參考</span>
-                </div>
-            </div>
-
-            <div class="stats-controls-wrapper">
-                <div class="stats-controls">
-                    <div class="stats-meta">
-                        <span id="statsCacheIndicator" class="stats-update-time">載入中...</span>
-                        <button id="statsRefreshBtn" class="stats-refresh-btn" title="重新整理統計資料" aria-label="重新整理統計資料">
-                            <span class="material-icons">refresh</span>
-                        </button>
-                    </div>
-                </div>
-            </div>
+            <p class="tab-cta-hint">想親自試試看嗎？</p>
+            <button class="btn btn-primary tab-cta-btn" data-goto-tab="experience">
+                <span>開始體驗</span>
+                <span class="material-icons">arrow_forward</span>
+            </button>
         </div>
-    </section>
+    </div>
+
+    </div><!-- /panel-about -->
 
     <!-- Footer -->
     <footer class="footer">

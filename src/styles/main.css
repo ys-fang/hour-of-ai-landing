@@ -316,6 +316,11 @@
             position: relative;
             transition: color var(--transition-base), font-weight var(--transition-base);
             line-height: 2;
+            /* Button reset */
+            background: none;
+            border: none;
+            cursor: pointer;
+            font-family: inherit;
         }
 
         .section-nav-item::after {
@@ -338,6 +343,113 @@
 
         .section-nav-item.active::after {
             transform: scaleX(1);
+        }
+
+        /* ===== Tab Panels ===== */
+        .tab-panel {
+            display: none;
+        }
+
+        .tab-panel.active {
+            display: block;
+            animation: tabFadeIn 0.25s ease-out;
+        }
+
+        @keyframes tabFadeIn {
+            from { opacity: 0; transform: translateY(8px); }
+            to   { opacity: 1; transform: translateY(0); }
+        }
+
+        /* ===== Tab CTA Section ===== */
+        .tab-cta-section {
+            text-align: center;
+            padding: var(--spacing-2xl) 0 var(--spacing-3xl);
+        }
+
+        .tab-cta-hint {
+            font-size: var(--font-size-xl);
+            color: var(--color-text-secondary);
+            margin-bottom: var(--spacing-md);
+        }
+
+        .tab-cta-btn {
+            display: inline-flex;
+            align-items: center;
+            gap: var(--spacing-sm);
+            font-size: var(--font-size-xl);
+            padding: var(--spacing-md) var(--spacing-2xl);
+            border-radius: var(--border-radius-full);
+        }
+
+        /* ===== Sticky Bottom Bar (Tab 2) ===== */
+        .sticky-bottom-bar {
+            position: sticky;
+            bottom: 0;
+            background: rgba(255, 255, 255, 0.95);
+            backdrop-filter: blur(8px);
+            -webkit-backdrop-filter: blur(8px);
+            box-shadow: 0 -2px 12px rgba(0, 0, 0, 0.1);
+            padding: var(--spacing-sm) 0;
+            z-index: 100;
+        }
+
+        .sticky-bottom-bar-inner {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: var(--spacing-md);
+        }
+
+        .sticky-bottom-bar span:first-child {
+            font-weight: var(--font-weight-semibold);
+            color: var(--color-text-secondary);
+        }
+
+        /* ===== About Highlights (Tab 1) ===== */
+        .about-highlights-section {
+            padding: var(--spacing-2xl) 0;
+        }
+
+        .about-highlights {
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            gap: var(--spacing-lg);
+            max-width: 900px;
+            margin: var(--spacing-xl) auto 0;
+        }
+
+        .about-highlight-item {
+            display: flex;
+            gap: var(--spacing-md);
+            align-items: flex-start;
+            padding: var(--spacing-md);
+            border-radius: var(--border-radius-md);
+            background: var(--color-bg-lighter);
+        }
+
+        .about-highlight-item .material-icons {
+            flex-shrink: 0;
+            margin-top: 2px;
+        }
+
+        .about-highlight-item strong {
+            display: block;
+            color: var(--color-navy);
+            margin-bottom: var(--spacing-xs);
+            font-size: var(--font-size-base);
+        }
+
+        .about-highlight-item p {
+            color: var(--color-text-secondary);
+            font-size: var(--font-size-sm);
+            line-height: 1.6;
+            margin: 0;
+        }
+
+        @media (max-width: 640px) {
+            .about-highlights {
+                grid-template-columns: 1fr;
+            }
         }
 
         /* Social Proof Section */

@@ -414,79 +414,115 @@ Check Google Sheets to see how many entries were actually created.
             });
         });
 
-        // ===== Mobile Navigation =====
-        const mobileMenuToggle = document.getElementById('mobileMenuToggle');
-        const navLinks = document.getElementById('navLinks');
-
-        mobileMenuToggle.addEventListener('click', () => {
-            mobileMenuToggle.classList.toggle('active');
-            navLinks.classList.toggle('active');
-        });
-
-        // Close mobile menu when clicking on a link
-        navLinks.querySelectorAll('a').forEach(link => {
-            link.addEventListener('click', () => {
-                mobileMenuToggle.classList.remove('active');
-                navLinks.classList.remove('active');
-            });
-        });
-
         // ===== Sticky Navigation =====
         const nav = document.getElementById('nav');
-        let lastScroll = 0;
 
         window.addEventListener('scroll', () => {
-            const currentScroll = window.pageYOffset;
-
-            if (currentScroll > 100) {
+            if (window.pageYOffset > 100) {
                 nav.classList.add('scrolled');
             } else {
                 nav.classList.remove('scrolled');
             }
-
-            lastScroll = currentScroll;
         });
 
-        // ===== Section Nav (mobile wayfinding) =====
-        const sectionNavItems = document.querySelectorAll('.section-nav-item');
-        const sectionIds = ['hero', 'activities', 'register', 'about'];
+        // ===== Tab Navigation System =====
+        const TAB_IDS = ['home', 'experience', 'host', 'about'];
+        const tabButtons = document.querySelectorAll('#tabNav [role="tab"]');
+        let currentTab = 'home';
+        let mapInitialized = false;
 
-        // Scroll-based section tracking (more reliable than IntersectionObserver)
-        function updateActiveSection() {
-            const navHeight = nav.offsetHeight;
-            const scrollY = window.pageYOffset + navHeight + 80; // offset for sticky nav + buffer
+        function switchTab(tabId, pushState = true) {
+            if (!TAB_IDS.includes(tabId)) tabId = 'home';
+            currentTab = tabId;
 
-            let activeId = 'hero'; // default
-            for (const id of sectionIds) {
-                const el = document.getElementById(id);
-                if (el && el.offsetTop <= scrollY) {
-                    activeId = id;
+            // Update tab buttons
+            tabButtons.forEach(btn => {
+                const isActive = btn.dataset.tab === tabId;
+                btn.classList.toggle('active', isActive);
+                btn.setAttribute('aria-selected', isActive);
+            });
+
+            // Switch panels
+            document.querySelectorAll('.tab-panel').forEach(panel => {
+                panel.classList.toggle('active', panel.id === `panel-${tabId}`);
+            });
+
+            // Scroll to top
+            window.scrollTo({ top: 0, behavior: 'instant' });
+
+            // URL hash
+            if (pushState) {
+                history.pushState({ tab: tabId }, '', `#${tabId}`);
+            }
+
+            // Re-observe fade-in elements in newly visible panel
+            const panel = document.getElementById(`panel-${tabId}`);
+            if (panel) {
+                panel.querySelectorAll('.fade-in:not(.visible)').forEach(el => {
+                    observer.observe(el);
+                });
+                // Trigger immediate visibility check
+                panel.querySelectorAll('.fade-in:not(.visible)').forEach(el => {
+                    const rect = el.getBoundingClientRect();
+                    if (rect.top < window.innerHeight) {
+                        el.classList.add('visible');
+                    }
+                });
+            }
+
+            // Fix Leaflet map on first Tab 1 visit (if not initial)
+            if (tabId === 'home' && mapInitialized) {
+                const map = document.getElementById('taiwanMap');
+                if (map && map._leaflet_id) {
+                    // Leaflet needs invalidateSize after container becomes visible
+                    setTimeout(() => {
+                        if (window.taiwanMapInstance) {
+                            window.taiwanMapInstance.invalidateSize();
+                        }
+                    }, 100);
                 }
             }
 
-            sectionNavItems.forEach(item => {
-                item.classList.toggle('active', item.dataset.section === activeId);
-            });
+            // GA4 tab tracking
+            if (typeof gtag === 'function') {
+                gtag('event', 'tab_view', {
+                    tab_name: tabId,
+                    event_category: 'navigation'
+                });
+            }
         }
 
-        window.addEventListener('scroll', updateActiveSection, { passive: true });
-        updateActiveSection(); // initial call
-
-        // Smooth scroll click handlers
-        sectionNavItems.forEach(item => {
-            item.addEventListener('click', (e) => {
-                e.preventDefault();
-                const targetId = item.dataset.section;
-                const target = document.getElementById(targetId);
-                if (target) {
-                    const navHeight = nav.offsetHeight;
-                    window.scrollTo({
-                        top: target.offsetTop - navHeight - 8,
-                        behavior: 'smooth'
-                    });
-                }
+        // Tab click handlers
+        tabButtons.forEach(btn => {
+            btn.addEventListener('click', () => {
+                switchTab(btn.dataset.tab);
             });
         });
+
+        // CTA buttons that switch tabs
+        document.querySelectorAll('[data-goto-tab]').forEach(btn => {
+            btn.addEventListener('click', () => {
+                switchTab(btn.dataset.gotoTab);
+            });
+        });
+
+        // Hash routing
+        function getTabFromHash() {
+            const hash = window.location.hash.replace('#', '');
+            return TAB_IDS.includes(hash) ? hash : 'home';
+        }
+
+        // Handle browser back/forward
+        window.addEventListener('popstate', (e) => {
+            const tabId = e.state?.tab || getTabFromHash();
+            switchTab(tabId, false);
+        });
+
+        // Initialize from URL hash
+        const initialTab = getTabFromHash();
+        if (initialTab !== 'home') {
+            switchTab(initialTab, false);
+        }
 
         // ===== Fade-in Animation on Scroll =====
         const observerOptions = {
@@ -1978,7 +2014,7 @@ Check Google Sheets to see how many entries were actually created.
             }
 
             // Initialize map centered on Taiwan
-            taiwanMap = L.map('taiwanMap', {
+            taiwanMap = window.taiwanMapInstance = L.map('taiwanMap', {
                 center: [23.8, 121],
                 zoom: 7,
                 minZoom: 7,
@@ -2041,6 +2077,7 @@ Check Google Sheets to see how many entries were actually created.
 
             if (!taiwanMap) {
                 await initTaiwanMap();
+                mapInitialized = true;
             }
 
             const maxCount = Math.max(...Object.values(counties), 1);
