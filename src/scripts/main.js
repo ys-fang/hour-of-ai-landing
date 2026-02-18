@@ -447,6 +447,49 @@ Check Google Sheets to see how many entries were actually created.
             lastScroll = currentScroll;
         });
 
+        // ===== Section Nav (mobile wayfinding) =====
+        const sectionNavItems = document.querySelectorAll('.section-nav-item');
+        const sectionIds = ['hero', 'activities', 'register', 'about'];
+        let currentSection = 'hero';
+
+        // IntersectionObserver for section tracking
+        const sectionObserver = new IntersectionObserver((entries) => {
+            entries.forEach(entry => {
+                if (entry.isIntersecting) {
+                    currentSection = entry.target.id;
+                    sectionNavItems.forEach(item => item.classList.remove('active'));
+                    const activeItem = document.querySelector(
+                        `.section-nav-item[data-section="${entry.target.id}"]`
+                    );
+                    if (activeItem) activeItem.classList.add('active');
+                }
+            });
+        }, {
+            threshold: 0.15,
+            rootMargin: '-20% 0px -50% 0px'
+        });
+
+        sectionIds.forEach(id => {
+            const el = document.getElementById(id);
+            if (el) sectionObserver.observe(el);
+        });
+
+        // Smooth scroll click handlers
+        sectionNavItems.forEach(item => {
+            item.addEventListener('click', (e) => {
+                e.preventDefault();
+                const targetId = item.dataset.section;
+                const target = document.getElementById(targetId);
+                if (target) {
+                    const navHeight = nav.offsetHeight;
+                    window.scrollTo({
+                        top: target.offsetTop - navHeight,
+                        behavior: 'smooth'
+                    });
+                }
+            });
+        });
+
         // ===== Fade-in Animation on Scroll =====
         const observerOptions = {
             threshold: 0.1,
@@ -465,17 +508,36 @@ Check Google Sheets to see how many entries were actually created.
             observer.observe(el);
         });
 
-        // ===== Floating CTA =====
+        // ===== Floating CTA (context-aware) =====
         const floatingCta = document.getElementById('floatingCta');
+        const floatingCtaLink = floatingCta.querySelector('a');
+        const floatingCtaIcon = floatingCta.querySelector('.material-icons');
+        const activitiesSection = document.getElementById('activities');
         const registrationSection = document.getElementById('register');
 
         window.addEventListener('scroll', () => {
+            const activitiesTop = activitiesSection.offsetTop;
             const registrationTop = registrationSection.offsetTop;
-            const scrollPosition = window.pageYOffset + window.innerHeight;
+            const scrollY = window.pageYOffset;
+            const navHeight = nav.offsetHeight;
 
-            if (window.pageYOffset > 800 && scrollPosition < registrationTop + 200) {
+            if (scrollY < 300) {
+                // At top: hide
+                floatingCta.classList.remove('visible');
+            } else if (scrollY + navHeight < activitiesTop) {
+                // Before activities: show "Try AI"
                 floatingCta.classList.add('visible');
+                floatingCtaLink.href = '#activities';
+                floatingCtaIcon.textContent = 'play_circle';
+                floatingCtaLink.lastChild.textContent = '免費體驗 AI 課程';
+            } else if (scrollY + navHeight < registrationTop) {
+                // At activities: show "Register"
+                floatingCta.classList.add('visible');
+                floatingCtaLink.href = '#register';
+                floatingCtaIcon.textContent = 'event_note';
+                floatingCtaLink.lastChild.textContent = '我要舉辦活動';
             } else {
+                // At/past register: hide
                 floatingCta.classList.remove('visible');
             }
         });
