@@ -483,6 +483,16 @@ Check Google Sheets to see how many entries were actually created.
                 }
             }
 
+            // Fix carousel layout on first Tab 2 visit
+            if (tabId === 'experience') {
+                setTimeout(() => {
+                    const carousel = document.getElementById('eventsCarousel');
+                    if (carousel && carousel.querySelector('.event-card')) {
+                        scrollToPage(carouselCurrentIndex);
+                    }
+                }, 50);
+            }
+
             // GA4 tab tracking
             if (typeof gtag === 'function') {
                 gtag('event', 'tab_view', {
