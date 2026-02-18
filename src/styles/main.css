@@ -4263,36 +4263,6 @@
             margin-bottom: var(--spacing-lg);
         }
 
-        /* ===== Floating CTA Button ===== */
-        .floating-cta {
-            position: fixed;
-            bottom: var(--spacing-lg);
-            right: var(--spacing-lg);
-            z-index: 999;
-            opacity: 0;
-            transform: translateY(100px);
-            transition: all var(--transition-base);
-        }
-
-        .floating-cta.visible {
-            opacity: 1;
-            transform: translateY(0);
-        }
-
-        .floating-cta .btn {
-            box-shadow: var(--shadow-xl);
-            animation: pulse 2s infinite;
-        }
-
-        @keyframes pulse {
-            0%, 100% {
-                transform: scale(1);
-            }
-            50% {
-                transform: scale(1.05);
-            }
-        }
-
         /* ===== Footer ===== */
         .footer {
             background: var(--color-navy);
@@ -4686,10 +4656,7 @@
                 border-radius: var(--border-radius-md);
             }
 
-            /* Hide floating CTA on mobile — section nav replaces it */
-            .floating-cta {
-                display: none !important;
-            }
+
 
             .contact-info-card {
                 margin: var(--spacing-lg) 0 0;

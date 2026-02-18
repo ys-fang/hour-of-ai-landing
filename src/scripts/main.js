@@ -506,40 +506,6 @@ Check Google Sheets to see how many entries were actually created.
             observer.observe(el);
         });
 
-        // ===== Floating CTA (context-aware) =====
-        const floatingCta = document.getElementById('floatingCta');
-        const floatingCtaLink = floatingCta.querySelector('a');
-        const floatingCtaIcon = floatingCta.querySelector('.material-icons');
-        const activitiesSection = document.getElementById('activities');
-        const registrationSection = document.getElementById('register');
-
-        window.addEventListener('scroll', () => {
-            const activitiesTop = activitiesSection.offsetTop;
-            const registrationTop = registrationSection.offsetTop;
-            const scrollY = window.pageYOffset;
-            const navHeight = nav.offsetHeight;
-
-            if (scrollY < 300) {
-                // At top: hide
-                floatingCta.classList.remove('visible');
-            } else if (scrollY + navHeight < activitiesTop) {
-                // Before activities: show "Try AI"
-                floatingCta.classList.add('visible');
-                floatingCtaLink.href = '#activities';
-                floatingCtaIcon.textContent = 'play_circle';
-                floatingCtaLink.lastChild.textContent = '免費體驗 AI 課程';
-            } else if (scrollY + navHeight < registrationTop) {
-                // At activities: show "Register"
-                floatingCta.classList.add('visible');
-                floatingCtaLink.href = '#register';
-                floatingCtaIcon.textContent = 'event_note';
-                floatingCtaLink.lastChild.textContent = '我要舉辦活動';
-            } else {
-                // At/past register: hide
-                floatingCta.classList.remove('visible');
-            }
-        });
-
         // ===== Activity Description Example Section =====
         const exampleToggle = document.getElementById('exampleToggle');
         const exampleContent = document.getElementById('exampleContent');
