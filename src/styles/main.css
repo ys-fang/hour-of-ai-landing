@@ -4456,194 +4456,197 @@
         .footer {
             background: var(--color-navy);
             color: var(--color-white);
-            padding: var(--spacing-2xl) 0 var(--spacing-md);
-        }
-
-        .footer-content {
-            display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
-            gap: var(--spacing-xl);
-            margin-bottom: var(--spacing-xl);
-        }
-
-        .footer-section h4 {
-            font-size: var(--font-size-xl);
-            font-weight: var(--font-weight-bold);
-            line-height: var(--line-height-normal);
-            margin-bottom: var(--spacing-md);
-        }
-
-        .footer-section p,
-        .footer-section a {
-            color: rgba(255, 255, 255, 0.8);
-            margin-bottom: var(--spacing-xs);
-            display: block;
-        }
-
-        .footer-section a:hover {
-            color: var(--color-primary-orange);
-        }
-
-        /* Enhanced contact information styling */
-        .contact-info {
-            display: flex;
-            flex-direction: column;
-            gap: var(--spacing-sm);
-        }
-
-        .organization-name {
-            font-weight: 700 !important;
-            color: rgba(255, 255, 255, 0.95) !important;
-            margin-bottom: var(--spacing-md) !important;
-            font-size: var(--font-size-base) !important;
-        }
-
-        .contact-item {
-            display: flex;
-            align-items: flex-start;
-            gap: var(--spacing-sm);
-            margin-bottom: var(--spacing-xs);
-            line-height: 1.6;
-        }
-
-        .contact-item .material-icons {
-            color: var(--color-primary-orange);
-            margin-top: 2px;
-            flex-shrink: 0;
-        }
-
-        .contact-item a {
-            color: rgba(255, 255, 255, 0.8);
-            text-decoration: none;
-            transition: all var(--transition-base);
-            margin: 0;
-            display: inline;
-        }
-
-        .contact-item a:hover {
-            color: var(--color-primary-orange);
-            text-decoration: underline;
-        }
-
-        .contact-item span:not(.material-icons) {
-            color: rgba(255, 255, 255, 0.8);
-            font-size: var(--font-size-sm);
-            line-height: 1.6;
-        }
-
-        /* Mobile responsive contact info */
-        @media (max-width: 768px) {
-            .contact-item {
-                gap: var(--spacing-xs);
-                margin-bottom: var(--spacing-sm);
-            }
-
-            .contact-item .material-icons {
-                font-size: 18px;
-            }
-
-            .organization-name {
-                font-size: var(--font-size-sm) !important;
-                margin-bottom: var(--spacing-sm) !important;
-            }
-
-            .contact-item span:not(.material-icons),
-            .contact-item a {
-                font-size: var(--font-size-xs);
-            }
-        }
-
-        /* Compact footer styling */
-        .footer {
             padding: var(--spacing-xl) 0 var(--spacing-md);
         }
 
-        /* Logo in contact section */
-        .contact-logo {
-            text-align: center;
-            margin-bottom: var(--spacing-md);
+        /* Two-column layout */
+        .footer-main {
+            display: flex;
+            align-items: flex-start;
+            gap: var(--spacing-2xl);
+        }
+
+        /* Brand column */
+        .footer-brand {
+            display: flex;
+            align-items: center;
+            gap: var(--spacing-md);
+            flex-shrink: 0;
         }
 
         .footer-logo-img {
-            width: 100px;
+            width: 72px;
             height: auto;
             opacity: 0.95;
-            transition: all var(--transition-base);
+            transition: opacity var(--transition-base);
         }
 
         .footer-logo-img:hover {
             opacity: 1;
-            transform: scale(1.05);
         }
 
-        /* Compact contact info styling */
-        .contact-info-compact {
-            display: flex;
-            flex-direction: column;
-            gap: var(--spacing-xs);
+        .footer-title {
+            font-size: var(--font-size-xl);
+            font-weight: var(--font-weight-bold);
+            color: var(--color-white);
+            margin: 0 0 4px;
+            white-space: nowrap;
         }
 
-        .contact-info-compact .contact-item {
-            margin-bottom: 0;
-        }
-
-        .contact-info-compact .organization-name {
-            margin-bottom: var(--spacing-sm) !important;
-        }
-
-        /* Government compliance section - minimal and discreet */
-        .footer-compliance {
-            text-align: center;
-            padding: var(--spacing-xs) 0;
-            border-top: 1px solid rgba(255, 255, 255, 0.05);
-            margin-top: var(--spacing-sm);
-        }
-
-        .compliance-info {
-            color: rgba(255, 255, 255, 0.4);
+        .footer-tagline {
+            color: rgba(255, 255, 255, 0.6);
             font-size: var(--font-size-xs);
             margin: 0;
-            line-height: 1.4;
-            font-weight: 300;
-            opacity: 0.8;
         }
 
-        /* Mobile responsive footer adjustments */
+        /* Info column */
+        .footer-info {
+            flex: 1;
+            min-width: 0;
+        }
+
+        /* Links row */
+        .footer-links {
+            display: flex;
+            align-items: center;
+            gap: var(--spacing-xs);
+            flex-wrap: wrap;
+            margin-bottom: var(--spacing-sm);
+        }
+
+        .footer-links a {
+            color: rgba(255, 255, 255, 0.8);
+            font-size: var(--font-size-xs);
+            text-decoration: none;
+            transition: color var(--transition-base);
+        }
+
+        .footer-links a:hover {
+            color: var(--color-primary-orange);
+        }
+
+        .footer-link-sep {
+            color: rgba(255, 255, 255, 0.3);
+            user-select: none;
+        }
+
+        /* Contact row */
+        .footer-contact {
+            display: flex;
+            align-items: center;
+            gap: var(--spacing-md);
+            flex-wrap: wrap;
+            margin-bottom: var(--spacing-xs);
+        }
+
+        .footer-contact-item {
+            display: inline-flex;
+            align-items: center;
+            gap: 6px;
+            color: rgba(255, 255, 255, 0.8);
+            text-decoration: none;
+            font-size: var(--font-size-xs);
+            transition: color var(--transition-base);
+        }
+
+        .footer-contact-item:hover {
+            color: var(--color-primary-orange);
+        }
+
+        .footer-contact-item .material-icons {
+            font-size: 18px;
+            color: var(--color-primary-orange);
+        }
+
+        /* Hours line */
+        .footer-hours {
+            display: flex;
+            align-items: center;
+            gap: 6px;
+            color: rgba(255, 255, 255, 0.45);
+            font-size: 12px;
+            margin: 0;
+        }
+
+        .footer-hours .material-icons {
+            font-size: 14px;
+        }
+
+        /* ---- Footer mobile ---- */
         @media (max-width: 768px) {
             .footer {
-                padding: var(--spacing-lg) 0 var(--spacing-sm);
+                padding: var(--spacing-md) 0 var(--spacing-sm);
+            }
+
+            .footer-main {
+                flex-direction: column;
+                align-items: center;
+                gap: var(--spacing-md);
+                text-align: center;
+            }
+
+            /* Brand: stack logo above text */
+            .footer-brand {
+                flex-direction: column;
+                gap: var(--spacing-xs);
             }
 
             .footer-logo-img {
-                width: 80px;
+                width: 56px;
             }
 
-            .contact-logo {
+            .footer-brand-text {
+                text-align: center;
+            }
+
+            .footer-title {
+                font-size: var(--font-size-base);
+            }
+
+            .footer-tagline {
+                font-size: 12px;
+            }
+
+            /* Links: stay horizontal, centered */
+            .footer-links {
+                justify-content: center;
                 margin-bottom: var(--spacing-sm);
             }
 
-            .footer-content {
-                grid-template-columns: 1fr !important;
-                gap: var(--spacing-md);
-                margin-bottom: var(--spacing-sm);
+            /* Contact: icon-only circle buttons */
+            .footer-contact {
+                justify-content: center;
+                gap: var(--spacing-sm);
+                margin-bottom: var(--spacing-xs);
             }
 
-            .compliance-info {
-                font-size: 9px;
-                line-height: 1.6;
-                padding: 0 var(--spacing-md);
-                opacity: 0.7;
+            .footer-contact-item {
+                width: 44px;
+                height: 44px;
+                border-radius: 50%;
+                background: rgba(255, 255, 255, 0.1);
+                display: flex;
+                align-items: center;
+                justify-content: center;
+                gap: 0;
             }
 
-            .contact-item span:not(.material-icons),
-            .contact-item a {
-                font-size: var(--font-size-xs);
+            .footer-contact-item .material-icons {
+                font-size: 20px;
             }
 
-            .footer-compliance {
-                margin-top: var(--spacing-xs);
-                padding: var(--spacing-xs) 0;
-                border-top: 1px solid rgba(255, 255, 255, 0.03);
+            /* Hide text labels on mobile */
+            .footer-contact-label {
+                display: none;
+            }
+
+            /* Hours */
+            .footer-hours {
+                justify-content: center;
+            }
+
+            .footer-info {
+                width: 100%;
             }
         }
 
