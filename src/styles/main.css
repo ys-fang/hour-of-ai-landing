@@ -3041,15 +3041,15 @@
             }
         }
 
-        /* ===== Secondary Platform - Minimal inline row (AI Square) ===== */
+        /* ===== Secondary Platform - Compact card (AI Square) ===== */
         .platform-secondary-minimal {
-            display: flex;
-            align-items: center;
-            gap: var(--spacing-md);
-            padding: var(--spacing-md) var(--spacing-lg);
+            max-width: 400px;
+            margin: var(--spacing-lg) auto 0;
+            padding: var(--spacing-lg) var(--spacing-xl);
             border: 1px solid var(--color-border);
             border-radius: var(--radius-lg);
             background: var(--color-bg-lighter);
+            text-align: center;
             opacity: 0.55;
             transition: opacity 0.2s;
         }
@@ -3058,15 +3058,21 @@
             opacity: 0.75;
         }
 
+        .platform-secondary-top {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: var(--spacing-sm);
+            margin-bottom: var(--spacing-xs);
+        }
+
         .platform-secondary-badge {
-            flex-shrink: 0;
-            font-size: 11px;
+            font-size: 10px;
             font-weight: 600;
             color: var(--color-text-light);
             background: var(--color-border);
             padding: 2px 8px;
             border-radius: var(--radius-sm);
-            text-transform: uppercase;
             letter-spacing: 0.5px;
         }
 
@@ -3074,21 +3080,16 @@
             font-weight: 600;
             font-size: var(--font-size-base);
             color: var(--color-text-secondary);
-            white-space: nowrap;
         }
 
         .platform-secondary-desc {
-            flex: 1;
             font-size: var(--font-size-sm);
             color: var(--color-text-light);
-            min-width: 0;
-            overflow: hidden;
-            text-overflow: ellipsis;
-            white-space: nowrap;
+            margin: 0 0 var(--spacing-sm);
+            line-height: 1.4;
         }
 
         .platform-secondary-link {
-            flex-shrink: 0;
             display: inline-flex;
             align-items: center;
             gap: 4px;
@@ -3104,18 +3105,6 @@
 
         .platform-secondary-link .material-icons {
             font-size: 14px;
-        }
-
-        @media (max-width: 768px) {
-            .platform-secondary-minimal {
-                flex-wrap: wrap;
-                gap: var(--spacing-sm);
-            }
-            .platform-secondary-desc {
-                white-space: normal;
-                width: 100%;
-                order: 4;
-            }
         }
 
         /* ===== Bridge to Registration ===== */
