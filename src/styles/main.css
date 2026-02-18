@@ -268,7 +268,7 @@
         }
 
         .nav-links {
-            display: flex;
+            display: none;
             gap: var(--spacing-lg);
             list-style: none;
         }
@@ -299,9 +299,45 @@
             box-shadow: var(--shadow-lg);
         }
 
-        /* Section Nav (mobile wayfinding) */
+        /* Section Nav (wayfinding, all screens) */
         .section-nav {
-            display: none;
+            display: flex;
+            border-top: 1px solid var(--color-border);
+        }
+
+        .section-nav-item {
+            flex: 1;
+            text-align: center;
+            padding: var(--spacing-xs) 0;
+            font-size: var(--font-size-sm);
+            font-weight: var(--font-weight-normal);
+            color: var(--color-text-secondary);
+            text-decoration: none;
+            position: relative;
+            transition: color var(--transition-base), font-weight var(--transition-base);
+            line-height: 2;
+        }
+
+        .section-nav-item::after {
+            content: '';
+            position: absolute;
+            bottom: 0;
+            left: 20%;
+            right: 20%;
+            height: 3px;
+            background: var(--color-primary-orange);
+            border-radius: 3px 3px 0 0;
+            transform: scaleX(0);
+            transition: transform var(--transition-base);
+        }
+
+        .section-nav-item.active {
+            color: var(--color-navy);
+            font-weight: var(--font-weight-bold);
+        }
+
+        .section-nav-item.active::after {
+            transform: scaleX(1);
         }
 
         /* Social Proof Section */
@@ -435,11 +471,6 @@
             line-height: 1.8;
         }
 
-        .hero-ctas {
-            display: flex;
-            gap: var(--spacing-md);
-            flex-wrap: wrap;
-        }
 
         .btn {
             padding: var(--spacing-md) var(--spacing-xl);
@@ -4479,45 +4510,9 @@
                 display: none;
             }
 
-            /* Show section nav on mobile */
-            .section-nav {
-                display: flex;
-                border-top: 1px solid var(--color-border);
-            }
-
+            /* Smaller font on mobile */
             .section-nav-item {
-                flex: 1;
-                text-align: center;
-                padding: var(--spacing-xs) 0;
                 font-size: var(--font-size-xs);
-                font-weight: var(--font-weight-normal);
-                color: var(--color-text-secondary);
-                text-decoration: none;
-                position: relative;
-                transition: color var(--transition-base), font-weight var(--transition-base);
-                line-height: 2;
-            }
-
-            .section-nav-item::after {
-                content: '';
-                position: absolute;
-                bottom: 0;
-                left: 20%;
-                right: 20%;
-                height: 3px;
-                background: var(--color-primary-orange);
-                border-radius: 3px 3px 0 0;
-                transform: scaleX(0);
-                transition: transform var(--transition-base);
-            }
-
-            .section-nav-item.active {
-                color: var(--color-navy);
-                font-weight: var(--font-weight-bold);
-            }
-
-            .section-nav-item.active::after {
-                transform: scaleX(1);
             }
 
             /* Social proof counters stack on mobile */
@@ -4536,15 +4531,6 @@
 
             .hero-image {
                 order: 1;
-            }
-
-            .hero-ctas {
-                flex-direction: column;
-            }
-
-            .btn {
-                width: 100%;
-                justify-content: center;
             }
 
             .stats-container {
