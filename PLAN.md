@@ -1,155 +1,177 @@
-# Tab-Based Landing Page Redesign Plan
+# Dev Plan: Option C — Vertical Scroll + Sticky Section Nav
 
-## Design Overview
+## Current State Analysis
 
-Convert the scroll-based landing page into a 4-tab single-page app layout.
+The page is **already a single scrollable page** with a sticky top nav. However:
+- **Mobile nav is a hamburger menu** → user can't see where they are
+- **No section-awareness** → nav doesn't highlight the current section
+- **Current section order is info-heavy before the funnel payoff** (About → Pillars → Activities → Register)
+- **Floating CTA is the only mobile wayfinding** — and it disappears near the form
+
+## Goal
+
+Restructure into a clear **4-section funnel** with an always-visible compact section nav on mobile that tracks scroll position:
 
 ```
-MOBILE                              DESKTOP
-┌──────────────────┐               ┌─────────────────────────────────────┐
-│ 均一 x Hour of AI │               │ 均一 x Hour of AI  首頁 體驗 報名 關於│
-├──────────────────┤               ├─────────────────────────────────────┤
-│                  │               │                                     │
-│   Tab Content    │               │         Tab Content                 │
-│   (scrollable)   │               │         (scrollable, wider grids)   │
-│                  │               │                                     │
-├──────────────────┤               └─────────────────────────────────────┘
-│ 首頁 體驗 報名 關於│
-└──────────────────┘
+首頁 (Hero/Shock) → 體驗 (Experience) → 報名 (Register) → 關於 (About)
 ```
-
-- **Mobile**: Fixed bottom tab bar + minimal top brand bar
-- **Desktop**: Tabs merge into top bar alongside logo (no bottom bar)
-- One set of tab logic, CSS moves the bar position
-
----
-
-## Tab Content Specification
-
-### Tab 1: 首頁 (Home) — Hook the visitor
-
-Source sections: Hero (148-176), Stats Bar (179-196), Live Stats (199-404)
-
-**Content (top to bottom):**
-1. Hero: headline + subtitle + hero image (keep existing image)
-2. One-line mission: "AI 不是特權，是每位孩子的學習權利"
-3. Stats shock: Taiwan global rank badge, total events/participants counters
-4. Taiwan map + county rankings
-5. Upcoming events carousel
-6. Activity feed
-
-**Removed from current hero:** The two CTA buttons ("我要舉辦活動", "了解活動內容") — tabs replace this navigation.
-
-### Tab 2: 體驗 (Experience) — Try before you commit
-
-Source sections: Activities (760-823)
-
-**Content:**
-1. Section title: "先體驗，再決定"
-2. Active AI showcase (image + highlights + prominent CTA) — as currently redesigned
-3. AI Square one-line footnote — as currently redesigned
-4. Bridge text: "體驗完了？覺得適合帶進課堂？" with button that switches to Register tab
-
-### Tab 3: 報名 (Register) — Convert
-
-Source sections: Registration (826-1314)
-
-**Content:**
-1. Section title + subtitle
-2. Registration hero image
-3. Info banner (重要說明)
-4. Full form — ALL fields on one page (no multi-step, no progress bar)
-   - Contact info fields
-   - Organization details fields
-   - Activity details fields
-   - Consent + submit
-5. Success message (shown after submission)
-
-**Flatten the form:** Remove multi-step wizard logic (currentPage, showPage, updateProgress, validatePage). Replace with simple single-page form with one submit button. Keep field validation on submit.
-
-### Tab 4: 關於 (About) — For the curious
-
-Source sections: About (407-414), Pillars (417-757), Footer (1317-1372)
-
-**Content:**
-1. "What is Hour of AI" description
-2. Official selection badge
-3. Four Pillars — each as an expand/collapse card:
-   - Default: shows icon + title + subtitle + one-line brief (collapsed)
-   - Click to expand: reveals full detail (progression tabs content, insight quote)
-   - No modal — inline accordion style
-4. Footer content: contact info, links, logo
 
 ---
 
 ## Implementation Steps
 
-### Step 1: Tab Shell (HTML + CSS + JS)
+### Step 1: Add `id="hero"` to Hero Section
 
-**HTML changes to index.html:**
-- Replace top `<nav>` (lines 130-145) with minimal brand bar
-- Wrap all existing `<section>` elements into 4 `<div class="tab-panel">` containers
-- Add tab bar HTML (renders at bottom on mobile, inside top bar on desktop)
-- Remove floating CTA (lines 1375-1380)
-- Remove pillar modal overlay (lines 1383-1395)
+The hero `<section class="hero">` currently has no `id`. Add `id="hero"` so the section nav can target it.
 
-**CSS:**
-- `.app-shell`: full viewport height, flex column
-- `.brand-bar`: fixed top, minimal height, logo + branding text
-- `.tab-content`: flex: 1, overflow-y: auto (scrollable)
-- `.tab-panel`: hidden by default, `.tab-panel.active` shown
-- `.tab-bar`: fixed bottom on mobile, flex row, equal-width items
-- `@media (min-width: 769px)`: tab bar moves into brand bar (top), bottom bar hidden
+**File:** `src/index.html` line ~148
 
-**JS (new: tabNavigation.js):**
-- `initTabs()`: set up click handlers on tab buttons
-- `switchTab(tabId)`: hide all panels, show target, update active button
-- Default to "home" tab on load
-- Bridge buttons (e.g., "體驗完了？") call `switchTab('register')`
+### Step 2: Add Section Nav Bar (HTML)
 
-### Step 2: Migrate Content into Tabs
+Add a new compact section nav **inside** the existing `<nav id="nav">`, right after `.nav-container`. On mobile, this replaces the hamburger menu as the primary wayfinding.
 
-Move existing HTML sections into the 4 tab panels. No content rewrite needed — just re-parenting.
+```html
+<div class="section-nav" id="sectionNav">
+  <a href="#hero" class="section-nav-item active" data-section="hero">首頁</a>
+  <a href="#activities" class="section-nav-item" data-section="activities">體驗</a>
+  <a href="#register" class="section-nav-item" data-section="register">報名</a>
+  <a href="#about" class="section-nav-item" data-section="about">關於</a>
+</div>
+```
 
-- **Tab 1 (home):** hero + stats-bar + live-stats-section
-- **Tab 2 (experience):** activities section (already redesigned)
-- **Tab 3 (register):** registration section
-- **Tab 4 (about):** about section + pillars section + footer content
+### Step 3: Style Section Nav (CSS)
 
-### Step 3: Flatten Registration Form
+**Mobile (≤768px) — visible:**
+- Horizontal flex, full-width, inside sticky nav
+- Each item: equal `flex: 1`, centered text, ~40px height
+- Active: `border-bottom: 3px solid var(--color-primary-orange)`, `color: var(--color-navy)`, `font-weight: 700`
+- Inactive: `color: var(--color-text-secondary)`, `font-weight: 400`
+- Animated underline using `::after` with `transform: scaleX()` transition
+- Hide `.mobile-menu-toggle` and `.nav-links` dropdown on mobile
 
-In main.js registration logic:
-- Remove progress bar HTML
-- Remove `currentPage`, `showPage()`, `updateProgress()`, `goToPage()`
-- Remove next/prev button handlers
-- Show all form pages at once (remove `.hidden` from page divs)
-- Keep `validatePage()` logic but call it once on submit for ALL fields
-- Keep form submission logic, honeypot, success state
+**Desktop (>768px) — hidden:**
+- `display: none`
+- Keep existing full desktop nav-links as-is
 
-### Step 4: Pillars — Modal to Inline Toggle
+### Step 4: Reorder HTML Sections for Funnel Flow
 
-- Remove pillar modal overlay HTML
-- Remove `openPillarModal()`, `closePillarModal()`, `setupPillarModal()` from JS
-- Each pillar card gets a click handler that toggles `.expanded` class
-- Expanded state reveals the detail content (progression tabs + insight) inline below the card
-- Pillar detail panels move inside their respective cards
-- Keep pillar tab switching logic (basic/proficient/advanced) within expanded cards
+Current order:
+```
+Hero → Stats Bar → Live Stats → About → Pillars → Activities → Register → Footer
+```
 
-### Step 5: Cleanup
+New order:
+```
+Hero → Stats Bar → Activities → Register → About → Pillars → Live Stats → Footer
+```
 
-- Remove old top nav CSS (`.nav`, `.nav-links`, `.mobile-menu-toggle`)
-- Remove floating CTA CSS (`.floating-cta`)
-- Remove pillar modal CSS (`.pillar-modal-overlay`, `.pillar-modal`)
-- Remove multi-step form CSS (`.form-progress`, page transitions)
-- Remove floating CTA scroll listener JS
-- Remove mobile menu toggle JS
-- Update click tracking: ensure `initClickTracking()` runs on tab switch or on DOM ready
-- Verify all 76 existing tests still pass
+Moves:
+1. **Cut `#activities` section** (lines ~760-823) → paste after Stats Bar (after line ~196)
+2. **Cut `#register` section** (lines ~826-1314) → paste after Activities
+3. `#about`, `#pillars`, `#live-stats` stay in their relative order but now come after Register
 
-### Step 6: Final Polish
+This creates the funnel: **Shock (hero + stats) → Try it (experience) → Sign up (register) → Learn more (about + pillars + stats dashboard)**
 
-- Tab switch animations (fade or slide)
-- Scroll to top on tab switch
-- URL hash support (`#home`, `#experience`, `#register`, `#about`) for deep linking
-- Active tab highlight styling
-- Test on mobile and desktop viewports
+### Step 5: IntersectionObserver for Section Tracking (JS)
+
+New function in `main.js`:
+
+```js
+function initSectionNav() {
+  const sectionIds = ['hero', 'activities', 'register', 'about'];
+  const navItems = document.querySelectorAll('.section-nav-item');
+
+  const observer = new IntersectionObserver((entries) => {
+    entries.forEach(entry => {
+      if (entry.isIntersecting) {
+        navItems.forEach(item => item.classList.remove('active'));
+        const activeItem = document.querySelector(
+          `.section-nav-item[data-section="${entry.target.id}"]`
+        );
+        if (activeItem) activeItem.classList.add('active');
+      }
+    });
+  }, {
+    threshold: 0.15,
+    rootMargin: '-20% 0px -50% 0px'
+  });
+
+  sectionIds.forEach(id => {
+    const el = document.getElementById(id);
+    if (el) observer.observe(el);
+  });
+}
+```
+
+The `rootMargin: '-20% 0px -50% 0px'` creates a trigger zone in the upper 30% of the viewport, so the section near the top of the screen gets highlighted.
+
+### Step 6: Smooth Scroll Click Handlers (JS)
+
+Add to `initSectionNav()`:
+
+```js
+navItems.forEach(item => {
+  item.addEventListener('click', (e) => {
+    e.preventDefault();
+    const targetId = item.dataset.section;
+    const target = document.getElementById(targetId);
+    if (target) {
+      const navHeight = document.getElementById('nav').offsetHeight;
+      window.scrollTo({
+        top: target.offsetTop - navHeight,
+        behavior: 'smooth'
+      });
+    }
+  });
+});
+```
+
+### Step 7: Update Floating CTA Context-Awareness (JS)
+
+Current: Always shows "免費體驗 AI 課程" → `#activities`
+
+New behavior based on scroll position:
+- **Hero visible**: Show "免費體驗 AI 課程" → `#activities`
+- **Activities visible**: Show "我要舉辦活動" → `#register`
+- **Register/About visible**: Hide
+
+### Step 8: Hide Hamburger on Mobile (CSS)
+
+In `@media (max-width: 768px)`:
+- `.mobile-menu-toggle { display: none; }`
+- `.nav-links { display: none !important; }` (the dropdown, not the section nav)
+- Section nav is always visible
+
+---
+
+## File Changes Summary
+
+| File | Changes |
+|------|---------|
+| `src/index.html` | Add `id="hero"`, add section nav HTML, reorder sections |
+| `src/styles/main.css` | Add `.section-nav-*` styles, mobile media query for hide hamburger + show section nav |
+| `src/scripts/main.js` | Add `initSectionNav()` with IO + smooth scroll, update floating CTA logic |
+
+## What Stays the Same
+
+- **Desktop nav** (full nav-links) — unchanged
+- **All section content** — unchanged, just reordered
+- **Multi-step form logic** — unchanged
+- **Pillar modal** — unchanged
+- **Analytics/tracking** — unchanged
+- **Fade-in animations** — unchanged
+- **All backend/GAS integration** — unchanged
+
+## Execution Order
+
+1. ~~Explore codebase~~ ✅
+2. Add `id="hero"` to hero section
+3. Add section nav HTML inside `<nav>`
+4. Add section nav CSS (mobile-first)
+5. Reorder HTML sections for funnel flow
+6. Add IntersectionObserver JS for section tracking
+7. Add smooth scroll click handlers
+8. Update floating CTA context-awareness
+9. Hide hamburger on mobile, show section nav
+10. Test & verify
+11. Commit & push
