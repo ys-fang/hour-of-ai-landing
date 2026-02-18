@@ -75,11 +75,10 @@ export function getActivityIdFromElement(element) {
         return ACTIVITY_TYPES.UNKNOWN;
     }
 
-    // Try to get from data-activity attribute on parent card
-    const card = element.closest('.activity-card');
-    if (card && card.dataset.activity) {
-        // Map data-activity values to our constants
-        const dataActivity = card.dataset.activity;
+    // Try to get from data-activity attribute on parent element
+    const container = element.closest('[data-activity]');
+    if (container && container.dataset.activity) {
+        const dataActivity = container.dataset.activity;
         if (dataActivity === 'data-world') {
             return ACTIVITY_TYPES.ACTIVE_AI;
         }

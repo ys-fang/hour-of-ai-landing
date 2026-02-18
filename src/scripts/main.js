@@ -1,139 +1,10 @@
         // ===== Imports =====
         import { initClickTracking } from './clickTracking.js';
 
-        // ===== 統一的 Flash-Card 系統 =====
-        function toggleCard(button, event) {
-            event.stopPropagation();
-
-            const cardElement = button.closest('.activity-card');
-
-            if (cardElement) {
-                cardElement.classList.add('flipped');
-
-                // 直接使用內聯樣式強制顯示背面
-                const cardImage = cardElement.querySelector('.activity-card-image');
-                const cardContent = cardElement.querySelector('.activity-card-content');
-                const overlay = cardElement.querySelector('.image-overlay');
-                const closeBtn = cardElement.querySelector('.overlay-close');
-
-                if (cardImage) {
-                    cardImage.style.opacity = '1';
-                    cardImage.style.zIndex = '10';
-                    cardImage.style.pointerEvents = 'auto';
-                }
-                if (cardContent) {
-                    cardContent.style.opacity = '0.1';
-                }
-                if (overlay) {
-                    overlay.style.opacity = '1';
-                }
-                if (closeBtn) {
-                    closeBtn.style.display = 'inline-flex';
-                }
-
-                // 停止按鈕的動畫
-                button.style.animation = 'none';
-            } else {
-                console.error('找不到 .activity-card 元素!');
-            }
-        }
-
-        function closeCard(button, event) {
-            event.stopPropagation();
-
-            const cardElement = button.closest('.activity-card');
-            if (cardElement) {
-                cardElement.classList.remove('flipped');
-
-                // 直接重置內聯樣式
-                const cardImage = cardElement.querySelector('.activity-card-image');
-                const cardContent = cardElement.querySelector('.activity-card-content');
-                const overlay = cardElement.querySelector('.image-overlay');
-                const closeBtn = cardElement.querySelector('.overlay-close');
-
-                if (cardImage) {
-                    cardImage.style.opacity = '0';
-                    cardImage.style.zIndex = '';
-                    cardImage.style.pointerEvents = 'none';
-                }
-                if (cardContent) {
-                    cardContent.style.opacity = '1';
-                }
-                if (overlay) {
-                    overlay.style.opacity = '0';
-                }
-                if (closeBtn) {
-                    closeBtn.style.display = 'none';
-                }
-
-                // 重新啟動查看詳細按鈕的動畫
-                const detailsButton = cardElement.querySelector('.activity-details-button');
-                if (detailsButton) {
-                    detailsButton.style.animation = 'pulse-gentle 2s infinite';
-                }
-            }
-        }
-
         // 初始化
         document.addEventListener('DOMContentLoaded', () => {
-
-
-
-            // 為所有查看詳細按鈕添加事件監聽器
-            const detailButtons = document.querySelectorAll('.activity-details-button');
-
-            detailButtons.forEach((button, index) => {
-
-                // 添加多種事件
-                button.addEventListener('click', function(event) {
-                    event.preventDefault();
-                    event.stopPropagation();
-                    event.stopImmediatePropagation();
-
-                    toggleCard(this, event);
-                    return false;
-                }, true);
-
-                button.addEventListener('mousedown', function(event) {
-                }, true);
-
-                button.addEventListener('touchstart', function(event) {
-                }, true);
-            });
-
-            // 為所有關閉按鈕添加事件監聽器
-            const closeButtons = document.querySelectorAll('.overlay-close');
-
-            closeButtons.forEach((button, index) => {
-
-                button.addEventListener('click', function(event) {
-                    event.preventDefault();
-                    event.stopPropagation();
-                    event.stopImmediatePropagation();
-
-                    closeCard(this, event);
-                    return false;
-                }, true);
-            });
-
-            // 為整個activity-card添加點擊事件作為後備
-            const activityCards = document.querySelectorAll('.activity-card');
-            activityCards.forEach((card, index) => {
-
-                card.addEventListener('click', function(event) {
-
-                    // 檢查是否點擊了詳細按鈕區域
-                    if (event.target.closest('.activity-details-button')) {
-                        const button = event.target.closest('.activity-details-button');
-                        event.preventDefault();
-                        event.stopPropagation();
-                        toggleCard(button, event);
-                    }
-                });
-            });
-
             // ===== Initialize Activity CTA Click Tracking =====
-            // Tracks clicks on "開始學習" buttons for conversion rate analysis
+            // Tracks clicks on platform experience CTAs for funnel analysis
             initClickTracking();
         });
 
@@ -543,38 +414,125 @@ Check Google Sheets to see how many entries were actually created.
             });
         });
 
-        // ===== Mobile Navigation =====
-        const mobileMenuToggle = document.getElementById('mobileMenuToggle');
-        const navLinks = document.getElementById('navLinks');
-
-        mobileMenuToggle.addEventListener('click', () => {
-            mobileMenuToggle.classList.toggle('active');
-            navLinks.classList.toggle('active');
-        });
-
-        // Close mobile menu when clicking on a link
-        navLinks.querySelectorAll('a').forEach(link => {
-            link.addEventListener('click', () => {
-                mobileMenuToggle.classList.remove('active');
-                navLinks.classList.remove('active');
-            });
-        });
-
         // ===== Sticky Navigation =====
         const nav = document.getElementById('nav');
-        let lastScroll = 0;
 
         window.addEventListener('scroll', () => {
-            const currentScroll = window.pageYOffset;
-
-            if (currentScroll > 100) {
+            if (window.pageYOffset > 100) {
                 nav.classList.add('scrolled');
             } else {
                 nav.classList.remove('scrolled');
             }
-
-            lastScroll = currentScroll;
         });
+
+        // ===== Tab Navigation System =====
+        const TAB_IDS = ['home', 'experience', 'host', 'about'];
+        const tabButtons = document.querySelectorAll('#tabNav [role="tab"]');
+        let currentTab = 'home';
+        let mapInitialized = false;
+
+        function switchTab(tabId, pushState = true) {
+            if (!TAB_IDS.includes(tabId)) tabId = 'home';
+            currentTab = tabId;
+
+            // Update tab buttons
+            tabButtons.forEach(btn => {
+                const isActive = btn.dataset.tab === tabId;
+                btn.classList.toggle('active', isActive);
+                btn.setAttribute('aria-selected', isActive);
+            });
+
+            // Switch panels
+            document.querySelectorAll('.tab-panel').forEach(panel => {
+                panel.classList.toggle('active', panel.id === `panel-${tabId}`);
+            });
+
+            // Scroll to top
+            window.scrollTo({ top: 0, behavior: 'instant' });
+
+            // URL hash
+            if (pushState) {
+                history.pushState({ tab: tabId }, '', `#${tabId}`);
+            }
+
+            // Re-observe fade-in elements in newly visible panel
+            const panel = document.getElementById(`panel-${tabId}`);
+            if (panel) {
+                panel.querySelectorAll('.fade-in:not(.visible)').forEach(el => {
+                    observer.observe(el);
+                });
+                // Trigger immediate visibility check
+                panel.querySelectorAll('.fade-in:not(.visible)').forEach(el => {
+                    const rect = el.getBoundingClientRect();
+                    if (rect.top < window.innerHeight) {
+                        el.classList.add('visible');
+                    }
+                });
+            }
+
+            // Fix Leaflet map on first Tab 1 visit (if not initial)
+            if (tabId === 'home' && mapInitialized) {
+                const map = document.getElementById('taiwanMap');
+                if (map && map._leaflet_id) {
+                    // Leaflet needs invalidateSize after container becomes visible
+                    setTimeout(() => {
+                        if (window.taiwanMapInstance) {
+                            window.taiwanMapInstance.invalidateSize();
+                        }
+                    }, 100);
+                }
+            }
+
+            // Fix carousel layout on first Tab 2 visit
+            if (tabId === 'experience') {
+                setTimeout(() => {
+                    const carousel = document.getElementById('eventsCarousel');
+                    if (carousel && carousel.querySelector('.event-card')) {
+                        scrollToPage(carouselCurrentIndex);
+                    }
+                }, 50);
+            }
+
+            // GA4 tab tracking
+            if (typeof gtag === 'function') {
+                gtag('event', 'tab_view', {
+                    tab_name: tabId,
+                    event_category: 'navigation'
+                });
+            }
+        }
+
+        // Tab click handlers
+        tabButtons.forEach(btn => {
+            btn.addEventListener('click', () => {
+                switchTab(btn.dataset.tab);
+            });
+        });
+
+        // CTA buttons that switch tabs
+        document.querySelectorAll('[data-goto-tab]').forEach(btn => {
+            btn.addEventListener('click', () => {
+                switchTab(btn.dataset.gotoTab);
+            });
+        });
+
+        // Hash routing
+        function getTabFromHash() {
+            const hash = window.location.hash.replace('#', '');
+            return TAB_IDS.includes(hash) ? hash : 'home';
+        }
+
+        // Handle browser back/forward
+        window.addEventListener('popstate', (e) => {
+            const tabId = e.state?.tab || getTabFromHash();
+            switchTab(tabId, false);
+        });
+
+        // Initialize from URL hash
+        const initialTab = getTabFromHash();
+        if (initialTab !== 'home') {
+            switchTab(initialTab, false);
+        }
 
         // ===== Fade-in Animation on Scroll =====
         const observerOptions = {
@@ -592,21 +550,6 @@ Check Google Sheets to see how many entries were actually created.
 
         document.querySelectorAll('.fade-in').forEach(el => {
             observer.observe(el);
-        });
-
-        // ===== Floating CTA =====
-        const floatingCta = document.getElementById('floatingCta');
-        const registrationSection = document.getElementById('register');
-
-        window.addEventListener('scroll', () => {
-            const registrationTop = registrationSection.offsetTop;
-            const scrollPosition = window.pageYOffset + window.innerHeight;
-
-            if (window.pageYOffset > 800 && scrollPosition < registrationTop + 200) {
-                floatingCta.classList.add('visible');
-            } else {
-                floatingCta.classList.remove('visible');
-            }
         });
 
         // ===== Activity Description Example Section =====
@@ -2081,7 +2024,7 @@ Check Google Sheets to see how many entries were actually created.
             }
 
             // Initialize map centered on Taiwan
-            taiwanMap = L.map('taiwanMap', {
+            taiwanMap = window.taiwanMapInstance = L.map('taiwanMap', {
                 center: [23.8, 121],
                 zoom: 7,
                 minZoom: 7,
@@ -2144,6 +2087,7 @@ Check Google Sheets to see how many entries were actually created.
 
             if (!taiwanMap) {
                 await initTaiwanMap();
+                mapInitialized = true;
             }
 
             const maxCount = Math.max(...Object.values(counties), 1);
@@ -2425,12 +2369,15 @@ Check Google Sheets to see how many entries were actually created.
         // ===== Smooth Scrolling for Anchor Links =====
         document.querySelectorAll('a[href^="#"]').forEach(anchor => {
             anchor.addEventListener('click', function (e) {
+                // Skip if already handled by section-nav
+                if (this.classList.contains('section-nav-item')) return;
                 e.preventDefault();
                 const target = document.querySelector(this.getAttribute('href'));
                 if (target) {
-                    target.scrollIntoView({
-                        behavior: 'smooth',
-                        block: 'start'
+                    const navHeight = nav.offsetHeight;
+                    window.scrollTo({
+                        top: target.offsetTop - navHeight - 8,
+                        behavior: 'smooth'
                     });
                 }
             });

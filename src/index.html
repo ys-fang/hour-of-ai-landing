@@ -132,40 +132,31 @@
             <div class="nav-logo">
                 均一 x Hour of <span>AI</span>
             </div>
-            <button class="mobile-menu-toggle" id="mobileMenuToggle" aria-label="Toggle menu">
-                <span class="hamburger"></span>
-            </button>
-            <ul class="nav-links" id="navLinks">
-                <li><a href="#about">關於活動</a></li>
-                <li><a href="#pillars">AI 素養</a></li>
-                <li><a href="#activities">活動內容</a></li>
-                <li><a href="#register" class="nav-cta">舉辦活動</a></li>
-            </ul>
+        </div>
+        <!-- Tab Navigation -->
+        <div class="section-nav" id="tabNav" role="tablist">
+            <button role="tab" class="section-nav-item active" aria-selected="true" data-tab="home">首頁</button>
+            <button role="tab" class="section-nav-item" aria-selected="false" data-tab="experience">體驗</button>
+            <button role="tab" class="section-nav-item" aria-selected="false" data-tab="host">舉辦</button>
+            <button role="tab" class="section-nav-item" aria-selected="false" data-tab="about">關於</button>
         </div>
     </nav>
 
+    <!-- ==================== Tab 1: 首頁 (Awareness) ==================== -->
+    <div class="tab-panel active" id="panel-home" role="tabpanel">
+
     <!-- Hero Section -->
-    <section class="hero">
+    <section class="hero" id="hero">
         <div class="container">
             <div class="hero-content">
                 <div class="hero-text fade-in">
                     <h1>
                         <span class="highlight">AI 素養起步走</span><br>
-                        擁抱 AI,讓學習力再進化
+                        用一小時，讓每個孩子認識 AI
                     </h1>
                     <p>
-                        均一平台教育基金會提供免費 AI 教育資源與平台，邀請您成為台灣 AI 素養教育推手！在您的機構舉辦 Hour of AI，我們提供完整教材支援。
+                        均一平台教育基金會提供免費 AI 教育資源與平台，邀請您成為台灣 AI 素養教育推手！
                     </p>
-                    <div class="hero-ctas">
-                        <a href="#register" class="btn btn-primary">
-                            <span class="material-icons small">campaign</span>
-                            我要舉辦活動
-                        </a>
-                        <a href="#activities" class="btn btn-secondary">
-                            <span class="material-icons small">info</span>
-                            了解活動內容
-                        </a>
-                    </div>
                 </div>
                 <div class="hero-image fade-in">
                     <img src="https://storage.googleapis.com/wpassets.junyiacademy.org/1/2025/11/均一首頁最新消息Hour-of-AI＿25Q3＿V1.jpg"
@@ -175,57 +166,47 @@
         </div>
     </section>
 
-    <!-- Stats Bar -->
-    <section class="stats-bar">
+    <!-- What is Hour of AI — concise bullet points -->
+    <section class="section about-highlights-section" id="about">
         <div class="container">
-            <div class="stats-container">
-                <div class="stat-item fade-in">
-                    <h2>AI 不是特權</h2>
-                    <p>是每位孩子的學習權利</p>
+            <h2 class="section-title fade-in">Hour of AI 是什麼？</h2>
+            <div class="about-highlights">
+                <div class="about-highlight-item fade-in">
+                    <span class="material-icons medium" style="color: var(--color-primary-blue);">language</span>
+                    <div>
+                        <strong>全球教育運動</strong>
+                        <p>靈感來自 Hour of Code，由 Code.org 發起，全球教育社群共同推動</p>
+                    </div>
                 </div>
-                <div class="stat-item fade-in">
-                    <h2>培養自學與思考力</h2>
-                    <p>孩子可以和 AI 共學</p>
+                <div class="about-highlight-item fade-in">
+                    <span class="material-icons medium" style="color: var(--color-primary-orange);">timer</span>
+                    <div>
+                        <strong>60 分鐘體驗 AI</strong>
+                        <p>透過免費教材與工具，讓學生在一小時內親身體驗、理解、善用 AI</p>
+                    </div>
                 </div>
-                <div class="stat-item fade-in">
-                    <h2>學會善用 AI</h2>
-                    <p>而不是被 AI 取代</p>
+                <div class="about-highlight-item fade-in">
+                    <span class="material-icons medium" style="color: var(--color-primary-teal);">school</span>
+                    <div>
+                        <strong>免費教材，適合教室與社區</strong>
+                        <p>主要場域為教室與社區，目標讓每位孩子都能接觸 AI 素養教育</p>
+                    </div>
+                </div>
+                <div class="about-highlight-item fade-in">
+                    <span class="material-icons medium" style="color: var(--color-coral);">volunteer_activism</span>
+                    <div>
+                        <strong>均一在台灣推動</strong>
+                        <p>均一平台教育基金會在台灣主辦，提供完整教材與平台支援</p>
+                    </div>
                 </div>
             </div>
         </div>
     </section>
 
-    <!-- Live Statistics Dashboard -->
-    <section class="live-stats-section" id="live-stats">
+    <!-- Social Proof: Global Rank + Counters -->
+    <section class="social-proof-section">
         <div class="container">
-            <!-- Upcoming Events Carousel Section -->
-            <div class="upcoming-events-section" id="upcoming-events">
-                <div class="upcoming-events-header">
-                    <h2 class="section-title fade-in">
-                        <span class="material-icons medium" style="color: var(--color-primary-orange);">campaign</span>
-                        近期推廣活動
-                    </h2>
-                    <p class="section-subtitle fade-in">
-                        探索我們主辦的精彩活動，一起參與 AI 素養教育推廣
-                    </p>
-                </div>
-                <div class="events-carousel-wrapper">
-                    <button class="carousel-nav prev" id="carouselPrev" aria-label="上一個">
-                        <span class="material-icons">chevron_left</span>
-                    </button>
-                    <div class="events-carousel" id="eventsCarousel">
-                        <!-- Event cards will be rendered by JavaScript -->
-                    </div>
-                    <button class="carousel-nav next" id="carouselNext" aria-label="下一個">
-                        <span class="material-icons">chevron_right</span>
-                    </button>
-                </div>
-                <div class="carousel-dots" id="carouselDots">
-                    <!-- Dots will be rendered by JavaScript -->
-                </div>
-            </div>
-
-            <!-- Taiwan Global Ranking Section -->
+            <!-- Compact Global Ranking -->
             <div class="taiwan-global-rank-section fade-in" id="globalRankSection">
                 <div class="stats-header-wrapper">
                     <div class="stats-header-content">
@@ -266,7 +247,7 @@
                     </div>
                 </div>
 
-                <!-- Auxiliary Info: Local vs Global (降級為說明文字) -->
+                <!-- Auxiliary Info: Local vs Global -->
                 <div class="rank-auxiliary-info">
                     <span class="material-icons tiny">info_outline</span>
                     <div class="auxiliary-content">
@@ -282,6 +263,36 @@
                 </div>
             </div>
 
+            <!-- Counters -->
+            <div class="stats-counters">
+                <div class="counter-card fade-in">
+                    <div class="counter-icon">
+                        <span class="material-icons large" style="color: var(--color-primary-orange);">event</span>
+                    </div>
+                    <div class="counter-number" id="totalEvents">0</div>
+                    <div class="counter-label">規劃場次</div>
+                </div>
+                <div class="counter-card fade-in">
+                    <div class="counter-icon">
+                        <span class="material-icons large" style="color: var(--color-primary-blue);">groups</span>
+                    </div>
+                    <div class="counter-number" id="totalParticipants">0</div>
+                    <div class="counter-label">預估人數</div>
+                </div>
+                <div class="counter-card fade-in">
+                    <div class="counter-icon">
+                        <span class="material-icons large" style="color: var(--color-primary-teal);">location_on</span>
+                    </div>
+                    <div class="counter-number" id="totalCounties">0</div>
+                    <div class="counter-label">參與縣市</div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Live Statistics Dashboard -->
+    <section class="live-stats-section" id="live-stats">
+        <div class="container">
             <div class="stats-header-wrapper">
                 <div class="stats-header-content">
                     <h2 class="section-title fade-in">
@@ -299,34 +310,8 @@
             </div>
 
             <div class="stats-dashboard" id="statsDashboard">
-                <!-- Left Column: Counters & Map -->
+                <!-- Left Column: Map -->
                 <div class="stats-left">
-                    <!-- Counters -->
-                    <div class="stats-counters">
-                        <div class="counter-card fade-in">
-                            <div class="counter-icon">
-                                <span class="material-icons large" style="color: var(--color-primary-orange);">event</span>
-                            </div>
-                            <div class="counter-number" id="totalEvents">0</div>
-                            <div class="counter-label">規劃場次</div>
-                        </div>
-                        <div class="counter-card fade-in">
-                            <div class="counter-icon">
-                                <span class="material-icons large" style="color: var(--color-primary-blue);">groups</span>
-                            </div>
-                            <div class="counter-number" id="totalParticipants">0</div>
-                            <div class="counter-label">預估參與人數</div>
-                        </div>
-                        <div class="counter-card fade-in">
-                            <div class="counter-icon">
-                                <span class="material-icons large" style="color: var(--color-primary-teal);">location_on</span>
-                            </div>
-                            <div class="counter-number" id="totalCounties">0</div>
-                            <div class="counter-label">參與縣市</div>
-                        </div>
-                    </div>
-
-                    <!-- Taiwan Map -->
                     <div class="taiwan-map-container fade-in">
                         <h3>
                             <span class="material-icons medium" style="color: var(--color-navy);">map</span>
@@ -338,14 +323,12 @@
 
                 <!-- Right Column: Rankings & Activity Feed -->
                 <div class="stats-right">
-                    <!-- Top Counties Ranking -->
                     <div class="ranking-card fade-in">
                         <h3>
                             <span class="material-icons medium" style="color: var(--color-yellow);">emoji_events</span>
                             縣市排行榜
                         </h3>
                         <div class="ranking-list" id="rankingList">
-                            <!-- Will be populated by JavaScript -->
                             <div class="ranking-item">
                                 <div class="ranking-position top-1">1</div>
                                 <div class="ranking-info">
@@ -359,14 +342,12 @@
                         </div>
                     </div>
 
-                    <!-- Latest Activity Feed -->
                     <div class="activity-feed-card fade-in">
                         <h3>
                             <span class="material-icons medium" style="color: var(--color-primary-blue);">campaign</span>
                             最新活動規劃
                         </h3>
                         <div class="activity-feed" id="activityFeed">
-                            <!-- Will be populated by JavaScript -->
                             <div class="activity-item">
                                 <div class="activity-icon">
                                     <span class="material-icons medium" style="color: var(--color-white);">auto_awesome</span>
@@ -381,7 +362,6 @@
                 </div>
             </div>
 
-            <!-- Demo Mode Notice (only shown in demo mode) -->
             <div id="demoNotice" class="demo-notice" style="display: none;">
                 <div class="demo-notice-content">
                     <span class="material-icons small">info</span>
@@ -389,7 +369,6 @@
                 </div>
             </div>
 
-            <!-- Stats Update Controls -->
             <div class="stats-controls-wrapper">
                 <div class="stats-controls">
                     <div class="stats-meta">
@@ -403,480 +382,125 @@
         </div>
     </section>
 
-    <!-- About Section -->
-    <section class="section" id="about">
+    <!-- Tab 1 CTA -->
+    <div class="tab-cta-section">
         <div class="container">
-            <h2 class="section-title fade-in">什麼是 Hour of AI?</h2>
-            <p class="section-subtitle fade-in">
-                Hour of AI，活動靈感來自全球最大公益學習運動 Hour of Code，由國際教育平台 Code.org 發起的年度活動，由全球教育社群推動，在每年指定時段，透過免費開放的教材與工具，讓學生、教師與社區成員在 60 分鐘內或延伸課程中學習 AI 素養，以推廣 AI 教育成為全民基礎能力。主要場域為教室與社區，目標讓每位孩子都能用一小時親身體驗 AI、理解 AI、善用 AI。
-            </p>
+            <p class="tab-cta-hint">想看看 AI 教育長什麼樣子？</p>
+            <button class="btn btn-primary tab-cta-btn" data-goto-tab="experience">
+                <span>開始體驗</span>
+                <span class="material-icons">arrow_forward</span>
+            </button>
         </div>
-    </section>
+    </div>
 
-    <!-- AI Pillars Section -->
-    <section class="section" id="pillars" style="background: var(--color-bg-light);">
-        <div class="container">
-            <h2 class="section-title fade-in">AI 素養四大支柱</h2>
-            <p class="pillars-intro fade-in">
-                AI 素養不是一次到位，而是一段由淺入深的學習歷程
-            </p>
+    </div><!-- /panel-home -->
 
-            <!-- Pillar Cards -->
-            <div class="pillars-grid">
-                <div class="pillar-card fade-in" data-pillar="ask">
-                    <div class="pillar-icon">問 AI</div>
-                    <div class="pillar-english">Engage</div>
-                    <div class="pillar-subtitle">精準提問與人機協作</div>
-                    <p class="pillar-brief">學會跟 AI 對話，而不是丟一句話給它</p>
-                    <button class="pillar-details-button">
-                        <span class="material-icons">visibility</span>
-                        <span>查看詳細</span>
-                    </button>
-                </div>
-                <div class="pillar-card fade-in" data-pillar="use">
-                    <div class="pillar-icon">用 AI</div>
-                    <div class="pillar-english">Create</div>
-                    <div class="pillar-subtitle">工具掌握與效率提升</div>
-                    <p class="pillar-brief">把 AI 放進流程，而不是多開一個工具</p>
-                    <button class="pillar-details-button">
-                        <span class="material-icons">visibility</span>
-                        <span>查看詳細</span>
-                    </button>
-                </div>
-                <div class="pillar-card fade-in" data-pillar="manage">
-                    <div class="pillar-icon">管 AI</div>
-                    <div class="pillar-english">Manage</div>
-                    <div class="pillar-subtitle">批判思考與倫理素養</div>
-                    <p class="pillar-brief">確保「人仍然在駕駛座上」</p>
-                    <button class="pillar-details-button">
-                        <span class="material-icons">visibility</span>
-                        <span>查看詳細</span>
-                    </button>
-                </div>
-                <div class="pillar-card fade-in" data-pillar="build">
-                    <div class="pillar-icon">造 AI</div>
-                    <div class="pillar-english">Design</div>
-                    <div class="pillar-subtitle">原理理解與創新應用</div>
-                    <p class="pillar-brief">從使用者，走向能創造價值的人</p>
-                    <button class="pillar-details-button">
-                        <span class="material-icons">visibility</span>
-                        <span>查看詳細</span>
-                    </button>
-                </div>
-            </div>
+    <!-- ==================== Tab 2: 體驗 (Interest) ==================== -->
+    <div class="tab-panel" id="panel-experience" role="tabpanel">
 
-            <!-- Expandable Detail Panels -->
-            <div class="pillar-detail" id="pillar-detail-ask" data-pillar="ask">
-                <div class="pillar-detail-header">
-                    <div class="pillar-detail-icon">問</div>
-                    <div class="pillar-detail-title-group">
-                        <div class="pillar-detail-english">Engaging with AI</div>
-                        <h3 class="pillar-detail-title">問 AI</h3>
-                        <div class="pillar-detail-subtitle">精準提問與人機協作</div>
-                    </div>
-                </div>
-                <div class="pillar-detail-headline">學會跟 AI 對話，而不是丟一句話給它</div>
-
-                <!-- Progression Tabs -->
-                <div class="pillar-tabs">
-                    <div class="pillar-tabs-nav">
-                        <button class="pillar-tab-btn active" data-tab="basic">基礎</button>
-                        <button class="pillar-tab-btn" data-tab="proficient">精熟</button>
-                        <button class="pillar-tab-btn" data-tab="advanced">進階</button>
-                    </div>
-                    <div class="pillar-tabs-content">
-                        <div class="pillar-tab-panel active" data-tab="basic">
-                            <div class="pillar-level-header">
-                                <span class="pillar-level-icon material-icons">gps_fixed</span>
-                                <div class="pillar-level-title">
-                                    <strong>精準提問</strong>
-                                    <span class="pillar-level-english">Precision</span>
-                                </div>
-                            </div>
-                            <p class="pillar-level-desc">能清楚描述人、事、時、地、物與目標。不再問模糊問題。</p>
-                            <div class="pillar-level-example">
-                                <span class="example-label">關鍵能力</span>
-                                <span>將模糊需求轉成明確指令</span>
-                            </div>
-                        </div>
-                        <div class="pillar-tab-panel" data-tab="proficient">
-                            <div class="pillar-level-header">
-                                <span class="pillar-level-icon material-icons">sync</span>
-                                <div class="pillar-level-title">
-                                    <strong>迭代追問</strong>
-                                    <span class="pillar-level-english">Iteration</span>
-                                </div>
-                            </div>
-                            <p class="pillar-level-desc">透過連續對話、反問與收斂，引導 AI 修正方向。像蘇格拉底式的對話。</p>
-                            <div class="pillar-level-example">
-                                <span class="example-label">關鍵能力</span>
-                                <span>追問、修正、深化對話品質</span>
-                            </div>
-                        </div>
-                        <div class="pillar-tab-panel" data-tab="advanced">
-                            <div class="pillar-level-header">
-                                <span class="pillar-level-icon material-icons">psychology</span>
-                                <div class="pillar-level-title">
-                                    <strong>框架思維</strong>
-                                    <span class="pillar-level-english">Framework</span>
-                                </div>
-                            </div>
-                            <p class="pillar-level-desc">要求 AI 提供解決問題的思維模型與系統性分析。問的不是答案，是方法論。</p>
-                            <div class="pillar-level-example">
-                                <span class="example-label">關鍵能力</span>
-                                <span>用 AI 做資訊輔助與結構化思考</span>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-
-                <div class="pillar-detail-insight">
-                    <span class="insight-icon material-icons">lightbulb</span>
-                    <p>「問」是一種思考訓練：你知不知道自己真正要什麼？</p>
-                </div>
-            </div>
-
-            <div class="pillar-detail" id="pillar-detail-use" data-pillar="use">
-                <div class="pillar-detail-header">
-                    <div class="pillar-detail-icon">用</div>
-                    <div class="pillar-detail-title-group">
-                        <div class="pillar-detail-english">Creating with AI</div>
-                        <h3 class="pillar-detail-title">用 AI</h3>
-                        <div class="pillar-detail-subtitle">工具掌握與效率提升</div>
-                    </div>
-                </div>
-                <div class="pillar-detail-headline">把 AI 放進流程，而不是多開一個工具</div>
-
-                <!-- Progression Tabs -->
-                <div class="pillar-tabs">
-                    <div class="pillar-tabs-nav">
-                        <button class="pillar-tab-btn active" data-tab="basic">基礎</button>
-                        <button class="pillar-tab-btn" data-tab="proficient">精熟</button>
-                        <button class="pillar-tab-btn" data-tab="advanced">進階</button>
-                    </div>
-                    <div class="pillar-tabs-content">
-                        <div class="pillar-tab-panel active" data-tab="basic">
-                            <div class="pillar-level-header">
-                                <span class="pillar-level-icon material-icons">edit</span>
-                                <div class="pillar-level-title">
-                                    <strong>生活單點</strong>
-                                    <span class="pillar-level-english">Task</span>
-                                </div>
-                            </div>
-                            <p class="pillar-level-desc">解決單一需求。例如：規劃旅遊、寫信、摘要文章。</p>
-                            <div class="pillar-level-example">
-                                <span class="example-label">關鍵能力</span>
-                                <span>理解不同 AI 工具的強項</span>
-                            </div>
-                        </div>
-                        <div class="pillar-tab-panel" data-tab="proficient">
-                            <div class="pillar-level-header">
-                                <span class="pillar-level-icon material-icons">link</span>
-                                <div class="pillar-level-title">
-                                    <strong>專業串聯</strong>
-                                    <span class="pillar-level-english">Workflow</span>
-                                </div>
-                            </div>
-                            <p class="pillar-level-desc">建立自動化工作流，串接產出。例如：行銷文案→自動製圖→排程發布。</p>
-                            <div class="pillar-level-example">
-                                <span class="example-label">關鍵能力</span>
-                                <span>組合多個工具提升效率</span>
-                            </div>
-                        </div>
-                        <div class="pillar-tab-panel" data-tab="advanced">
-                            <div class="pillar-level-header">
-                                <span class="pillar-level-icon material-icons">smart_toy</span>
-                                <div class="pillar-level-title">
-                                    <strong>自主代理</strong>
-                                    <span class="pillar-level-english">Agents</span>
-                                </div>
-                            </div>
-                            <p class="pillar-level-desc">指揮 AI 跨域調用工具去「執行」任務。例如：給模糊目標，讓 Agent 自行比價下單。</p>
-                            <div class="pillar-level-example">
-                                <span class="example-label">關鍵能力</span>
-                                <span>設計 AI 代理執行複雜任務</span>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-
-                <div class="pillar-detail-insight">
-                    <span class="insight-icon material-icons">lightbulb</span>
-                    <p>關鍵判準：用完之後，學習有沒有變好？</p>
-                </div>
-            </div>
-
-            <div class="pillar-detail" id="pillar-detail-manage" data-pillar="manage">
-                <div class="pillar-detail-header">
-                    <div class="pillar-detail-icon">管</div>
-                    <div class="pillar-detail-title-group">
-                        <div class="pillar-detail-english">Managing with AI</div>
-                        <h3 class="pillar-detail-title">管 AI</h3>
-                        <div class="pillar-detail-subtitle">批判思考與倫理素養</div>
-                    </div>
-                </div>
-                <div class="pillar-detail-headline">確保「人仍然在駕駛座上」</div>
-
-                <!-- Progression Tabs -->
-                <div class="pillar-tabs">
-                    <div class="pillar-tabs-nav">
-                        <button class="pillar-tab-btn active" data-tab="basic">基礎</button>
-                        <button class="pillar-tab-btn" data-tab="proficient">精熟</button>
-                        <button class="pillar-tab-btn" data-tab="advanced">進階</button>
-                    </div>
-                    <div class="pillar-tabs-content">
-                        <div class="pillar-tab-panel active" data-tab="basic">
-                            <div class="pillar-level-header">
-                                <span class="pillar-level-icon material-icons">visibility</span>
-                                <div class="pillar-level-title">
-                                    <strong>管好一 AI</strong>
-                                    <span class="pillar-level-english">Supervision</span>
-                                </div>
-                            </div>
-                            <p class="pillar-level-desc">具備識讀能力，能查核事實，避免單一 AI 幻覺。（指導員層級）</p>
-                            <div class="pillar-level-example">
-                                <span class="example-label">關鍵能力</span>
-                                <span>不盲信 AI 產出，能驗證資訊</span>
-                            </div>
-                        </div>
-                        <div class="pillar-tab-panel" data-tab="proficient">
-                            <div class="pillar-level-header">
-                                <span class="pillar-level-icon material-icons">tune</span>
-                                <div class="pillar-level-title">
-                                    <strong>管好群 AI</strong>
-                                    <span class="pillar-level-english">Orchestration</span>
-                                </div>
-                            </div>
-                            <p class="pillar-level-desc">同時調度多個不同功能的 Agents 協作。（調度員層級）</p>
-                            <div class="pillar-level-example">
-                                <span class="example-label">關鍵能力</span>
-                                <span>協調多個 AI 系統的輸出</span>
-                            </div>
-                        </div>
-                        <div class="pillar-tab-panel" data-tab="advanced">
-                            <div class="pillar-level-header">
-                                <span class="pillar-level-icon material-icons">supervisor_account</span>
-                                <div class="pillar-level-title">
-                                    <strong>管好人機協作</strong>
-                                    <span class="pillar-level-english">Leadership</span>
-                                </div>
-                            </div>
-                            <p class="pillar-level-desc">領導「人+AI」混合團隊，劃分權責與倫理邊界。（指揮官層級）</p>
-                            <div class="pillar-level-example">
-                                <span class="example-label">關鍵能力</span>
-                                <span>定義人與 AI 的責任邊界</span>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-
-                <div class="pillar-detail-insight">
-                    <span class="insight-icon material-icons">lightbulb</span>
-                    <p>定義責任：哪些判斷絕不能外包？哪些後果必須由人承擔？</p>
-                </div>
-            </div>
-
-            <div class="pillar-detail" id="pillar-detail-build" data-pillar="build">
-                <div class="pillar-detail-header">
-                    <div class="pillar-detail-icon">造</div>
-                    <div class="pillar-detail-title-group">
-                        <div class="pillar-detail-english">Designing with AI</div>
-                        <h3 class="pillar-detail-title">造 AI</h3>
-                        <div class="pillar-detail-subtitle">原理理解與創新應用</div>
-                    </div>
-                </div>
-                <div class="pillar-detail-headline">從使用者，走向能創造價值的人</div>
-
-                <!-- Progression Tabs -->
-                <div class="pillar-tabs">
-                    <div class="pillar-tabs-nav">
-                        <button class="pillar-tab-btn active" data-tab="basic">基礎</button>
-                        <button class="pillar-tab-btn" data-tab="proficient">精熟</button>
-                        <button class="pillar-tab-btn" data-tab="advanced">進階</button>
-                    </div>
-                    <div class="pillar-tabs-content">
-                        <div class="pillar-tab-panel active" data-tab="basic">
-                            <div class="pillar-level-header">
-                                <span class="pillar-level-icon material-icons">inventory_2</span>
-                                <div class="pillar-level-title">
-                                    <strong>封裝經驗</strong>
-                                    <span class="pillar-level-english">Prompting</span>
-                                </div>
-                            </div>
-                            <p class="pillar-level-desc">將個人成功的指令存成模板 (Template)。（造工具）</p>
-                            <div class="pillar-level-example">
-                                <span class="example-label">關鍵能力</span>
-                                <span>理解 AI 的基本原理</span>
-                            </div>
-                        </div>
-                        <div class="pillar-tab-panel" data-tab="proficient">
-                            <div class="pillar-level-header">
-                                <span class="pillar-level-icon material-icons">extension</span>
-                                <div class="pillar-level-title">
-                                    <strong>連結知識</strong>
-                                    <span class="pillar-level-english">RAG</span>
-                                </div>
-                            </div>
-                            <p class="pillar-level-desc">餵養特定資料，造出懂團隊語言的知識庫。（造大腦）</p>
-                            <div class="pillar-level-example">
-                                <span class="example-label">關鍵能力</span>
-                                <span>組合工具與流程設計</span>
-                            </div>
-                        </div>
-                        <div class="pillar-tab-panel" data-tab="advanced">
-                            <div class="pillar-level-header">
-                                <span class="pillar-level-icon material-icons">construction</span>
-                                <div class="pillar-level-title">
-                                    <strong>深入場景</strong>
-                                    <span class="pillar-level-english">Product</span>
-                                </div>
-                            </div>
-                            <p class="pillar-level-desc">針對具體痛點，開發出可重複使用的服務/產品。（造護城河）</p>
-                            <div class="pillar-level-example">
-                                <span class="example-label">關鍵能力</span>
-                                <span>用 AI 解決真實問題</span>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-
-                <div class="pillar-detail-insight">
-                    <span class="insight-icon material-icons">lightbulb</span>
-                    <p>培養主體性：知道 AI 為何這樣判斷，並決定用它解決什麼問題。</p>
-                </div>
-            </div>
-
-            <!-- Footer Message -->
-            <div class="pillars-footer fade-in">
-                <p>
-                    <strong>這不是四個要一次教完的能力，而是一條可以慢慢累積的學習進程。</strong><br>
-                    這不只是學生的學習目標，也是未來所有人的基本能力。
-                </p>
-            </div>
-        </div>
-    </section>
-
-    <!-- Activities Section -->
     <section class="section" id="activities">
         <div class="container">
-            <h2 class="section-title fade-in">精選活動內容</h2>
-
-            <!-- Official Selection Badge -->
-            <div class="official-selection-badge fade-in">
-                <span class="material-icons medium" style="color: var(--color-yellow);">star</span>
-                <p>
-                    <strong>均一榮幸獲選 Hour of AI 官方合作學習資源！</strong><br>
-                    兩大 AI 活動已正式上架 Hour of AI 全球目錄
-                </p>
-                <span class="material-icons medium" style="color: var(--color-yellow);">star</span>
-            </div>
-
+            <h2 class="section-title fade-in">先體驗，再決定</h2>
             <p class="section-subtitle fade-in">
-                我們精心設計兩個活動,適合不同年齡層的學習者
+                親自體驗一次，就知道值得帶進課堂
             </p>
-            <!-- Activity Cards Layout -->
-            <div class="activity-cards-container">
-                <!-- Activity Card 1 - Active AI (主推) -->
-                <div class="activity-card fade-in" data-activity="data-world">
-                    <div class="activity-card-content">
-                        <div class="activity-icon">
-                            <span class="material-icons large">analytics</span>
-                        </div>
-                        <h3 class="activity-card-title">數據世界：AI 原來如此</h3>
-                        <div class="activity-meta">
-                            <div class="activity-info">
-                                <span class="material-icons small">school</span>
-                                <span>國小高年級以上學生</span>
-                            </div>
-                            <div class="activity-provider">
-                                <span class="material-icons small">business</span>
-                                <span>Active AI</span>
-                            </div>
-                        </div>
-                        <button class="activity-details-button">
-                            <span class="material-icons small">visibility</span>
-                            <span>查看詳細</span>
-                        </button>
-                    </div>
-                    <div class="activity-card-image">
-                        <img src="https://storage.googleapis.com/wpassets.junyiacademy.org/1/2025/11/Hour-of-AI＿V1_活動連結圖片-Active-AI.jpg" alt="Active AI 數據世界" loading="lazy">
-                        <div class="image-overlay">
-                            <div class="overlay-content">
-                                <h5>活動亮點</h5>
-                                <ul>
-                                    <li>認識 AI 如何處理數據</li>
-                                    <li>輕鬆理解 AI 運作原理</li>
-                                    <li>動手實作 AI 應用</li>
-                                    <li>完成後可獲得學習證書</li>
-                                </ul>
-                                <div class="overlay-actions">
-                                    <a href="https://link.junyiacademy.org/8c2slp" class="overlay-cta">
-                                        <span>開始學習</span>
-                                        <span class="material-icons">arrow_forward</span>
-                                    </a>
-                                    <button class="overlay-close">
-                                        <span class="material-icons small">close</span>
-                                        <span>關閉</span>
-                                    </button>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                </div>
 
-                <!-- Activity Card 2 -->
-                <div class="activity-card fade-in" data-activity="semiconductor">
-                    <div class="activity-card-content">
-                        <div class="activity-icon">
-                            <span class="material-icons large">memory</span>
-                        </div>
-                        <h3 class="activity-card-title">我的半導體冒險</h3>
-                        <div class="activity-meta">
-                            <div class="activity-info">
-                                <span class="material-icons small">group</span>
-                                <span>國中以上學生</span>
-                            </div>
-                            <div class="activity-provider">
-                                <span class="material-icons small">business</span>
-                                <span>AI Square</span>
-                            </div>
-                        </div>
-                        <button class="activity-details-button">
-                            <span class="material-icons small">visibility</span>
-                            <span>查看詳細</span>
-                        </button>
-                    </div>
-                    <div class="activity-card-image">
-                        <img src="https://storage.googleapis.com/wpassets.junyiacademy.org/1/2025/11/Hour-of-AI＿V1_活動連結圖片-AI-Square.jpg" alt="AI Square 我的半導體冒險" loading="lazy">
-                        <div class="image-overlay">
-                            <div class="overlay-content">
-                                <h5>活動亮點</h5>
-                                <ul>
-                                    <li>探索半導體產業與 AI 的關係</li>
-                                    <li>互動式學習體驗</li>
-                                    <li>實際案例分析</li>
-                                    <li>完成後可獲得學習證書</li>
-                                </ul>
-                                <div class="overlay-actions">
-                                    <a href="https://link.junyiacademy.org/8c2s2q" class="overlay-cta">
-                                        <span>開始學習</span>
-                                        <span class="material-icons">arrow_forward</span>
-                                    </a>
-                                    <button class="overlay-close">
-                                        <span class="material-icons small">close</span>
-                                        <span>關閉</span>
-                                    </button>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
+            <!-- Upcoming Events Carousel (social proof: others are doing it) -->
+            <div class="upcoming-events-section" id="upcoming-events">
+                <div class="upcoming-events-header">
+                    <h3 class="section-title fade-in">
+                        <span class="material-icons medium" style="color: var(--color-primary-orange);">campaign</span>
+                        近期推廣活動
+                    </h3>
                 </div>
-
+                <div class="events-carousel-wrapper">
+                    <button class="carousel-nav prev" id="carouselPrev" aria-label="上一個">
+                        <span class="material-icons">chevron_left</span>
+                    </button>
+                    <div class="events-carousel" id="eventsCarousel">
+                        <!-- Event cards will be rendered by JavaScript -->
+                    </div>
+                    <button class="carousel-nav next" id="carouselNext" aria-label="下一個">
+                        <span class="material-icons">chevron_right</span>
+                    </button>
+                </div>
+                <div class="carousel-dots" id="carouselDots">
+                    <!-- Dots will be rendered by JavaScript -->
+                </div>
             </div>
+
+            <!-- Primary Platform: Active AI -->
+            <div class="platform-showcase fade-in" data-activity="data-world">
+                <div class="platform-showcase-image">
+                    <img src="https://storage.googleapis.com/wpassets.junyiacademy.org/1/2025/11/Hour-of-AI＿V1_活動連結圖片-Active-AI.jpg" alt="Active AI 數據世界：AI 原來如此" loading="lazy">
+                </div>
+                <div class="platform-showcase-content">
+                    <div class="platform-showcase-badge">
+                        <span class="material-icons small">star</span>
+                        主推平台
+                    </div>
+                    <h3 class="platform-showcase-title">數據世界：AI 原來如此</h3>
+                    <p class="platform-showcase-desc">由 Active AI 開發的互動式學習平台，帶領學生從零認識 AI 如何處理數據與做出決策。</p>
+                    <ul class="platform-showcase-highlights">
+                        <li>
+                            <span class="material-icons small">school</span>
+                            適合國小高年級以上學生
+                        </li>
+                        <li>
+                            <span class="material-icons small">timer</span>
+                            約 60 分鐘完整體驗
+                        </li>
+                        <li>
+                            <span class="material-icons small">touch_app</span>
+                            互動式操作，動手實作 AI 應用
+                        </li>
+                        <li>
+                            <span class="material-icons small">workspace_premium</span>
+                            完成後可獲得學習證書
+                        </li>
+                    </ul>
+                    <a href="https://link.junyiacademy.org/8c2slp" class="btn btn-primary overlay-cta">
+                        <span class="material-icons">rocket_launch</span>
+                        <span>免費體驗平台</span>
+                    </a>
+                    <p class="platform-showcase-hint">
+                        <span class="material-icons small">info</span>
+                        建議先以學生角度完整體驗一次，再決定是否舉辦活動
+                    </p>
+                </div>
+            </div>
+
+            <!-- Supplemental Platform: AI Square (minimal) -->
+            <div class="platform-secondary-minimal fade-in" data-activity="semiconductor">
+                <div class="platform-secondary-top">
+                    <span class="platform-secondary-badge">其他資源</span>
+                    <span class="platform-secondary-title">我的半導體冒險</span>
+                </div>
+                <p class="platform-secondary-desc">由 AI Square 開發，透過半導體主題認識 AI 在科技產業中的應用。</p>
+                <a href="https://link.junyiacademy.org/8c2s2q" class="platform-secondary-link overlay-cta">
+                    前往體驗 <span class="material-icons small">open_in_new</span>
+                </a>
+            </div>
+
         </div>
     </section>
 
-    <!-- Registration Form Section -->
+    <!-- Tab 2 Sticky Bottom CTA Bar -->
+    <div class="sticky-bottom-bar" id="experienceBottomBar">
+        <div class="container sticky-bottom-bar-inner">
+            <span>體驗完成？</span>
+            <button class="btn btn-primary" data-goto-tab="host">
+                <span>我要舉辦活動</span>
+                <span class="material-icons small">arrow_forward</span>
+            </button>
+        </div>
+    </div>
+
+    </div><!-- /panel-experience -->
+
+    <!-- ==================== Tab 3: 舉辦 (Conversion) ==================== -->
+    <div class="tab-panel" id="panel-host" role="tabpanel">
+
     <section class="registration-section section" id="register">
         <div class="container">
             <h2 class="section-title fade-in">
@@ -1361,78 +985,324 @@
                 <p>如果您在填寫報名表時有任何疑問，或需要更多活動資訊，歡迎隨時與我們聯繫</p>
                 <a href="mailto:support@junyiacademy.org" class="contact-email-link">
                     <span class="contact-email-icon material-icons medium">email</span>
-                    <span>support@junyiacademy.org</span>
+                    <span>聯絡我們</span>
                 </a>
             </div>
         </div>
     </section>
 
-    <!-- Footer -->
-    <footer class="footer">
+    </div><!-- /panel-host -->
+
+    <!-- ==================== Tab 4: 關於 (Enrichment) ==================== -->
+    <div class="tab-panel" id="panel-about" role="tabpanel">
+
+    <!-- AI Pillars Section -->
+    <section class="section" id="pillars" style="background: var(--color-bg-light);">
         <div class="container">
-            <!-- Main footer content -->
-            <div class="footer-content">
-                <!-- About Section -->
-                <div class="footer-section">
-                    <h4>均一 x Hour of AI</h4>
-                    <p>由均一平台教育基金會主辦<br>與 Code.org 全球同步推動 AI 素養教育</p>
+            <h2 class="section-title fade-in">AI 素養四大支柱</h2>
+            <p class="pillars-intro fade-in">
+                AI 素養不是一次到位，而是一段由淺入深的學習歷程
+            </p>
+
+            <!-- Pillar Cards -->
+            <div class="pillars-grid">
+                <div class="pillar-card fade-in" data-pillar="ask">
+                    <div class="pillar-icon">問 AI</div>
+                    <div class="pillar-english">Engage</div>
+                    <div class="pillar-subtitle">精準提問與人機協作</div>
+                    <p class="pillar-brief">學會跟 AI 對話，而不是丟一句話給它</p>
+                    <button class="pillar-details-button">
+                        <span class="material-icons">visibility</span>
+                        <span>查看詳細</span>
+                    </button>
                 </div>
-
-                <!-- Links Section -->
-                <div class="footer-section">
-                    <h4>相關連結</h4>
-                    <a href="https://hoa.junyiacademy.org/">台灣活動官網</a>
-                    <a href="https://hourofai.org/" target="_blank">Hour of AI 全球官網</a>
-                    <a href="https://code.org/" target="_blank">Code.org</a>
+                <div class="pillar-card fade-in" data-pillar="use">
+                    <div class="pillar-icon">用 AI</div>
+                    <div class="pillar-english">Create</div>
+                    <div class="pillar-subtitle">工具掌握與效率提升</div>
+                    <p class="pillar-brief">把 AI 放進流程，而不是多開一個工具</p>
+                    <button class="pillar-details-button">
+                        <span class="material-icons">visibility</span>
+                        <span>查看詳細</span>
+                    </button>
                 </div>
-
-                <!-- Contact Section with Logo -->
-                <div class="footer-section">
-                    <h4>聯絡我們</h4>
-
-                    <!-- Logo in contact section -->
-                    <div class="contact-logo">
-                        <img src="https://storage.googleapis.com/wpassets.junyiacademy.org/1/2020/02/LOGO_WHITE.png"
-                             alt="均一平台教育基金會" class="footer-logo-img" loading="lazy">
-                    </div>
-
-                    <div class="contact-info-compact">
-                        <p class="organization-name">均一平台教育基金會</p>
-
-                        <div class="contact-item">
-                            <span class="material-icons small">email</span>
-                            <a href="mailto:support@junyiacademy.org">support@junyiacademy.org</a>
-                        </div>
-
-                        <div class="contact-item">
-                            <span class="material-icons small">phone</span>
-                            <a href="tel:+886223931231">(02) 2393-1231</a>
-                        </div>
-
-                        <div class="contact-item">
-                            <span class="material-icons small">schedule</span>
-                            <span>營業時間：10:00 ~ 18:00 <small style="opacity: 0.7;">(13:00 ~ 14:00 為午休時段)</small></span>
-                        </div>
-
-                        <div class="contact-item">
-                            <span class="material-icons small">place</span>
-                            <span>台北市中正區寶慶路 25 號 2 樓</span>
-                        </div>
-                    </div>
+                <div class="pillar-card fade-in" data-pillar="manage">
+                    <div class="pillar-icon">管 AI</div>
+                    <div class="pillar-english">Manage</div>
+                    <div class="pillar-subtitle">批判思考與倫理素養</div>
+                    <p class="pillar-brief">確保「人仍然在駕駛座上」</p>
+                    <button class="pillar-details-button">
+                        <span class="material-icons">visibility</span>
+                        <span>查看詳細</span>
+                    </button>
+                </div>
+                <div class="pillar-card fade-in" data-pillar="build">
+                    <div class="pillar-icon">造 AI</div>
+                    <div class="pillar-english">Design</div>
+                    <div class="pillar-subtitle">原理理解與創新應用</div>
+                    <p class="pillar-brief">從使用者，走向能創造價值的人</p>
+                    <button class="pillar-details-button">
+                        <span class="material-icons">visibility</span>
+                        <span>查看詳細</span>
+                    </button>
                 </div>
             </div>
 
-        </div>
-    </footer>
+            <!-- Expandable Detail Panels -->
+            <div class="pillar-detail" id="pillar-detail-ask" data-pillar="ask">
+                <div class="pillar-detail-header">
+                    <div class="pillar-detail-icon">問</div>
+                    <div class="pillar-detail-title-group">
+                        <div class="pillar-detail-english">Engaging with AI</div>
+                        <h3 class="pillar-detail-title">問 AI</h3>
+                        <div class="pillar-detail-subtitle">精準提問與人機協作</div>
+                    </div>
+                </div>
+                <div class="pillar-detail-headline">學會跟 AI 對話，而不是丟一句話給它</div>
+                <div class="pillar-tabs">
+                    <div class="pillar-tabs-nav">
+                        <button class="pillar-tab-btn active" data-tab="basic">基礎</button>
+                        <button class="pillar-tab-btn" data-tab="proficient">精熟</button>
+                        <button class="pillar-tab-btn" data-tab="advanced">進階</button>
+                    </div>
+                    <div class="pillar-tabs-content">
+                        <div class="pillar-tab-panel active" data-tab="basic">
+                            <div class="pillar-level-header">
+                                <span class="pillar-level-icon material-icons">gps_fixed</span>
+                                <div class="pillar-level-title"><strong>精準提問</strong><span class="pillar-level-english">Precision</span></div>
+                            </div>
+                            <p class="pillar-level-desc">能清楚描述人、事、時、地、物與目標。不再問模糊問題。</p>
+                            <div class="pillar-level-example"><span class="example-label">關鍵能力</span><span>將模糊需求轉成明確指令</span></div>
+                        </div>
+                        <div class="pillar-tab-panel" data-tab="proficient">
+                            <div class="pillar-level-header">
+                                <span class="pillar-level-icon material-icons">sync</span>
+                                <div class="pillar-level-title"><strong>迭代追問</strong><span class="pillar-level-english">Iteration</span></div>
+                            </div>
+                            <p class="pillar-level-desc">透過連續對話、反問與收斂，引導 AI 修正方向。像蘇格拉底式的對話。</p>
+                            <div class="pillar-level-example"><span class="example-label">關鍵能力</span><span>追問、修正、深化對話品質</span></div>
+                        </div>
+                        <div class="pillar-tab-panel" data-tab="advanced">
+                            <div class="pillar-level-header">
+                                <span class="pillar-level-icon material-icons">psychology</span>
+                                <div class="pillar-level-title"><strong>框架思維</strong><span class="pillar-level-english">Framework</span></div>
+                            </div>
+                            <p class="pillar-level-desc">要求 AI 提供解決問題的思維模型與系統性分析。問的不是答案，是方法論。</p>
+                            <div class="pillar-level-example"><span class="example-label">關鍵能力</span><span>用 AI 做資訊輔助與結構化思考</span></div>
+                        </div>
+                    </div>
+                </div>
+                <div class="pillar-detail-insight"><span class="insight-icon material-icons">lightbulb</span><p>「問」是一種思考訓練：你知不知道自己真正要什麼？</p></div>
+            </div>
 
-    <!-- Floating CTA Button -->
-    <div class="floating-cta" id="floatingCta">
-        <a href="#register" class="btn btn-primary">
-            <span class="material-icons small">add_circle</span>
-            規劃我的活動
-        </a>
+            <div class="pillar-detail" id="pillar-detail-use" data-pillar="use">
+                <div class="pillar-detail-header">
+                    <div class="pillar-detail-icon">用</div>
+                    <div class="pillar-detail-title-group">
+                        <div class="pillar-detail-english">Creating with AI</div>
+                        <h3 class="pillar-detail-title">用 AI</h3>
+                        <div class="pillar-detail-subtitle">工具掌握與效率提升</div>
+                    </div>
+                </div>
+                <div class="pillar-detail-headline">把 AI 放進流程，而不是多開一個工具</div>
+                <div class="pillar-tabs">
+                    <div class="pillar-tabs-nav">
+                        <button class="pillar-tab-btn active" data-tab="basic">基礎</button>
+                        <button class="pillar-tab-btn" data-tab="proficient">精熟</button>
+                        <button class="pillar-tab-btn" data-tab="advanced">進階</button>
+                    </div>
+                    <div class="pillar-tabs-content">
+                        <div class="pillar-tab-panel active" data-tab="basic">
+                            <div class="pillar-level-header">
+                                <span class="pillar-level-icon material-icons">edit</span>
+                                <div class="pillar-level-title"><strong>生活單點</strong><span class="pillar-level-english">Task</span></div>
+                            </div>
+                            <p class="pillar-level-desc">解決單一需求。例如：規劃旅遊、寫信、摘要文章。</p>
+                            <div class="pillar-level-example"><span class="example-label">關鍵能力</span><span>理解不同 AI 工具的強項</span></div>
+                        </div>
+                        <div class="pillar-tab-panel" data-tab="proficient">
+                            <div class="pillar-level-header">
+                                <span class="pillar-level-icon material-icons">link</span>
+                                <div class="pillar-level-title"><strong>專業串聯</strong><span class="pillar-level-english">Workflow</span></div>
+                            </div>
+                            <p class="pillar-level-desc">建立自動化工作流，串接產出。例如：行銷文案→自動製圖→排程發布。</p>
+                            <div class="pillar-level-example"><span class="example-label">關鍵能力</span><span>組合多個工具提升效率</span></div>
+                        </div>
+                        <div class="pillar-tab-panel" data-tab="advanced">
+                            <div class="pillar-level-header">
+                                <span class="pillar-level-icon material-icons">smart_toy</span>
+                                <div class="pillar-level-title"><strong>自主代理</strong><span class="pillar-level-english">Agents</span></div>
+                            </div>
+                            <p class="pillar-level-desc">指揮 AI 跨域調用工具去「執行」任務。例如：給模糊目標，讓 Agent 自行比價下單。</p>
+                            <div class="pillar-level-example"><span class="example-label">關鍵能力</span><span>設計 AI 代理執行複雜任務</span></div>
+                        </div>
+                    </div>
+                </div>
+                <div class="pillar-detail-insight"><span class="insight-icon material-icons">lightbulb</span><p>關鍵判準：用完之後，學習有沒有變好？</p></div>
+            </div>
+
+            <div class="pillar-detail" id="pillar-detail-manage" data-pillar="manage">
+                <div class="pillar-detail-header">
+                    <div class="pillar-detail-icon">管</div>
+                    <div class="pillar-detail-title-group">
+                        <div class="pillar-detail-english">Managing with AI</div>
+                        <h3 class="pillar-detail-title">管 AI</h3>
+                        <div class="pillar-detail-subtitle">批判思考與倫理素養</div>
+                    </div>
+                </div>
+                <div class="pillar-detail-headline">確保「人仍然在駕駛座上」</div>
+                <div class="pillar-tabs">
+                    <div class="pillar-tabs-nav">
+                        <button class="pillar-tab-btn active" data-tab="basic">基礎</button>
+                        <button class="pillar-tab-btn" data-tab="proficient">精熟</button>
+                        <button class="pillar-tab-btn" data-tab="advanced">進階</button>
+                    </div>
+                    <div class="pillar-tabs-content">
+                        <div class="pillar-tab-panel active" data-tab="basic">
+                            <div class="pillar-level-header">
+                                <span class="pillar-level-icon material-icons">visibility</span>
+                                <div class="pillar-level-title"><strong>管好一 AI</strong><span class="pillar-level-english">Supervision</span></div>
+                            </div>
+                            <p class="pillar-level-desc">具備識讀能力，能查核事實，避免單一 AI 幻覺。（指導員層級）</p>
+                            <div class="pillar-level-example"><span class="example-label">關鍵能力</span><span>不盲信 AI 產出，能驗證資訊</span></div>
+                        </div>
+                        <div class="pillar-tab-panel" data-tab="proficient">
+                            <div class="pillar-level-header">
+                                <span class="pillar-level-icon material-icons">tune</span>
+                                <div class="pillar-level-title"><strong>管好群 AI</strong><span class="pillar-level-english">Orchestration</span></div>
+                            </div>
+                            <p class="pillar-level-desc">同時調度多個不同功能的 Agents 協作。（調度員層級）</p>
+                            <div class="pillar-level-example"><span class="example-label">關鍵能力</span><span>協調多個 AI 系統的輸出</span></div>
+                        </div>
+                        <div class="pillar-tab-panel" data-tab="advanced">
+                            <div class="pillar-level-header">
+                                <span class="pillar-level-icon material-icons">supervisor_account</span>
+                                <div class="pillar-level-title"><strong>管好人機協作</strong><span class="pillar-level-english">Leadership</span></div>
+                            </div>
+                            <p class="pillar-level-desc">領導「人+AI」混合團隊，劃分權責與倫理邊界。（指揮官層級）</p>
+                            <div class="pillar-level-example"><span class="example-label">關鍵能力</span><span>定義人與 AI 的責任邊界</span></div>
+                        </div>
+                    </div>
+                </div>
+                <div class="pillar-detail-insight"><span class="insight-icon material-icons">lightbulb</span><p>定義責任：哪些判斷絕不能外包？哪些後果必須由人承擔？</p></div>
+            </div>
+
+            <div class="pillar-detail" id="pillar-detail-build" data-pillar="build">
+                <div class="pillar-detail-header">
+                    <div class="pillar-detail-icon">造</div>
+                    <div class="pillar-detail-title-group">
+                        <div class="pillar-detail-english">Designing with AI</div>
+                        <h3 class="pillar-detail-title">造 AI</h3>
+                        <div class="pillar-detail-subtitle">原理理解與創新應用</div>
+                    </div>
+                </div>
+                <div class="pillar-detail-headline">從使用者，走向能創造價值的人</div>
+                <div class="pillar-tabs">
+                    <div class="pillar-tabs-nav">
+                        <button class="pillar-tab-btn active" data-tab="basic">基礎</button>
+                        <button class="pillar-tab-btn" data-tab="proficient">精熟</button>
+                        <button class="pillar-tab-btn" data-tab="advanced">進階</button>
+                    </div>
+                    <div class="pillar-tabs-content">
+                        <div class="pillar-tab-panel active" data-tab="basic">
+                            <div class="pillar-level-header">
+                                <span class="pillar-level-icon material-icons">inventory_2</span>
+                                <div class="pillar-level-title"><strong>封裝經驗</strong><span class="pillar-level-english">Prompting</span></div>
+                            </div>
+                            <p class="pillar-level-desc">將個人成功的指令存成模板 (Template)。（造工具）</p>
+                            <div class="pillar-level-example"><span class="example-label">關鍵能力</span><span>理解 AI 的基本原理</span></div>
+                        </div>
+                        <div class="pillar-tab-panel" data-tab="proficient">
+                            <div class="pillar-level-header">
+                                <span class="pillar-level-icon material-icons">extension</span>
+                                <div class="pillar-level-title"><strong>連結知識</strong><span class="pillar-level-english">RAG</span></div>
+                            </div>
+                            <p class="pillar-level-desc">餵養特定資料，造出懂團隊語言的知識庫。（造大腦）</p>
+                            <div class="pillar-level-example"><span class="example-label">關鍵能力</span><span>組合工具與流程設計</span></div>
+                        </div>
+                        <div class="pillar-tab-panel" data-tab="advanced">
+                            <div class="pillar-level-header">
+                                <span class="pillar-level-icon material-icons">construction</span>
+                                <div class="pillar-level-title"><strong>深入場景</strong><span class="pillar-level-english">Product</span></div>
+                            </div>
+                            <p class="pillar-level-desc">針對具體痛點，開發出可重複使用的服務/產品。（造護城河）</p>
+                            <div class="pillar-level-example"><span class="example-label">關鍵能力</span><span>用 AI 解決真實問題</span></div>
+                        </div>
+                    </div>
+                </div>
+                <div class="pillar-detail-insight"><span class="insight-icon material-icons">lightbulb</span><p>培養主體性：知道 AI 為何這樣判斷，並決定用它解決什麼問題。</p></div>
+            </div>
+
+            <div class="pillars-footer fade-in">
+                <p>
+                    <strong>這不是四個要一次教完的能力，而是一條可以慢慢累積的學習進程。</strong><br>
+                    這不只是學生的學習目標，也是未來所有人的基本能力。
+                </p>
+            </div>
+        </div>
+    </section>
+
+    <!-- Tab 4 CTA -->
+    <div class="tab-cta-section">
+        <div class="container">
+            <p class="tab-cta-hint">想親自試試看嗎？</p>
+            <button class="btn btn-primary tab-cta-btn" data-goto-tab="experience">
+                <span>開始體驗</span>
+                <span class="material-icons">arrow_forward</span>
+            </button>
+        </div>
     </div>
 
+    </div><!-- /panel-about -->
+
+    <!-- Footer -->
+    <footer class="footer">
+        <div class="container">
+            <div class="footer-main">
+                <!-- Brand column -->
+                <div class="footer-brand">
+                    <img src="https://storage.googleapis.com/wpassets.junyiacademy.org/1/2020/02/LOGO_WHITE.png"
+                         alt="均一平台教育基金會" class="footer-logo-img" loading="lazy">
+                    <div class="footer-brand-text">
+                        <p class="footer-title">均一 x Hour of AI</p>
+                        <p class="footer-tagline">與 Code.org 全球同步推動 AI 素養教育</p>
+                    </div>
+                </div>
+
+                <!-- Info column -->
+                <div class="footer-info">
+                    <!-- Links row -->
+                    <nav class="footer-links" aria-label="相關連結">
+                        <a href="https://hoa.junyiacademy.org/">台灣活動官網</a>
+                        <span class="footer-link-sep" aria-hidden="true">·</span>
+                        <a href="https://hourofai.org/" target="_blank" rel="noopener">Hour of AI 全球官網</a>
+                        <span class="footer-link-sep" aria-hidden="true">·</span>
+                        <a href="https://code.org/" target="_blank" rel="noopener">Code.org</a>
+                    </nav>
+
+                    <!-- Contact row (desktop: inline items, mobile: icon buttons) -->
+                    <div class="footer-contact">
+                        <a href="mailto:support@junyiacademy.org" class="footer-contact-item" title="Email">
+                            <span class="material-icons" aria-hidden="true">email</span>
+                            <span class="footer-contact-label">support@junyiacademy.org</span>
+                        </a>
+                        <a href="tel:+886223931231" class="footer-contact-item" title="電話">
+                            <span class="material-icons" aria-hidden="true">phone</span>
+                            <span class="footer-contact-label">(02) 2393-1231</span>
+                        </a>
+                        <a href="https://maps.google.com/?q=台北市中正區寶慶路25號2樓" target="_blank" rel="noopener" class="footer-contact-item" title="地址：台北市中正區寶慶路 25 號 2 樓">
+                            <span class="material-icons" aria-hidden="true">place</span>
+                            <span class="footer-contact-label">台北市中正區寶慶路 25 號 2 樓</span>
+                        </a>
+                    </div>
+                    <p class="footer-hours">
+                        <span class="material-icons" aria-hidden="true">schedule</span>
+                        10:00–18:00（午休 13:00–14:00）
+                    </p>
+                </div>
+            </div>
+        </div>
+    </footer>
 
     <!-- Pillar Detail Modal -->
     <div class="pillar-modal-overlay" id="pillarModal">
