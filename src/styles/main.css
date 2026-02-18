@@ -3047,15 +3047,17 @@
             margin: var(--spacing-lg) auto 0;
             padding: var(--spacing-lg) var(--spacing-xl);
             border: 1px solid var(--color-border);
-            border-radius: var(--radius-lg);
+            border-radius: var(--border-radius-lg);
             background: var(--color-bg-lighter);
+            box-shadow: var(--shadow-md);
             text-align: center;
             opacity: 0.55;
-            transition: opacity 0.2s;
+            transition: opacity 0.2s, box-shadow 0.2s;
         }
 
         .platform-secondary-minimal:hover {
             opacity: 0.75;
+            box-shadow: var(--shadow-lg);
         }
 
         .platform-secondary-top {
