@@ -3041,41 +3041,61 @@
             }
         }
 
-        /* ===== Secondary Platform Card (AI Square - de-emphasized) ===== */
+        /* ===== Secondary Platform Card (AI Square - strongly de-emphasized) ===== */
         .platform-showcase--secondary {
-            box-shadow: var(--shadow-sm);
-            opacity: 0.85;
+            box-shadow: none;
+            opacity: 0.6;
             border: 1px solid var(--color-border);
+            background: var(--color-bg-lighter);
+            transform: scale(0.92);
+            transform-origin: top center;
+        }
+
+        .platform-showcase--secondary:hover {
+            opacity: 0.8;
         }
 
         .platform-showcase--secondary .platform-showcase-image {
-            min-height: 240px;
+            min-height: 180px;
+            filter: grayscale(30%);
         }
 
         .platform-showcase--secondary .platform-showcase-title {
-            font-size: var(--font-size-xl);
+            font-size: var(--font-size-lg);
+            color: var(--color-text-secondary);
+        }
+
+        .platform-showcase--secondary .platform-showcase-desc {
+            font-size: var(--font-size-sm);
+        }
+
+        .platform-showcase--secondary .platform-showcase-highlights li {
+            color: var(--color-text-light);
         }
 
         .platform-showcase-badge--secondary {
-            background: linear-gradient(135deg, #7b8fa3, #9bb0c4) !important;
+            background: #a0adb8 !important;
+            font-size: var(--font-size-xs) !important;
         }
 
         .platform-showcase-cta--secondary {
-            background: var(--color-bg-light) !important;
-            color: var(--color-primary-blue) !important;
-            box-shadow: var(--shadow-sm) !important;
-            font-size: var(--font-size-base) !important;
-            padding: var(--spacing-md) var(--spacing-xl) !important;
+            background: transparent !important;
+            color: var(--color-text-light) !important;
+            box-shadow: none !important;
+            border: 1px solid var(--color-border) !important;
+            font-size: var(--font-size-sm) !important;
+            padding: var(--spacing-sm) var(--spacing-lg) !important;
         }
 
         .platform-showcase-cta--secondary:hover {
-            background: var(--color-border) !important;
-            transform: translateY(-1px);
+            background: var(--color-bg-light) !important;
+            color: var(--color-primary-blue) !important;
+            transform: none;
         }
 
         @media (max-width: 768px) {
             .platform-showcase--secondary .platform-showcase-image {
-                min-height: 160px;
+                min-height: 120px;
             }
         }
 
