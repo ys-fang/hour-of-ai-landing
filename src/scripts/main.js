@@ -1421,6 +1421,52 @@ Check Google Sheets to see how many entries were actually created.
             }
         };
 
+        // ===== County Data Normalization =====
+        // 前端資料對齊層：統一縣市名稱，避免來源資料污染導致計數錯誤
+        // （例如「臺北市」vs「台北市」被視為不同縣市）
+
+        const TAIWAN_COUNTY_ALIASES = {
+            // 臺→台 異體字
+            '臺北市': '台北市',
+            '臺中市': '台中市',
+            '臺南市': '台南市',
+            '臺東縣': '台東縣',
+            // 縣市合併前舊名
+            '桃園縣': '桃園市',
+            '台中縣': '台中市',
+            '臺中縣': '台中市',
+            '台南縣': '台南市',
+            '臺南縣': '台南市',
+            '高雄縣': '高雄市',
+        };
+
+        const VALID_TAIWAN_COUNTIES = new Set([
+            '台北市', '新北市', '桃園市', '台中市', '台南市', '高雄市',
+            '基隆市', '新竹市', '嘉義市',
+            '新竹縣', '苗栗縣', '彰化縣', '南投縣', '雲林縣', '嘉義縣',
+            '屏東縣', '宜蘭縣', '花蓮縣', '台東縣', '澎湖縣', '金門縣', '連江縣'
+        ]);
+
+        function normalizeCountyData(counties) {
+            if (!counties || typeof counties !== 'object') return counties;
+            const normalized = {};
+            for (const [name, count] of Object.entries(counties)) {
+                const clean = name.trim().replace(/\s+/g, '').replace(/臺/g, '台');
+                const canonical = TAIWAN_COUNTY_ALIASES[clean] || clean;
+                if (!VALID_TAIWAN_COUNTIES.has(canonical)) continue;
+                normalized[canonical] = (normalized[canonical] || 0) + count;
+            }
+            return normalized;
+        }
+
+        function normalizeStatisticsData(data) {
+            if (!data) return data;
+            return {
+                ...data,
+                counties: normalizeCountyData(data.counties)
+            };
+        }
+
         // ===== Mock Data Generator for Demo Mode =====
 
         function generateMockStats() {
@@ -2199,7 +2245,7 @@ Check Google Sheets to see how many entries were actually created.
                 if (cachedData && isCacheValid()) {
                     console.log('✅ 使用快取資料');
                     updateCacheIndicator(getCacheAge());
-                    return cachedData;
+                    return normalizeStatisticsData(cachedData);
                 }
             }
 
@@ -2220,7 +2266,7 @@ Check Google Sheets to see how many entries were actually created.
 
                     saveToCache(mockData);
                     updateCacheIndicator(0); // Fresh data
-                    return mockData;
+                    return normalizeStatisticsData(mockData);
 
                 } else if (liveStatsConfig.STATS_API_URL === 'WORDPRESS_CONFIG_NEEDED') {
                     console.log('⚠️ WordPress 環境需要設定 API URL');
@@ -2240,7 +2286,7 @@ Check Google Sheets to see how many entries were actually created.
                     saveToCache(data);
                     updateCacheIndicator(0); // Just updated
 
-                    return data;
+                    return normalizeStatisticsData(data);
                 }
             } catch (error) {
                 console.warn('⚠️ API 呼叫失敗:', error);
@@ -2250,13 +2296,13 @@ Check Google Sheets to see how many entries were actually created.
                 if (cachedData) {
                     console.log('📦 API 失敗，使用過期快取資料');
                     updateCacheIndicator(getCacheAge());
-                    return cachedData;
+                    return normalizeStatisticsData(cachedData);
                 }
             }
 
             // 4. Everything failed - use hardcoded fallback
             console.log('⚠️ 使用預設資料');
-            return liveStatsConfig.fallbackData;
+            return normalizeStatisticsData(liveStatsConfig.fallbackData);
         }
 
         // Manual refresh function (called by refresh button)
