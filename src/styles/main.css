@@ -639,6 +639,7 @@
 
         /* ===== Upcoming Events Carousel ===== */
         .upcoming-events-section {
+            margin-top: var(--spacing-3xl);
             padding-bottom: var(--spacing-2xl);
             margin-bottom: var(--spacing-xl);
         }
