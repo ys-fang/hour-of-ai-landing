@@ -1,34 +1,28 @@
 # Hour of AI Landing Page - 專案說明
 
 ## ⚠️ 上次進度
-**更新時間**：2026-02-05 12:30
+**更新時間**：2026-02-26
 
 **本次完成項目**：
-1. ✅ 修復 Taiwan Rank Tracker 部署問題（Code.js 未 clasp push）
-2. ✅ 部署 PR #8 Click Tracking 功能到 Firebase
-3. ✅ 修復 GA4 API 維度錯誤（customEvent:event_label → 使用不同事件名稱）
-4. ✅ 實作活動類型區分（active_ai_click vs ai_square_click）
-5. ✅ 新增每日點擊數據記錄到 Google Sheet（ClickHistory）
-6. ✅ 建立 trigger 自動設定函數（setupDailyClickTrigger）
-7. ✅ 驗證所有 3 個自動化 triggers 正常運作
+1. ✅ 新增 UpcomingEvents 管理指南（`docs/upcoming-events-guide.md`）
+2. ✅ 確認 Active AI click tracking pipeline 正常（GA4 → GAS → ClickHistory）
+3. ✅ CTA 漏斗優化：
+   - Tab 1（首頁）& Tab 4（關於）：新增 sticky bottom bar → Active AI（含 GA4 tracking）
+   - Tab 2（體驗）：Active AI showcase 移到最前面，近期推廣活動 carousel 移到下方
+   - Tab 2 sticky bar 文案更新：「體驗好讚！」→「我要舉辦 Hour of AI」
+   - AI Square 卡片移至「其他資源」區段（carousel 下方）
+4. ✅ Playwright 驗證：3 個 Active AI CTA 全部正確觸發 `active_ai_click` GA4 event
+5. ✅ PR #13 merged + 3 commits pushed to main，Firebase CI/CD 全部成功
 
-**系統狀態**：
-- 所有自動化任務已部署且正常運作
-- 前端點擊追蹤已上線（等待 GA4 數據累積 24-48h）
-- 所有程式碼已 commit 並 push 到 GitHub
-- CI/CD 自動部署正常
+**GA4 數據觀察**：
+- `active_ai_click` 事件過去 7 天：135 次（+237.5%）
+- Click tracking 從 2 個 CTA 增加到 4 個
 
-**下次待辦**：
-- 明天查看自動化 triggers 執行結果
-- 驗證 ClickHistory sheet 是否有新數據
-- （可選）檢查 Slack 通知是否包含點擊數據
+**待觀察**：
+- 下週週報確認 real user clicks 是否提升（目標 0.5-1% CTR）
+- ClickHistory sheet 應從明天起有數據
 
-**技術文件**：
-- CLICK-TRACKING-VERIFICATION.md
-- GA4-CLICK-TRACKING-FIX.md
-- CLICK-TRACKING-ACTIVITY-SPLIT.md
-- DAILY-CLICK-TRACKER-SETUP.md
-- DEPLOYMENT-CHECKLIST.md
+> 要繼續這個討論嗎？
 
 ---
 
