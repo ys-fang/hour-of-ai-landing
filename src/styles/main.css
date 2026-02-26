@@ -3041,13 +3041,54 @@
             }
         }
 
-        /* ===== Secondary Platform - Inline footnote (AI Square) ===== */
-        .platform-secondary-footnote {
+        /* ===== Secondary Platform - Compact card (AI Square) ===== */
+        .platform-secondary-minimal {
+            max-width: 400px;
+            margin: var(--spacing-lg) auto 0;
+            padding: var(--spacing-lg) var(--spacing-xl);
+            border: 1px solid var(--color-border);
+            border-radius: var(--border-radius-lg);
+            background: var(--color-bg-lighter);
+            box-shadow: var(--shadow-md);
             text-align: center;
+            opacity: 0.55;
+            transition: opacity 0.2s, box-shadow 0.2s;
+        }
+
+        .platform-secondary-minimal:hover {
+            opacity: 0.75;
+            box-shadow: var(--shadow-lg);
+        }
+
+        .platform-secondary-top {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: var(--spacing-sm);
+            margin-bottom: var(--spacing-xs);
+        }
+
+        .platform-secondary-badge {
+            font-size: 10px;
+            font-weight: 600;
+            color: var(--color-text-light);
+            background: var(--color-border);
+            padding: 2px 8px;
+            border-radius: var(--radius-sm);
+            letter-spacing: 0.5px;
+        }
+
+        .platform-secondary-title {
+            font-weight: 600;
+            font-size: var(--font-size-base);
+            color: var(--color-text-secondary);
+        }
+
+        .platform-secondary-desc {
             font-size: var(--font-size-sm);
             color: var(--color-text-light);
-            margin: var(--spacing-xl) auto 0;
-            opacity: 0.6;
+            margin: 0 0 var(--spacing-sm);
+            line-height: 1.4;
         }
 
         .platform-secondary-link {
@@ -3056,8 +3097,7 @@
             gap: 4px;
             font-size: var(--font-size-sm);
             color: var(--color-text-light);
-            text-decoration: underline;
-            text-underline-offset: 2px;
+            text-decoration: none;
             transition: color 0.2s;
         }
 
