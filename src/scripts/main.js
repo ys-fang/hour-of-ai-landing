@@ -1726,6 +1726,10 @@ Check Google Sheets to see how many entries were actually created.
         function updateGlobalRankUI(rankData, localStats) {
             if (!rankData) return;
 
+            // Remove skeleton states
+            ['globalRankNumber', 'globalRankTotal', 'globalPercentile', 'localEventCount', 'globalEventCount']
+                .forEach(id => document.getElementById(id)?.classList.remove('skeleton-text'));
+
             // Update global rank card
             animateCounter(
                 document.getElementById('globalRankNumber'),
