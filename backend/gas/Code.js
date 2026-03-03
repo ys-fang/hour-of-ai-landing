@@ -184,6 +184,10 @@ function doGet(e) {
       return getUpcomingEvents();
     }
 
+    if (action === 'getGlobalRank') {
+      return getGlobalRank();
+    }
+
     // Default response
     return ContentService.createTextOutput('Hour of AI Statistics API v3.2')
       .setMimeType(ContentService.MimeType.TEXT);
@@ -1815,6 +1819,76 @@ function listAllTriggers() {
   });
 }
 
+// ===== GLOBAL RANK API =====
+
+/**
+ * Get pre-computed global rank data from GlobalTop10History sheet
+ * Returns the latest day's ranking data with Taiwan analysis
+ */
+function getGlobalRank() {
+  try {
+    // Check cache first (5 min)
+    const cache = CacheService.getScriptCache();
+    const cached = cache.get('global_rank_data');
+    if (cached) {
+      return ContentService.createTextOutput(cached)
+        .setMimeType(ContentService.MimeType.JSON);
+    }
+
+    const fullData = fetchGlobalRankData();
+    const fullSorted = fullData.filter(item => item.count > 0).sort((a, b) => b.count - a.count);
+    const result = buildGlobalRankResponse(fullSorted, formatDateTW(new Date(), 'yyyy-MM-dd'));
+
+    const jsonStr = JSON.stringify(result);
+    cache.put('global_rank_data', jsonStr, 300);
+    return ContentService.createTextOutput(jsonStr)
+      .setMimeType(ContentService.MimeType.JSON);
+
+  } catch (error) {
+    Logger.log('Error in getGlobalRank: ' + error.toString());
+    return ContentService.createTextOutput(JSON.stringify({
+      status: 'error',
+      message: error.toString()
+    })).setMimeType(ContentService.MimeType.JSON);
+  }
+}
+
+/**
+ * Build the global rank API response from sorted data
+ */
+function buildGlobalRankResponse(sorted, date) {
+  const taiwanIndex = sorted.findIndex(item => item.country === CONFIG.RANK_TRACKER_TARGET_COUNTRY);
+  const contextRange = 2;
+
+  if (taiwanIndex === -1) {
+    return { status: 'error', message: 'Taiwan not found in data' };
+  }
+
+  const taiwan = sorted[taiwanIndex];
+  const rank = taiwanIndex + 1;
+  const totalCountries = sorted.length;
+
+  const startIdx = Math.max(0, taiwanIndex - contextRange);
+  const nearbyCountries = [
+    ...sorted.slice(startIdx, taiwanIndex)
+      .map((c, idx) => ({ ...c, rank: startIdx + idx + 1, position: 'above' })),
+    { ...taiwan, rank: rank, position: 'current' },
+    ...sorted.slice(taiwanIndex + 1, taiwanIndex + contextRange + 1)
+      .map((c, idx) => ({ ...c, rank: rank + idx + 1, position: 'below' }))
+  ];
+
+  return {
+    status: 'success',
+    globalRank: rank,
+    totalCountries: totalCountries,
+    percentile: ((totalCountries - rank + 1) / totalCountries * 100).toFixed(1),
+    taiwanCount: taiwan.count,
+    nearbyCountries: nearbyCountries,
+    topCountry: sorted[0],
+    lastUpdated: date || formatDateTW(new Date(), 'yyyy-MM-dd')
+  };
+}
+
 // ===== TAIWAN RANK TRACKER =====
 // 每日追蹤台灣在 Hour of AI 全球活動的排名
 // 設定 Time-driven trigger: 每日執行 trackTaiwanRank
@@ -2027,6 +2101,17 @@ function testGlobalTop10Logging() {
 
   Logger.log('✅ Test completed - check GlobalTop10History sheet');
   Logger.log(`Top 3: ${sorted.slice(0, 3).map(c => c.country).join(', ')}`);
+}
+
+/**
+ * 測試 getGlobalRank API endpoint
+ */
+function testGetGlobalRank() {
+  const result = getGlobalRank();
+  const content = result.getContent();
+  const data = JSON.parse(content);
+  Logger.log('getGlobalRank response: ' + JSON.stringify(data, null, 2));
+  Logger.log(`Status: ${data.status}, Rank: ${data.globalRank}, Total: ${data.totalCountries}`);
 }
 
 // ===== UPCOMING EVENTS API =====
