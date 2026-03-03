@@ -49,7 +49,7 @@ const CONFIG = {
 
   // ===== GA4 設定 =====
   ENABLE_GA_REPORT: true,
-  GA4_PROPERTY_ID: '266069252',  // GA4 Property ID
+  GA4_PROPERTY_ID: '521199085',  // GA4 Property ID（Hour of AI Landing）
   PAGE_PATH_FILTER: '/',  // Firebase Hosting 根路徑（舊值 '/event/2025-hour-of-ai/' 為 WordPress 路徑）
 
   // ===== Taiwan Rank Tracker 設定 =====
