@@ -1653,9 +1653,13 @@ Check Google Sheets to see how many entries were actually created.
          * Get GAS API URL for global rank data
          */
         function getGlobalRankApiUrl() {
-            const formUrl = document.getElementById('registrationForm')?.action;
-            if (!formUrl) return null;
-            return formUrl.replace('/exec', '/exec') + '?action=getGlobalRank';
+            if (CONFIG.IS_DEMO_MODE()) {
+                return 'DEMO_MODE';
+            } else if (!CONFIG.isWordPressConfigValid()) {
+                return 'WORDPRESS_CONFIG_NEEDED';
+            } else {
+                return CONFIG.FORM_SUBMIT_URL.replace('/exec', '/exec?action=getGlobalRank');
+            }
         }
 
         /**
@@ -1671,8 +1675,8 @@ Check Google Sheets to see how many entries were actually created.
                 }
 
                 const apiUrl = getGlobalRankApiUrl();
-                if (!apiUrl) {
-                    console.warn('Global rank API URL not available');
+                if (!apiUrl || apiUrl === 'DEMO_MODE' || apiUrl === 'WORDPRESS_CONFIG_NEEDED') {
+                    console.warn('Global rank API not available:', apiUrl);
                     return null;
                 }
 
