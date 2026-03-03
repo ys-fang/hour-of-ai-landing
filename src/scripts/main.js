@@ -1644,16 +1644,22 @@ Check Google Sheets to see how many entries were actually created.
          * Global Rank Configuration
          */
         const globalRankConfig = {
-            CSV_URL: 'https://docs.google.com/spreadsheets/d/1QDTmNNP3i6Nfhg6y7qp5V_cSL6ciNsMyF3bEjyKXTsY/export?format=csv',
             CACHE_KEY: 'hourOfAI_global_rank_cache',
             CACHE_TIMESTAMP_KEY: 'hourOfAI_global_rank_timestamp',
             CACHE_DURATION: 3600000, // 1 hour
-            TARGET_COUNTRY: 'Taiwan',
-            CONTEXT_RANGE: 2  // Show 2 countries above and below
         };
 
         /**
-         * Fetch and analyze Taiwan's global rank
+         * Get GAS API URL for global rank data
+         */
+        function getGlobalRankApiUrl() {
+            const formUrl = document.getElementById('registrationForm')?.action;
+            if (!formUrl) return null;
+            return formUrl.replace('/exec', '/exec') + '?action=getGlobalRank';
+        }
+
+        /**
+         * Fetch Taiwan's global rank from GAS API
          */
         async function fetchTaiwanGlobalRank() {
             try {
@@ -1664,98 +1670,26 @@ Check Google Sheets to see how many entries were actually created.
                     return cached;
                 }
 
-                // Fetch fresh data
-                const response = await fetch(globalRankConfig.CSV_URL);
-                const csvText = await response.text();
-                const data = parseCSV(csvText);
-                const analysis = analyzeTaiwanGlobalRank(data);
+                const apiUrl = getGlobalRankApiUrl();
+                if (!apiUrl) {
+                    console.warn('Global rank API URL not available');
+                    return null;
+                }
+
+                const response = await fetch(apiUrl);
+                const data = await response.json();
+
+                if (data.status !== 'success') {
+                    throw new Error(data.message || 'API error');
+                }
 
                 // Save to cache
-                saveGlobalRankCache(analysis);
-
-                return analysis;
+                saveGlobalRankCache(data);
+                return data;
             } catch (error) {
                 console.error('Error fetching global rank:', error);
                 return null;
             }
-        }
-
-        /**
-         * Parse CSV data
-         */
-        function parseCSV(csvText) {
-            const lines = csvText.split('\n');
-            const data = [];
-
-            for (let i = 1; i < lines.length; i++) {
-                const line = lines[i].trim();
-                if (!line) continue;
-
-                const [country, count] = line.split(',');
-                if (country && count) {
-                    data.push({
-                        country: country.trim().replace(/^"|"$/g, ''),
-                        count: parseInt(count.trim())
-                    });
-                }
-            }
-
-            return data;
-        }
-
-        /**
-         * Analyze Taiwan's global rank
-         */
-        function analyzeTaiwanGlobalRank(data) {
-            // Sort by count descending
-            const sorted = data
-                .filter(item => item.count > 0)
-                .sort((a, b) => b.count - a.count);
-
-            // Find Taiwan
-            const taiwanIndex = sorted.findIndex(item =>
-                item.country === globalRankConfig.TARGET_COUNTRY
-            );
-
-            if (taiwanIndex === -1) {
-                throw new Error('Taiwan not found in data');
-            }
-
-            const taiwan = sorted[taiwanIndex];
-            const rank = taiwanIndex + 1;
-            const totalCountries = sorted.length;
-
-            // Get nearby countries
-            const contextRange = globalRankConfig.CONTEXT_RANGE;
-            const nearbyCountries = [
-                ...sorted.slice(Math.max(0, taiwanIndex - contextRange), taiwanIndex)
-                    .map((country, idx) => ({
-                        ...country,
-                        rank: taiwanIndex - contextRange + idx + 1,
-                        position: 'above'
-                    })),
-                {
-                    ...taiwan,
-                    rank: rank,
-                    position: 'current'
-                },
-                ...sorted.slice(taiwanIndex + 1, taiwanIndex + contextRange + 1)
-                    .map((country, idx) => ({
-                        ...country,
-                        rank: rank + idx + 1,
-                        position: 'below'
-                    }))
-            ];
-
-            return {
-                globalRank: rank,
-                totalCountries: totalCountries,
-                percentile: ((totalCountries - rank + 1) / totalCountries * 100).toFixed(1),
-                taiwanCount: taiwan.count,
-                nearbyCountries: nearbyCountries,
-                topCountry: sorted[0],
-                lastUpdated: new Date().toISOString()
-            };
         }
 
         /**
