@@ -1111,10 +1111,6 @@ Check Google Sheets to see how many entries were actually created.
             return [...futureAndOngoing, ...recentPast];
         }
 
-        // Carousel state
-        let carouselAutoplayTimer = null;
-        let carouselCurrentIndex = 0;
-
         /**
          * Get status badge HTML
          */
@@ -1132,249 +1128,237 @@ Check Google Sheets to see how many entries were actually created.
         }
 
         /**
-         * Render event cards in the carousel
+         * Reusable EventsCarousel class supporting multiple instances
          */
-        function renderEventCards(events) {
-            const carousel = document.getElementById('eventsCarousel');
-            if (!carousel || !events || events.length === 0) return;
+        class EventsCarousel {
+            constructor(config) {
+                this.carouselId = config.carouselId;
+                this.prevBtnId = config.prevBtnId;
+                this.nextBtnId = config.nextBtnId;
+                this.dotsId = config.dotsId;
+                this.autoplayInterval = config.autoplayInterval || 5000;
 
-            carousel.innerHTML = events.map((event, index) => {
-                const status = event._status || getEventStatus(event);
-                const dateStr = formatEventDate(event);
-
-                return `
-                <a href="${event.url}"
-                   class="event-card fade-in event-card-${status}"
-                   target="_blank"
-                   rel="noopener noreferrer"
-                   data-event-index="${index}">
-                    <div class="event-card-arrow">
-                        <span class="material-icons">arrow_forward</span>
-                    </div>
-                    <div class="event-card-meta">
-                        ${getStatusBadgeHTML(status)}
-                        ${dateStr ? `<span class="event-date"><span class="material-icons">calendar_today</span>${dateStr}</span>` : ''}
-                    </div>
-                    <div class="event-card-content">
-                        <h3 class="event-card-title">${event.title}</h3>
-                        <p class="event-card-description">${event.description}</p>
-                        <span class="event-card-btn">
-                            <span class="material-icons small">open_in_new</span>
-                            前往活動
-                        </span>
-                    </div>
-                </a>
-            `}).join('');
-
-            // Trigger fade-in animation
-            setTimeout(() => {
-                carousel.querySelectorAll('.fade-in').forEach(el => el.classList.add('visible'));
-            }, 100);
-        }
-
-        /**
-         * Render carousel dots
-         */
-        function renderCarouselDots(totalPages) {
-            const dotsContainer = document.getElementById('carouselDots');
-            if (!dotsContainer || totalPages <= 1) {
-                if (dotsContainer) dotsContainer.innerHTML = '';
-                return;
+                this.currentIndex = 0;
+                this.autoplayTimer = null;
+                this.events = [];
             }
 
-            dotsContainer.innerHTML = Array.from({ length: totalPages }, (_, i) => `
-                <button class="carousel-dot ${i === 0 ? 'active' : ''}"
-                        data-page="${i}"
-                        aria-label="前往第 ${i + 1} 頁"></button>
-            `).join('');
+            getCarousel() { return document.getElementById(this.carouselId); }
+            getPrevBtn() { return document.getElementById(this.prevBtnId); }
+            getNextBtn() { return document.getElementById(this.nextBtnId); }
+            getDotsContainer() { return document.getElementById(this.dotsId); }
 
-            // Add click handlers
-            dotsContainer.querySelectorAll('.carousel-dot').forEach(dot => {
-                dot.addEventListener('click', () => {
-                    const page = parseInt(dot.dataset.page);
-                    scrollToPage(page);
-                    resetAutoplay();
-                });
-            });
-        }
+            async init(events) {
+                const carousel = this.getCarousel();
+                if (!carousel) return;
 
-        /**
-         * Get visible cards count based on viewport
-         * 統一使用手機端樣式：所有裝置都只顯示單一卡片
-         */
-        function getVisibleCardsCount() {
-            return 1; // 所有裝置統一顯示單一卡片
-        }
+                this.events = events;
+                this.renderCards(events);
+                this.renderDots(this.getTotalPages());
+                this.updateNavButtons();
+                this.setupEventListeners();
+                this.startAutoplay();
+            }
 
-        /**
-         * Get total pages
-         */
-        function getTotalPages() {
-            const events = upcomingEventsConfig.events;
-            const visibleCards = getVisibleCardsCount();
-            return Math.ceil(events.length / visibleCards);
-        }
+            renderCards(events) {
+                const carousel = this.getCarousel();
+                if (!carousel || !events || events.length === 0) return;
 
-        /**
-         * Scroll carousel to specific page
-         */
-        function scrollToPage(page) {
-            const carousel = document.getElementById('eventsCarousel');
-            if (!carousel) return;
+                carousel.innerHTML = events.map((event, index) => {
+                    const status = event._status || getEventStatus(event);
+                    const dateStr = formatEventDate(event);
+                    return `
+                    <a href="${event.url}"
+                       class="event-card fade-in event-card-${status}"
+                       target="_blank" rel="noopener noreferrer"
+                       data-event-index="${index}">
+                        <div class="event-card-arrow">
+                            <span class="material-icons">arrow_forward</span>
+                        </div>
+                        <div class="event-card-meta">
+                            ${getStatusBadgeHTML(status)}
+                            ${dateStr ? `<span class="event-date"><span class="material-icons">calendar_today</span>${dateStr}</span>` : ''}
+                        </div>
+                        <div class="event-card-content">
+                            <h3 class="event-card-title">${event.title}</h3>
+                            <p class="event-card-description">${event.description}</p>
+                            <span class="event-card-btn">
+                                <span class="material-icons small">open_in_new</span>
+                                前往活動
+                            </span>
+                        </div>
+                    </a>`;
+                }).join('');
 
-            const cards = carousel.querySelectorAll('.event-card');
-            if (cards.length === 0) return;
+                setTimeout(() => {
+                    carousel.querySelectorAll('.fade-in').forEach(el => el.classList.add('visible'));
+                }, 100);
+            }
 
-            const visibleCards = getVisibleCardsCount();
-            const targetIndex = Math.min(page * visibleCards, cards.length - 1);
-            const targetCard = cards[targetIndex];
+            renderDots(totalPages) {
+                const dotsContainer = this.getDotsContainer();
+                if (!dotsContainer || totalPages <= 1) {
+                    if (dotsContainer) dotsContainer.innerHTML = '';
+                    return;
+                }
 
-            if (targetCard) {
-                carousel.scrollTo({
-                    left: targetCard.offsetLeft - carousel.offsetLeft,
-                    behavior: 'smooth'
+                dotsContainer.innerHTML = Array.from({ length: totalPages }, (_, i) =>
+                    `<button class="carousel-dot ${i === 0 ? 'active' : ''}"
+                             data-page="${i}" aria-label="前往第 ${i + 1} 頁"></button>`
+                ).join('');
+
+                dotsContainer.querySelectorAll('.carousel-dot').forEach(dot => {
+                    dot.addEventListener('click', () => {
+                        this.scrollToPage(parseInt(dot.dataset.page));
+                        this.resetAutoplay();
+                    });
                 });
             }
 
-            carouselCurrentIndex = page;
-            updateCarouselDots(page);
-            updateNavButtons();
-        }
+            getVisibleCardsCount() { return 1; }
 
-        /**
-         * Update active dot
-         */
-        function updateCarouselDots(activePage) {
-            const dots = document.querySelectorAll('.carousel-dot');
-            dots.forEach((dot, i) => {
-                dot.classList.toggle('active', i === activePage);
-            });
-        }
+            getTotalPages() {
+                return Math.ceil(this.events.length / this.getVisibleCardsCount());
+            }
 
-        /**
-         * Update navigation buttons state
-         */
-        function updateNavButtons() {
-            const prevBtn = document.getElementById('carouselPrev');
-            const nextBtn = document.getElementById('carouselNext');
-            const totalPages = getTotalPages();
+            scrollToPage(page) {
+                const carousel = this.getCarousel();
+                if (!carousel) return;
+                const cards = carousel.querySelectorAll('.event-card');
+                if (cards.length === 0) return;
 
-            if (prevBtn) prevBtn.disabled = carouselCurrentIndex === 0;
-            if (nextBtn) nextBtn.disabled = carouselCurrentIndex >= totalPages - 1;
-        }
+                const targetIndex = Math.min(page * this.getVisibleCardsCount(), cards.length - 1);
+                const targetCard = cards[targetIndex];
+                if (targetCard) {
+                    carousel.scrollTo({ left: targetCard.offsetLeft - carousel.offsetLeft, behavior: 'smooth' });
+                }
 
-        /**
-         * Start autoplay
-         */
-        function startAutoplay() {
-            stopAutoplay();
-            carouselAutoplayTimer = setInterval(() => {
-                const totalPages = getTotalPages();
-                const nextPage = (carouselCurrentIndex + 1) % totalPages;
-                scrollToPage(nextPage);
-            }, upcomingEventsConfig.AUTOPLAY_INTERVAL);
-        }
+                this.currentIndex = page;
+                this.updateDots(page);
+                this.updateNavButtons();
+            }
 
-        /**
-         * Stop autoplay
-         */
-        function stopAutoplay() {
-            if (carouselAutoplayTimer) {
-                clearInterval(carouselAutoplayTimer);
-                carouselAutoplayTimer = null;
+            updateDots(activePage) {
+                const dotsContainer = this.getDotsContainer();
+                if (!dotsContainer) return;
+                dotsContainer.querySelectorAll('.carousel-dot').forEach((dot, i) => {
+                    dot.classList.toggle('active', i === activePage);
+                });
+            }
+
+            updateNavButtons() {
+                const prevBtn = this.getPrevBtn();
+                const nextBtn = this.getNextBtn();
+                const totalPages = this.getTotalPages();
+                if (prevBtn) prevBtn.disabled = this.currentIndex === 0;
+                if (nextBtn) nextBtn.disabled = this.currentIndex >= totalPages - 1;
+            }
+
+            startAutoplay() {
+                this.stopAutoplay();
+                this.autoplayTimer = setInterval(() => {
+                    const totalPages = this.getTotalPages();
+                    this.scrollToPage((this.currentIndex + 1) % totalPages);
+                }, this.autoplayInterval);
+            }
+
+            stopAutoplay() {
+                if (this.autoplayTimer) {
+                    clearInterval(this.autoplayTimer);
+                    this.autoplayTimer = null;
+                }
+            }
+
+            resetAutoplay() { this.startAutoplay(); }
+
+            setupEventListeners() {
+                const carousel = this.getCarousel();
+                const prevBtn = this.getPrevBtn();
+                const nextBtn = this.getNextBtn();
+
+                if (prevBtn) {
+                    prevBtn.addEventListener('click', () => {
+                        if (this.currentIndex > 0) {
+                            this.scrollToPage(this.currentIndex - 1);
+                            this.resetAutoplay();
+                        }
+                    });
+                }
+
+                if (nextBtn) {
+                    nextBtn.addEventListener('click', () => {
+                        if (this.currentIndex < this.getTotalPages() - 1) {
+                            this.scrollToPage(this.currentIndex + 1);
+                            this.resetAutoplay();
+                        }
+                    });
+                }
+
+                carousel.addEventListener('mouseenter', () => this.stopAutoplay());
+                carousel.addEventListener('mouseleave', () => this.startAutoplay());
+                carousel.addEventListener('touchstart', () => this.stopAutoplay(), { passive: true });
+                carousel.addEventListener('touchend', () => {
+                    setTimeout(() => this.startAutoplay(), 1000);
+                }, { passive: true });
+
+                let scrollTimeout;
+                carousel.addEventListener('scroll', () => {
+                    clearTimeout(scrollTimeout);
+                    scrollTimeout = setTimeout(() => {
+                        const cardWidth = carousel.querySelector('.event-card')?.offsetWidth || 0;
+                        const gap = parseFloat(getComputedStyle(carousel).gap) || 0;
+                        const pageWidth = (cardWidth + gap) * this.getVisibleCardsCount();
+                        const newPage = Math.round(carousel.scrollLeft / pageWidth);
+                        if (newPage !== this.currentIndex) {
+                            this.currentIndex = newPage;
+                            this.updateDots(newPage);
+                            this.updateNavButtons();
+                        }
+                    }, 100);
+                });
+
+                let resizeTimeout;
+                window.addEventListener('resize', () => {
+                    clearTimeout(resizeTimeout);
+                    resizeTimeout = setTimeout(() => {
+                        this.renderDots(this.getTotalPages());
+                        this.scrollToPage(0);
+                    }, 200);
+                });
             }
         }
 
-        /**
-         * Reset autoplay (restart timer)
-         */
-        function resetAutoplay() {
-            startAutoplay();
-        }
+        // Shared events data — fetch once, use for all carousel instances
+        let sharedEventsData = null;
 
         /**
-         * Initialize events carousel with dynamic data
+         * Initialize all event carousels (Tab 1 homepage + Tab 2 experience)
          */
-        async function initEventsCarousel() {
-            const carousel = document.getElementById('eventsCarousel');
-            const prevBtn = document.getElementById('carouselPrev');
-            const nextBtn = document.getElementById('carouselNext');
-
-            if (!carousel) return;
-
-            // Fetch events from API (with caching)
+        async function initAllCarousels() {
+            // Fetch events once
             const events = await fetchUpcomingEvents();
+            sharedEventsData = events;
             upcomingEventsConfig.events = events;
 
-            // Render cards and dots
-            renderEventCards(upcomingEventsConfig.events);
-            renderCarouselDots(getTotalPages());
-            updateNavButtons();
-
-            // Navigation button handlers
-            if (prevBtn) {
-                prevBtn.addEventListener('click', () => {
-                    if (carouselCurrentIndex > 0) {
-                        scrollToPage(carouselCurrentIndex - 1);
-                        resetAutoplay();
-                    }
-                });
-            }
-
-            if (nextBtn) {
-                nextBtn.addEventListener('click', () => {
-                    const totalPages = getTotalPages();
-                    if (carouselCurrentIndex < totalPages - 1) {
-                        scrollToPage(carouselCurrentIndex + 1);
-                        resetAutoplay();
-                    }
-                });
-            }
-
-            // Pause autoplay on hover/touch
-            carousel.addEventListener('mouseenter', stopAutoplay);
-            carousel.addEventListener('mouseleave', startAutoplay);
-            carousel.addEventListener('touchstart', stopAutoplay, { passive: true });
-            carousel.addEventListener('touchend', () => {
-                // Delay restart to allow scroll to complete
-                setTimeout(startAutoplay, 1000);
-            }, { passive: true });
-
-            // Handle scroll events for dot sync
-            let scrollTimeout;
-            carousel.addEventListener('scroll', () => {
-                clearTimeout(scrollTimeout);
-                scrollTimeout = setTimeout(() => {
-                    const scrollLeft = carousel.scrollLeft;
-                    const cardWidth = carousel.querySelector('.event-card')?.offsetWidth || 0;
-                    const gap = parseFloat(getComputedStyle(carousel).gap) || 0;
-                    const visibleCards = getVisibleCardsCount();
-                    const pageWidth = (cardWidth + gap) * visibleCards;
-                    const newPage = Math.round(scrollLeft / pageWidth);
-
-                    if (newPage !== carouselCurrentIndex) {
-                        carouselCurrentIndex = newPage;
-                        updateCarouselDots(newPage);
-                        updateNavButtons();
-                    }
-                }, 100);
+            // Tab 2 carousel (experience)
+            const experienceCarousel = new EventsCarousel({
+                carouselId: 'eventsCarousel',
+                prevBtnId: 'carouselPrev',
+                nextBtnId: 'carouselNext',
+                dotsId: 'carouselDots',
             });
+            await experienceCarousel.init(events);
 
-            // Handle window resize
-            let resizeTimeout;
-            window.addEventListener('resize', () => {
-                clearTimeout(resizeTimeout);
-                resizeTimeout = setTimeout(() => {
-                    renderCarouselDots(getTotalPages());
-                    scrollToPage(0);
-                    updateNavButtons();
-                }, 250);
+            // Tab 1 carousel (home)
+            const homeCarousel = new EventsCarousel({
+                carouselId: 'homeEventsCarousel',
+                prevBtnId: 'homeCarouselPrev',
+                nextBtnId: 'homeCarouselNext',
+                dotsId: 'homeCarouselDots',
             });
+            await homeCarousel.init(events);
 
-            // Start autoplay
-            startAutoplay();
-
-            console.log('✅ Events carousel initialized');
+            console.log('✅ All event carousels initialized');
         }
 
         // ===== Live Statistics Dashboard =====
@@ -2586,8 +2570,8 @@ Check Google Sheets to see how many entries were actually created.
             // Setup demo mode indicators based on environment
             setupDemoModeIndicators();
 
-            // Initialize upcoming events carousel
-            initEventsCarousel();
+            // Initialize all event carousels (Tab 1 + Tab 2)
+            initAllCarousels();
 
             // Initialize live statistics dashboard
             initStatistics();
