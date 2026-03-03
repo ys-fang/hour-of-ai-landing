@@ -22,10 +22,8 @@
    - Tab 2（體驗）：保留原有 carousel
    - 兩處共用資料（fetch 一次），獨立運作
 
-**待辦**：
-- 需要 `clasp push` 部署 getGlobalRank endpoint
-- 需要 push to main 觸發 Firebase 前端部署
-- 下週二週報應顯示正確的 click 數據
+**待觀察**：
+- 下週二週報應顯示正確的 click 數據（active_ai_click + ai_square_click）
 
 > 要繼續這個討論嗎？
 
