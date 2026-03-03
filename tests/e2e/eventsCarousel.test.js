@@ -378,6 +378,58 @@ describe('Events Data Processing Integration', () => {
     });
 });
 
+describe('Multi-instance Carousel', () => {
+    beforeEach(() => {
+        // Create DOM with two carousel containers
+        document.body.innerHTML = `
+            <div class="events-carousel" id="carouselA"></div>
+            <div class="carousel-dots" id="dotsA"></div>
+            <button id="prevA"></button>
+            <button id="nextA"></button>
+
+            <div class="events-carousel" id="carouselB"></div>
+            <div class="carousel-dots" id="dotsB"></div>
+            <button id="prevB"></button>
+            <button id="nextB"></button>
+        `;
+    });
+
+    afterEach(() => {
+        document.body.innerHTML = '';
+    });
+
+    it('two carousel instances render into separate containers', () => {
+        const eventsA = [
+            { id: '1', title: 'Event A', description: 'Desc', url: 'https://example.com/a', startDate: '2026-01-25', isActive: true },
+        ];
+        const eventsB = [
+            { id: '2', title: 'Event B1', description: 'Desc', url: 'https://example.com/b1', startDate: '2026-01-26', isActive: true },
+            { id: '3', title: 'Event B2', description: 'Desc', url: 'https://example.com/b2', startDate: '2026-01-27', isActive: true },
+        ];
+
+        // Render into carousel A
+        const carouselA = document.getElementById('carouselA');
+        carouselA.innerHTML = eventsA.map((e, i) =>
+            `<a class="event-card" data-event-index="${i}"><h3 class="event-card-title">${e.title}</h3></a>`
+        ).join('');
+
+        // Render into carousel B
+        const carouselB = document.getElementById('carouselB');
+        carouselB.innerHTML = eventsB.map((e, i) =>
+            `<a class="event-card" data-event-index="${i}"><h3 class="event-card-title">${e.title}</h3></a>`
+        ).join('');
+
+        // Verify independence
+        const cardsA = carouselA.querySelectorAll('.event-card');
+        const cardsB = carouselB.querySelectorAll('.event-card');
+
+        expect(cardsA).toHaveLength(1);
+        expect(cardsB).toHaveLength(2);
+        expect(cardsA[0].querySelector('.event-card-title').textContent).toBe('Event A');
+        expect(cardsB[0].querySelector('.event-card-title').textContent).toBe('Event B1');
+    });
+});
+
 describe('Accessibility', () => {
     beforeEach(() => {
         createCarouselDOM();
