@@ -1,26 +1,31 @@
 # Hour of AI Landing Page - 專案說明
 
 ## ⚠️ 上次進度
-**更新時間**：2026-02-26
+**更新時間**：2026-03-04
 
 **本次完成項目**：
-1. ✅ 新增 UpcomingEvents 管理指南（`docs/upcoming-events-guide.md`）
-2. ✅ 確認 Active AI click tracking pipeline 正常（GA4 → GAS → ClickHistory）
-3. ✅ CTA 漏斗優化：
-   - Tab 1（首頁）& Tab 4（關於）：新增 sticky bottom bar → Active AI（含 GA4 tracking）
-   - Tab 2（體驗）：Active AI showcase 移到最前面，近期推廣活動 carousel 移到下方
-   - Tab 2 sticky bar 文案更新：「體驗好讚！」→「我要舉辦 Hour of AI」
-   - AI Square 卡片移至「其他資源」區段（carousel 下方）
-4. ✅ Playwright 驗證：3 個 Active AI CTA 全部正確觸發 `active_ai_click` GA4 event
-5. ✅ PR #13 merged + 3 commits pushed to main，Firebase CI/CD 全部成功
+1. ✅ **GA4 Click Tracking 修復**（根因排除）
+   - 根因：`GA4_PROPERTY_ID` 設錯（`266069252` → `521199085`）
+   - 後端查詢了錯誤的 GA4 property，導致 click 數據永遠是 0
+   - 修正後驗證：`active_ai_click: 278 次`、`ai_square_click: 5 次`
+   - PR #14 merged，已 `clasp push` 部署
+   - 新增 `debugGA4ClickTracking()` 診斷函式
 
-**GA4 數據觀察**：
-- `active_ai_click` 事件過去 7 天：135 次（+237.5%）
-- Click tracking 從 2 個 CTA 增加到 4 個
+2. ✅ **全球排名載入加速**
+   - 新增 GAS `?action=getGlobalRank` endpoint，從 GlobalTop10History sheet 讀預計算數據
+   - 前端改用 API call 取代直接 fetch CSV（~1-2s → ~200-500ms）
+   - 新增 loading skeleton 動畫（取代靜態 "--" 佔位符）
 
-**待觀察**：
-- 下週週報確認 real user clicks 是否提升（目標 0.5-1% CTR）
-- ClickHistory sheet 應從明天起有數據
+3. ✅ **活動輪播多處放置**
+   - 重構 carousel 為 `EventsCarousel` class（支援多實例）
+   - Tab 1（首頁）：在全球排名與縣市地圖之間新增 carousel
+   - Tab 2（體驗）：保留原有 carousel
+   - 兩處共用資料（fetch 一次），獨立運作
+
+**待辦**：
+- 需要 `clasp push` 部署 getGlobalRank endpoint
+- 需要 push to main 觸發 Firebase 前端部署
+- 下週二週報應顯示正確的 click 數據
 
 > 要繼續這個討論嗎？
 
