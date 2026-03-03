@@ -1365,6 +1365,10 @@ function getGA4ClickStats() {
         'properties/' + propertyId
       );
 
+      // Debug: 記錄 API 回應
+      Logger.log('[getGA4ClickStats] Query: ' + startDate + ' to ' + endDate);
+      Logger.log('[getGA4ClickStats] Response rowCount: ' + (response.rowCount || 0));
+
       // 初始化計數
       let totalClicks = 0;
       let activeAiClicks = 0;
@@ -1375,6 +1379,8 @@ function getGA4ClickStats() {
           const eventName = row.dimensionValues[0]?.value || '';
           const clickCount = parseInt(row.metricValues[0].value) || 0;
 
+          Logger.log('[getGA4ClickStats] Found event: ' + eventName + ' = ' + clickCount);
+
           totalClicks += clickCount;
 
           if (eventName === 'active_ai_click') {
@@ -1383,6 +1389,8 @@ function getGA4ClickStats() {
             aiSquareClicks += clickCount;
           }
         });
+      } else {
+        Logger.log('[getGA4ClickStats] No rows returned for period ' + startDate + ' to ' + endDate);
       }
 
       return {
@@ -1426,6 +1434,137 @@ function testGA4ClickStats() {
     Logger.log('成長率: ' + stats.growth.total + '%');
   } else {
     Logger.log('❌ 無法取得 GA4 點擊數據');
+  }
+}
+
+/**
+ * 診斷 GA4 點擊追蹤問題 - 詳細 debug 版本
+ * 用於排查為何點擊數據為 0 的問題
+ */
+function debugGA4ClickTracking() {
+  Logger.log('===== GA4 Click Tracking Debug =====');
+  Logger.log('Config GA4_PROPERTY_ID: ' + CONFIG.GA4_PROPERTY_ID);
+  Logger.log('Config ENABLE_GA_REPORT: ' + CONFIG.ENABLE_GA_REPORT);
+
+  if (!CONFIG.ENABLE_GA_REPORT) {
+    Logger.log('❌ GA4 報表已停用');
+    return;
+  }
+
+  const propertyId = CONFIG.GA4_PROPERTY_ID;
+
+  try {
+    // Step 1: 測試日期範圍
+    const today = new Date();
+    const oneWeekAgo = new Date(today.getTime() - 7 * 24 * 60 * 60 * 1000);
+    const startDate = formatDateTW(oneWeekAgo, 'yyyy-MM-dd');
+    const endDate = formatDateTW(today, 'yyyy-MM-dd');
+
+    Logger.log('Date range: ' + startDate + ' to ' + endDate);
+
+    // Step 2: 先查詢所有事件名稱（不做過濾）看看有哪些事件
+    Logger.log('\n--- Step 2: 查詢所有事件類型 ---');
+    const allEventsRequest = {
+      dateRanges: [{ startDate: startDate, endDate: endDate }],
+      dimensions: [{ name: 'eventName' }],
+      metrics: [{ name: 'eventCount' }],
+      limit: 50
+    };
+
+    const allEventsResponse = AnalyticsData.Properties.runReport(
+      allEventsRequest,
+      'properties/' + propertyId
+    );
+
+    Logger.log('總共找到 ' + (allEventsResponse.rows ? allEventsResponse.rows.length : 0) + ' 種事件');
+
+    if (allEventsResponse.rows && allEventsResponse.rows.length > 0) {
+      Logger.log('事件列表:');
+      allEventsResponse.rows.forEach((row, index) => {
+        const eventName = row.dimensionValues[0].value;
+        const count = row.metricValues[0].value;
+        Logger.log('  ' + (index + 1) + '. ' + eventName + ': ' + count + ' 次');
+
+        // 特別標註我們關心的事件
+        if (eventName.includes('click') || eventName.includes('active') || eventName.includes('ai_square')) {
+          Logger.log('     ⭐ 這是我們關心的點擊相關事件！');
+        }
+      });
+    } else {
+      Logger.log('❌ 沒有找到任何事件！這可能表示：');
+      Logger.log('   1. GA4 Property ID 不正確');
+      Logger.log('   2. 沒有任何流量/事件');
+      Logger.log('   3. API 權限問題');
+    }
+
+    // Step 3: 專門查詢 active_ai_click 事件
+    Logger.log('\n--- Step 3: 查詢 active_ai_click 事件 ---');
+    const clickRequest = {
+      dateRanges: [{ startDate: startDate, endDate: endDate }],
+      dimensions: [{ name: 'eventName' }],
+      metrics: [{ name: 'eventCount' }],
+      dimensionFilter: {
+        filter: {
+          fieldName: 'eventName',
+          stringFilter: {
+            matchType: 'EXACT',
+            value: 'active_ai_click'
+          }
+        }
+      }
+    };
+
+    const clickResponse = AnalyticsData.Properties.runReport(
+      clickRequest,
+      'properties/' + propertyId
+    );
+
+    if (clickResponse.rows && clickResponse.rows.length > 0) {
+      Logger.log('✅ 找到 active_ai_click 事件:');
+      clickResponse.rows.forEach(row => {
+        Logger.log('   count: ' + row.metricValues[0].value);
+      });
+    } else {
+      Logger.log('❌ 沒有找到 active_ai_click 事件');
+      Logger.log('   Raw response rowCount: ' + (clickResponse.rowCount || 0));
+    }
+
+    // Step 4: 查詢包含 "click" 的所有事件（模糊匹配）
+    Logger.log('\n--- Step 4: 查詢包含 "click" 的事件 ---');
+    const fuzzyClickRequest = {
+      dateRanges: [{ startDate: startDate, endDate: endDate }],
+      dimensions: [{ name: 'eventName' }],
+      metrics: [{ name: 'eventCount' }],
+      dimensionFilter: {
+        filter: {
+          fieldName: 'eventName',
+          stringFilter: {
+            matchType: 'CONTAINS',
+            value: 'click'
+          }
+        }
+      }
+    };
+
+    const fuzzyClickResponse = AnalyticsData.Properties.runReport(
+      fuzzyClickRequest,
+      'properties/' + propertyId
+    );
+
+    if (fuzzyClickResponse.rows && fuzzyClickResponse.rows.length > 0) {
+      Logger.log('✅ 找到包含 "click" 的事件:');
+      fuzzyClickResponse.rows.forEach(row => {
+        Logger.log('   ' + row.dimensionValues[0].value + ': ' + row.metricValues[0].value + ' 次');
+      });
+    } else {
+      Logger.log('❌ 沒有找到任何包含 "click" 的事件');
+    }
+
+    Logger.log('\n===== Debug 完成 =====');
+
+  } catch (error) {
+    Logger.log('❌ Error during debug: ' + error.toString());
+    Logger.log('Error stack: ' + error.stack);
   }
 }
 
@@ -1539,6 +1678,10 @@ function trackDailyClicks() {
       'properties/' + CONFIG.GA4_PROPERTY_ID
     );
 
+    // Debug: 記錄 API 回應
+    Logger.log('[trackDailyClicks] Query date: ' + dateStr);
+    Logger.log('[trackDailyClicks] Response rowCount: ' + (response.rowCount || 0));
+
     // 計算點擊數
     let totalClicks = 0;
     let activeAiClicks = 0;
@@ -1549,6 +1692,8 @@ function trackDailyClicks() {
         const eventName = row.dimensionValues[0]?.value || '';
         const clickCount = parseInt(row.metricValues[0].value) || 0;
 
+        Logger.log('[trackDailyClicks] Found event: ' + eventName + ' = ' + clickCount);
+
         totalClicks += clickCount;
 
         if (eventName === 'active_ai_click') {
@@ -1557,6 +1702,8 @@ function trackDailyClicks() {
           aiSquareClicks += clickCount;
         }
       });
+    } else {
+      Logger.log('[trackDailyClicks] No click events found for ' + dateStr);
     }
 
     const clickData = {
