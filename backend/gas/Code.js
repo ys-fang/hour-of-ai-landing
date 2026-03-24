@@ -190,6 +190,25 @@ function doGet(e) {
       return getGlobalRank();
     }
 
+    // 設定 Trigger（需要 admin token 驗證）
+    if (action === 'setupRankTrackerTrigger') {
+      const token = e.parameter.token;
+      const expectedToken = PropertiesService.getScriptProperties().getProperty('ADMIN_TOKEN');
+
+      if (!expectedToken || token !== expectedToken) {
+        return ContentService.createTextOutput(JSON.stringify({
+          status: 'error',
+          message: 'Invalid or missing admin token'
+        })).setMimeType(ContentService.MimeType.JSON);
+      }
+
+      const result = setupRankTrackerTrigger();
+      return ContentService.createTextOutput(JSON.stringify({
+        status: 'success',
+        ...result
+      })).setMimeType(ContentService.MimeType.JSON);
+    }
+
     // Default response
     return ContentService.createTextOutput('Hour of AI Statistics API v3.2')
       .setMimeType(ContentService.MimeType.TEXT);
@@ -2089,6 +2108,44 @@ ${belowText || '   (無)'}
  */
 function testTaiwanRankTracker() {
   trackTaiwanRank();
+}
+
+/**
+ * 設定 Taiwan Rank Tracker 的 Trigger（每週二 9:00 執行）
+ * 執行此函數會刪除舊的 trackTaiwanRank triggers 並建立新的週觸發器
+ *
+ * 使用方式：
+ * 1. 部署後執行一次此函數
+ * 2. 或透過 doGet?action=setupRankTrackerTrigger 呼叫
+ */
+function setupRankTrackerTrigger() {
+  // 刪除現有的 trackTaiwanRank triggers
+  const triggers = ScriptApp.getProjectTriggers();
+  let deletedCount = 0;
+
+  triggers.forEach(trigger => {
+    if (trigger.getHandlerFunction() === 'trackTaiwanRank') {
+      ScriptApp.deleteTrigger(trigger);
+      deletedCount++;
+    }
+  });
+
+  Logger.log(`🗑️ 已刪除 ${deletedCount} 個舊的 trackTaiwanRank triggers`);
+
+  // 建立新的週觸發器（週二 9:00）
+  ScriptApp.newTrigger('trackTaiwanRank')
+    .timeBased()
+    .onWeekDay(ScriptApp.WeekDay.TUESDAY)
+    .atHour(CONFIG.RANK_TRACKER_HOUR)
+    .create();
+
+  Logger.log(`✅ 已建立新的週觸發器：每週二 ${CONFIG.RANK_TRACKER_HOUR}:00 執行 trackTaiwanRank`);
+
+  return {
+    success: true,
+    message: `Trigger 設定完成：每週二 ${CONFIG.RANK_TRACKER_HOUR}:00 執行`,
+    deletedTriggers: deletedCount
+  };
 }
 
 /**
