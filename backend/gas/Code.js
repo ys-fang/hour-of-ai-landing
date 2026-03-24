@@ -57,6 +57,8 @@ const CONFIG = {
   RANK_TRACKER_DATA_URL: 'https://docs.google.com/spreadsheets/d/1QDTmNNP3i6Nfhg6y7qp5V_cSL6ciNsMyF3bEjyKXTsY/export?format=csv',
   RANK_TRACKER_TARGET_COUNTRY: 'Taiwan',
   GLOBAL_TOP10_SHEET_NAME: 'GlobalTop10History',  // 全球 Top 10 歷史資料工作表
+  RANK_TRACKER_DAY: 2,    // 週二 (0=週日, 1=週一, ..., 6=週六)
+  RANK_TRACKER_HOUR: 9,   // 上午 9 點（台灣時區）
 
   // ===== Click Tracking 設定 =====
   ENABLE_CLICK_TRACKER: true,
@@ -1921,12 +1923,13 @@ function logGlobalTop10ToSheet(sortedData) {
 }
 
 /**
- * 主函數 - 每日執行追蹤台灣排名
+ * 主函數 - 每週執行追蹤台灣排名
  * Setup: Apps Script Editor > Triggers > Add Trigger
  * - Function: trackTaiwanRank
  * - Event source: Time-driven
- * - Type: Day timer
- * - Time: 選擇適合的時間
+ * - Type: Week timer
+ * - Day: Tuesday (週二)
+ * - Time: 9am to 10am (台灣時區)
  */
 function trackTaiwanRank() {
   if (!CONFIG.ENABLE_RANK_TRACKER) {
