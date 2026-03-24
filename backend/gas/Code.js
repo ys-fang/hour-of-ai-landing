@@ -57,6 +57,8 @@ const CONFIG = {
   RANK_TRACKER_DATA_URL: 'https://docs.google.com/spreadsheets/d/1QDTmNNP3i6Nfhg6y7qp5V_cSL6ciNsMyF3bEjyKXTsY/export?format=csv',
   RANK_TRACKER_TARGET_COUNTRY: 'Taiwan',
   GLOBAL_TOP10_SHEET_NAME: 'GlobalTop10History',  // 全球 Top 10 歷史資料工作表
+  RANK_TRACKER_DAY: 2,    // 週二 (0=週日, 1=週一, ..., 6=週六)
+  RANK_TRACKER_HOUR: 9,   // 上午 9 點（台灣時區）
 
   // ===== Click Tracking 設定 =====
   ENABLE_CLICK_TRACKER: true,
@@ -186,6 +188,25 @@ function doGet(e) {
 
     if (action === 'getGlobalRank') {
       return getGlobalRank();
+    }
+
+    // 設定 Trigger（需要 admin token 驗證）
+    if (action === 'setupRankTrackerTrigger') {
+      const token = e.parameter.token;
+      const expectedToken = PropertiesService.getScriptProperties().getProperty('ADMIN_TOKEN');
+
+      if (!expectedToken || token !== expectedToken) {
+        return ContentService.createTextOutput(JSON.stringify({
+          status: 'error',
+          message: 'Invalid or missing admin token'
+        })).setMimeType(ContentService.MimeType.JSON);
+      }
+
+      const result = setupRankTrackerTrigger();
+      return ContentService.createTextOutput(JSON.stringify({
+        status: 'success',
+        ...result
+      })).setMimeType(ContentService.MimeType.JSON);
     }
 
     // Default response
@@ -1921,12 +1942,13 @@ function logGlobalTop10ToSheet(sortedData) {
 }
 
 /**
- * 主函數 - 每日執行追蹤台灣排名
+ * 主函數 - 每週執行追蹤台灣排名
  * Setup: Apps Script Editor > Triggers > Add Trigger
  * - Function: trackTaiwanRank
  * - Event source: Time-driven
- * - Type: Day timer
- * - Time: 選擇適合的時間
+ * - Type: Week timer
+ * - Day: Tuesday (週二)
+ * - Time: 9am to 10am (台灣時區)
  */
 function trackTaiwanRank() {
   if (!CONFIG.ENABLE_RANK_TRACKER) {
@@ -2086,6 +2108,44 @@ ${belowText || '   (無)'}
  */
 function testTaiwanRankTracker() {
   trackTaiwanRank();
+}
+
+/**
+ * 設定 Taiwan Rank Tracker 的 Trigger（每週二 9:00 執行）
+ * 執行此函數會刪除舊的 trackTaiwanRank triggers 並建立新的週觸發器
+ *
+ * 使用方式：
+ * 1. 部署後執行一次此函數
+ * 2. 或透過 doGet?action=setupRankTrackerTrigger 呼叫
+ */
+function setupRankTrackerTrigger() {
+  // 刪除現有的 trackTaiwanRank triggers
+  const triggers = ScriptApp.getProjectTriggers();
+  let deletedCount = 0;
+
+  triggers.forEach(trigger => {
+    if (trigger.getHandlerFunction() === 'trackTaiwanRank') {
+      ScriptApp.deleteTrigger(trigger);
+      deletedCount++;
+    }
+  });
+
+  Logger.log(`🗑️ 已刪除 ${deletedCount} 個舊的 trackTaiwanRank triggers`);
+
+  // 建立新的週觸發器（週二 9:00）
+  ScriptApp.newTrigger('trackTaiwanRank')
+    .timeBased()
+    .onWeekDay(ScriptApp.WeekDay.TUESDAY)
+    .atHour(CONFIG.RANK_TRACKER_HOUR)
+    .create();
+
+  Logger.log(`✅ 已建立新的週觸發器：每週二 ${CONFIG.RANK_TRACKER_HOUR}:00 執行 trackTaiwanRank`);
+
+  return {
+    success: true,
+    message: `Trigger 設定完成：每週二 ${CONFIG.RANK_TRACKER_HOUR}:00 執行`,
+    deletedTriggers: deletedCount
+  };
 }
 
 /**

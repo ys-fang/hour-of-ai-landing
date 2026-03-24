@@ -37,6 +37,19 @@ jobs:
         working-directory: backend/gas
         run: clasp push --force
 
+      - name: Setup Triggers via API
+        if: ${{ secrets.GAS_ADMIN_TOKEN != '' }}
+        run: |
+          echo "⏰ Setting up triggers..."
+          GAS_URL="https://script.google.com/macros/s/AKfycbyq39aJMUUoqIca_twgJcPl5AzgIrm1Rwlv6lccB-UgpTticj8kiUtsxwtDEfFQqXimTg/exec"
+          RESPONSE=$(curl -s "${GAS_URL}?action=setupRankTrackerTrigger&token=${{ secrets.GAS_ADMIN_TOKEN }}")
+          echo "Response: $RESPONSE"
+          if echo "$RESPONSE" | grep -q '"status":"success"'; then
+            echo "✅ Triggers configured successfully"
+          else
+            echo "⚠️ Trigger setup may have failed - check manually"
+          fi
+
       - name: Deployment complete
         run: |
           echo "✅ GAS deployment complete!"
