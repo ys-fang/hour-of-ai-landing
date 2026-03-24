@@ -6,14 +6,11 @@
 
 ## 部署步驟
 
-### Step 1: 部署程式碼到 GAS
+### Step 1: Merge PR 到 main
 
-```bash
-cd backend/gas
-clasp push
-```
+合併後 GitHub Action (`gas-deploy.yml`) 會自動執行 `clasp push`。
 
-### Step 2: 修改 Trigger
+### Step 2: 修改 Trigger（手動）
 
 1. 開啟 [Apps Script Editor](https://script.google.com/)
 2. 選擇 Hour of AI 專案
