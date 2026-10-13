@@ -242,27 +242,9 @@ clasp login --status
 5. 提交變更到 Git
 ```
 
-### 7.6 GitHub Actions 自動部署
+### 7.6 部署方式
 
-當 `backend/gas/**` 檔案變更並 push 到 `main` branch 時，會自動觸發 GAS 部署。
-
-**Workflow 檔案**: `.github/workflows/gas-deploy.yml`
-
-**相關設定**:
-- GitHub Secret: `CLASP_CREDENTIALS`（clasp 認證 JSON）
-- 觸發條件: `backend/gas/**` 檔案變更
-- 也支援手動觸發（workflow_dispatch）
-
-**查看部署狀態**: [GitHub Actions](https://github.com/ys-fang/hour-of-ai-landing/actions)
-
-**更新認證（Token 過期時）**:
-```bash
-# 1. 重新登入
-clasp login
-
-# 2. 更新 GitHub Secret
-gh secret set CLASP_CREDENTIALS < ~/.clasprc.json
-```
+GAS 一律在本機以 `clasp push`（＋需要時 `clasp deploy -i <deploymentId>`）部署，**不經 GitHub Actions**（2026-10-13 移除 `gas-deploy.yml` 與 `CLASP_CREDENTIALS` secret）。
 
 ### 7.7 clasp run（CLI 執行 GAS 函數）
 
@@ -314,7 +296,6 @@ clasp run myFunction --params '[1, "hello", true]'
 - 每個開發者需要自己執行 `clasp login` 取得認證
 - 部署新版本時，Web App URL 不會改變（除非建立新的 deployment）
 - 如果要更新 Web App URL，需要在 GAS 編輯器中「Deploy > Manage deployments」
-- GitHub Actions 使用的是 `CLASP_CREDENTIALS` secret 中的認證
 
 ---
 
@@ -555,7 +536,7 @@ PWA 功能：
 - [x] ~~Preload 關鍵資源~~ ✅ 已完成 (2026-01-23)
 - [x] ~~設定 hoa.junyiacademy.org 網域指向 Firebase Hosting~~ ✅ 已完成 (DNS CNAME → hour-of-ai-landing-junyi.web.app)
 - [x] ~~clasp 設定（GAS CLI 部署）~~ ✅ 已完成 (2026-01-29)
-- [x] ~~GAS 自動部署 GitHub Actions（Phase 1）~~ ✅ 已完成 (2026-01-29)
+- [x] ~~GAS 自動部署 GitHub Actions（Phase 1）~~ 🗑️ 已移除 (2026-10-13，改回本機 clasp push)
 - [x] ~~clasp run CLI 執行（GCP 專案連結 + OAuth 憑證）~~ ✅ 已完成 (2026-01-29)
 - [ ] Cloud Functions 處理唯讀操作（Phase 2）
 - [ ] 考慮是否需要 Staging 環境（介於 Preview 和 Production 之間）

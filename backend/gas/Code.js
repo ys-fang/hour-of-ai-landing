@@ -191,25 +191,6 @@ function doGet(e) {
       return getGlobalRank();
     }
 
-    // 設定 Trigger（需要 admin token 驗證）
-    if (action === 'setupRankTrackerTrigger') {
-      const token = e.parameter.token;
-      const expectedToken = PropertiesService.getScriptProperties().getProperty('ADMIN_TOKEN');
-
-      if (!expectedToken || token !== expectedToken) {
-        return ContentService.createTextOutput(JSON.stringify({
-          status: 'error',
-          message: 'Invalid or missing admin token'
-        })).setMimeType(ContentService.MimeType.JSON);
-      }
-
-      const result = setupRankTrackerTrigger();
-      return ContentService.createTextOutput(JSON.stringify({
-        status: 'success',
-        ...result
-      })).setMimeType(ContentService.MimeType.JSON);
-    }
-
     // Default response
     return ContentService.createTextOutput('Hour of AI Statistics API v3.2')
       .setMimeType(ContentService.MimeType.TEXT);
@@ -2122,7 +2103,6 @@ function testTaiwanRankTracker() {
  *
  * 使用方式：
  * 1. 部署後執行一次此函數
- * 2. 或透過 doGet?action=setupRankTrackerTrigger 呼叫
  */
 function setupRankTrackerTrigger() {
   // 刪除現有的 trackTaiwanRank triggers
