@@ -31,6 +31,7 @@ const CONFIG = {
   // 或使用函數：setSlackWebhookURL('your-webhook-url')
 
   // 通知開關 - 設定為 false 即可停用
+  ENABLE_SLACK_NOTIFICATION: false,    // Slack 總開關：false＝所有 Slack 推播停發（2026-10-13 退場，其餘排程照跑）
   ENABLE_INSTANT_NOTIFICATION: true,   // 即時通知：每次新報名時發送
   ENABLE_WEEKLY_REPORT: true,          // 週報：每週二上午發送
   ENABLE_EMAIL_NOTIFICATION: false,    // Email 通知（保留舊功能）
@@ -711,6 +712,11 @@ function testPost() {
  * Send message to Slack via Webhook
  */
 function sendToSlack(message) {
+  if (!CONFIG.ENABLE_SLACK_NOTIFICATION) {
+    Logger.log('Slack notification is disabled; message not sent');
+    return false;
+  }
+
   const webhookUrl = getSlackWebhookURL();
 
   if (!webhookUrl) {
